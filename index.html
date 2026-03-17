@@ -1,0 +1,2238 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>My Judo Stat</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#06080b;--bg2:#0b0f14;--bg3:#101620;--border:#1a2838;
+  --orange:#e8720a;--orange2:#ff9332;--amber:#f5c040;
+  --blue:#1a6a9a;--blue2:#2a8abf;
+  --text:#e2dbd0;--muted:#52606e;--green:#3dba70;--red:#e04444;
+  --fur1:#d4821a;--fur2:#8a4a08;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100vh;}
+body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+
+/* ═══════════════════════════════
+   LYNX PAW PRINT BACKGROUND
+   ═══════════════════════════════ */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    /* tatami lines */
+    linear-gradient(rgba(30,50,30,.14) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(30,50,30,.14) 1px,transparent 1px),
+    linear-gradient(rgba(230,114,10,.022) 2px,transparent 2px),
+    linear-gradient(90deg,rgba(230,114,10,.022) 2px,transparent 2px);
+  background-size:44px 44px,44px 44px,220px 220px,220px 220px;
+}
+
+/* SVG lynx paw prints scattered */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg opacity='0.035' fill='%23e8720a'%3E%3Cellipse cx='30' cy='75' rx='9' ry='11'/%3E%3Cellipse cx='20' cy='55' rx='6' ry='7'/%3E%3Cellipse cx='32' cy='52' rx='6' ry='7'/%3E%3Cellipse cx='44' cy='55' rx='6' ry='7'/%3E%3Cellipse cx='38' cy='68' rx='5' ry='6'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg opacity='0.025' fill='%23e8720a'%3E%3Cellipse cx='90' cy='30' rx='9' ry='11'/%3E%3Cellipse cx='80' cy='10' rx='6' ry='7'/%3E%3Cellipse cx='92' cy='7' rx='6' ry='7'/%3E%3Cellipse cx='104' cy='10' rx='6' ry='7'/%3E%3Cellipse cx='98' cy='23' rx='5' ry='6'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:240px 240px, 240px 240px;
+  background-position:0 0, 120px 120px;
+}
+
+/* Everything above bg */
+header,main,.club-section,.lang-bar,.toolbar{position:relative;z-index:1;}
+
+/* ═══════════════════════════════
+   LYNX SCRATCH DIVIDER SVG
+   ═══════════════════════════════ */
+.scratch-divider{
+  width:100%;overflow:hidden;line-height:0;display:block;
+}
+.scratch-divider svg{display:block;width:100%;}
+
+/* ═══════════════════════════════
+   HERO — ATHLETE FIRST
+   ═══════════════════════════════ */
+header{border-bottom:2px solid var(--orange);background:transparent;}
+
+/* big kanji watermark */
+.hero-kanji{
+  position:absolute;right:-20px;top:0;
+  font-size:280px;font-weight:900;font-family:'Cinzel',serif;
+  color:rgba(230,114,10,.045);pointer-events:none;user-select:none;
+  line-height:1;letter-spacing:-15px;z-index:0;
+}
+/* lynx face watermark top-left */
+.lynx-watermark{
+  position:absolute;left:10px;top:10px;
+  width:180px;height:180px;opacity:.04;
+  pointer-events:none;user-select:none;z-index:0;
+}
+
+.hero-inner{
+  display:flex;align-items:stretch;min-height:360px;
+  position:relative;z-index:1;
+}
+
+/* ── ATHLETE PHOTO COLUMN ── */
+.hero-photo-col{
+  flex-shrink:0;width:240px;position:relative;overflow:hidden;
+  background:var(--bg3);cursor:pointer;
+}
+@media(max-width:580px){.hero-photo-col{width:120px;}}
+
+/* gradient fade right */
+.hero-photo-col::after{
+  content:'';position:absolute;top:0;right:0;bottom:0;width:70px;
+  background:linear-gradient(90deg,transparent,var(--bg2));
+  pointer-events:none;z-index:2;
+}
+/* lynx stripe overlay on photo */
+.hero-photo-col::before{
+  content:'';position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:repeating-linear-gradient(
+    -55deg,
+    transparent,transparent 18px,
+    rgba(0,0,0,.06) 18px,rgba(0,0,0,.06) 20px
+  );
+}
+
+.hero-photo-img{
+  width:100%;height:100%;min-height:360px;
+  object-fit:cover;object-position:top center;
+  display:block;transition:transform .4s ease;
+}
+.hero-photo-col:hover .hero-photo-img{transform:scale(1.04);}
+
+.hero-photo-placeholder{
+  width:100%;min-height:360px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;color:var(--muted);
+}
+/* big lynx SVG as placeholder */
+.lynx-placeholder{width:100px;height:100px;opacity:.25;}
+
+.photo-overlay{
+  position:absolute;inset:0;z-index:4;
+  display:flex;align-items:flex-end;justify-content:center;padding-bottom:16px;
+  background:linear-gradient(transparent 50%,rgba(0,0,0,.6));
+  opacity:0;transition:opacity .25s;
+}
+.hero-photo-col:hover .photo-overlay{opacity:1;}
+.photo-overlay-btn{
+  background:rgba(230,114,10,.85);color:#fff;border:none;
+  padding:6px 14px;border-radius:20px;font-family:'Cinzel',serif;
+  font-size:11px;letter-spacing:.12em;cursor:pointer;
+}
+#heroPhotoInput{display:none;}
+
+/* ── ATHLETE DATA ── */
+.hero-data{
+  flex:1;padding:28px 24px 24px;
+  background:linear-gradient(135deg,rgba(11,15,20,.97) 0%,rgba(6,8,11,.95) 100%);
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+
+.hero-eyebrow{
+  font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--orange);font-family:'Cinzel',serif;
+  display:flex;align-items:center;gap:8px;margin-bottom:8px;
+}
+.hero-eyebrow::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(230,114,10,.5),transparent);}
+
+.athlete-name-display{
+  font-family:'Cinzel',serif;
+  font-size:clamp(20px,3.5vw,38px);
+  font-weight:900;line-height:1.1;
+  background:linear-gradient(135deg,#fff 0%,var(--amber) 55%,var(--orange2) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  cursor:pointer;display:inline-block;
+  border-bottom:1px dashed transparent;transition:border-color .2s;
+}
+.athlete-name-display:hover{border-color:rgba(245,192,64,.35);}
+.athlete-name-input{
+  font-family:'Cinzel',serif;font-size:clamp(20px,3.5vw,38px);font-weight:900;
+  color:var(--amber);background:transparent;border:none;
+  border-bottom:2px solid var(--orange);outline:none;width:100%;display:none;
+}
+
+/* LIVE STATS under name */
+.athlete-live-stats{
+  display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;
+}
+.als-item{
+  display:flex;flex-direction:column;gap:2px;
+  padding:8px 12px;border-radius:8px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  min-width:64px;text-align:center;
+}
+.als-val{font-family:'Cinzel',serif;font-size:20px;color:var(--orange2);line-height:1;}
+.als-lbl{font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
+
+/* ATTRIBUTE CHIPS */
+.attr-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px;}
+.attr-chip{
+  display:flex;flex-direction:column;gap:2px;
+  padding:7px 12px;border-radius:9px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  cursor:pointer;transition:all .2s;
+}
+.attr-chip:hover{border-color:rgba(230,114,10,.4);background:rgba(230,114,10,.07);}
+.attr-lbl{font-size:9px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;font-family:'Cinzel',serif;}
+.attr-val{font-size:13px;color:var(--text);}
+
+/* BELT DISPLAY */
+.belt-display{
+  margin-top:16px;display:flex;align-items:center;gap:12px;
+}
+.belt-visual-wrap{
+  display:flex;align-items:center;gap:0;
+  border-radius:6px;overflow:hidden;
+  box-shadow:0 0 0 1.5px rgba(255,255,255,.12);
+  flex-shrink:0;
+}
+/* individual belt segments */
+.belt-seg{
+  height:22px;width:22px;
+  position:relative;
+  transition:box-shadow .3s;
+}
+/* center knot segment slightly wider */
+.belt-seg.knot{
+  width:28px;
+  display:flex;align-items:center;justify-content:center;
+}
+.belt-seg.knot::after{
+  content:'';width:14px;height:14px;border-radius:50%;
+  background:rgba(0,0,0,.35);border:1.5px solid rgba(255,255,255,.15);
+  display:block;
+}
+.belt-name{
+  font-family:'Cinzel',serif;font-size:14px;letter-spacing:.1em;
+  text-shadow:0 0 10px currentColor;
+  font-weight:700;
+}
+
+/* ═══════════════════════════════
+   LYNX SCRATCH SEPARATOR
+   ═══════════════════════════════ */
+.lynx-sep{
+  width:100%;padding:0;display:flex;align-items:center;
+  background:var(--bg);overflow:hidden;height:32px;position:relative;
+}
+.lynx-sep::before,.lynx-sep::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(230,114,10,.3));
+}
+.lynx-sep::after{background:linear-gradient(270deg,transparent,rgba(230,114,10,.3));}
+.lynx-sep-icon{
+  font-size:18px;margin:0 14px;flex-shrink:0;
+  filter:sepia(1) saturate(3) hue-rotate(10deg);
+}
+
+/* ═══════════════════════════════
+   CLUB SECTION
+   ═══════════════════════════════ */
+.club-section{
+  background:linear-gradient(180deg,#070b0f,#0a0e14);
+  border-bottom:1px solid var(--border);
+  padding:22px 20px 26px;
+  position:relative;overflow:hidden;
+}
+/* claw scratch top-right */
+.club-section::before{
+  content:'';position:absolute;top:0;right:0;width:200px;height:120px;
+  background:
+    linear-gradient(135deg,transparent 30%,rgba(230,114,10,.03) 30%,rgba(230,114,10,.03) 31%,transparent 31%),
+    linear-gradient(125deg,transparent 35%,rgba(230,114,10,.025) 35%,rgba(230,114,10,.025) 36%,transparent 36%),
+    linear-gradient(115deg,transparent 40%,rgba(230,114,10,.02) 40%,rgba(230,114,10,.02) 41%,transparent 41%),
+    linear-gradient(105deg,transparent 45%,rgba(230,114,10,.015) 45%,rgba(230,114,10,.015) 46%,transparent 46%);
+  pointer-events:none;
+}
+
+.club-header{
+  display:flex;align-items:center;gap:14px;margin-bottom:18px;
+}
+.club-mon{
+  width:56px;height:56px;border-radius:12px;
+  border:2px solid var(--orange);background:var(--bg3);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 18px rgba(230,114,10,.18),inset 0 0 12px rgba(0,0,0,.4);
+  position:relative;overflow:hidden;
+}
+/* lynx eye effect in club mon */
+.club-mon::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 35%,rgba(230,114,10,.15),transparent 60%);
+}
+.club-mon-svg{width:36px;height:36px;}
+.club-name{
+  font-family:'Cinzel',serif;font-size:22px;font-weight:900;
+  color:var(--amber);letter-spacing:.08em;
+}
+.club-sub{font-size:12px;color:var(--muted);margin-top:2px;letter-spacing:.1em;}
+
+/* COACHES */
+.coaches-label{
+  font-size:10px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--orange);font-family:'Cinzel',serif;margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.coaches-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(230,114,10,.3),transparent);}
+
+.coaches-top{display:flex;justify-content:center;margin-bottom:16px;}
+.coaches-bottom{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;}
+
+.coach-card{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;width:110px;}
+.coach-card.head{width:130px;}
+.coach-card.head .coach-photo-wrap{width:110px;height:110px;}
+.coach-card.head .coach-photo-wrap.expanded{height:320px;}
+.coach-card.head .coach-photo-wrap img{height:320px;}
+.coach-card.head .coach-photo-placeholder{width:110px;height:110px;}
+.coach-card.head .coach-name-el{font-size:13px;}
+.head-badge{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--orange);font-family:'Cinzel',serif;padding:2px 10px;border-radius:20px;background:rgba(230,114,10,.1);border:1px solid rgba(230,114,10,.3);white-space:nowrap;}
+
+/* The magic: photo clipped to top, expands on click */
+.coach-photo-wrap{
+  width:90px;
+  /* Default height = head/shoulders only */
+  height:90px;
+  border-radius:14px;
+  overflow:hidden;
+  border:1.5px solid var(--border);
+  background:var(--bg3);
+  position:relative;
+  transition:
+    height .55s cubic-bezier(.4,0,.2,1),
+    border-color .2s,
+    box-shadow .2s;
+  cursor:pointer;
+}
+.coach-card:hover .coach-photo-wrap{border-color:rgba(230,114,10,.5);}
+.coach-photo-wrap.expanded{
+  height:260px;
+  border-color:var(--orange);
+  box-shadow:0 8px 32px rgba(230,114,10,.25);
+}
+
+.coach-photo-wrap img{
+  width:100%;
+  /* tall enough for full body */
+  height:260px;
+  object-fit:cover;
+  object-position:top center;
+  display:block;
+  transition:none;
+}
+.coach-photo-placeholder{
+  width:90px;height:90px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;color:var(--muted);
+}
+.coach-photo-placeholder .ph-icon{font-size:30px;opacity:.4;}
+.coach-photo-placeholder span{font-size:9px;letter-spacing:.1em;font-family:'Cinzel',serif;}
+
+/* lynx claw corner on coach card */
+.coach-photo-wrap::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--orange),rgba(230,114,10,.2),transparent);
+  opacity:0;transition:opacity .2s;z-index:2;
+}
+.coach-card:hover .coach-photo-wrap::before,
+.coach-photo-wrap.expanded::before{opacity:1;}
+
+/* expand hint */
+.expand-hint{
+  position:absolute;bottom:4px;right:4px;
+  width:22px;height:22px;border-radius:50%;
+  background:rgba(230,114,10,.8);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:#fff;z-index:5;
+  transition:transform .3s,background .2s;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.coach-photo-wrap.expanded .expand-hint{transform:rotate(180deg);background:rgba(230,114,10,.9);}
+
+.coach-add-btn{
+  position:absolute;top:4px;right:4px;
+  width:26px;height:26px;border-radius:50%;
+  background:rgba(230,114,10,.9);border:none;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:#fff;cursor:pointer;z-index:6;
+  transition:transform .2s;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+  line-height:1;text-align:center;
+}
+.coach-add-btn:hover,.coach-add-btn:active{transform:scale(1.15);}
+
+.coach-name-el{
+  font-family:'Cinzel',serif;font-size:11px;color:var(--text);
+  letter-spacing:.04em;text-align:center;cursor:pointer;
+  padding:2px 4px;border-bottom:1px dashed transparent;transition:border-color .2s;
+}
+.coach-name-el:hover{border-color:rgba(245,192,64,.3);}
+.coach-name-el.placeholder{color:var(--muted);font-style:italic;}
+.coach-name-input{
+  font-family:'Cinzel',serif;font-size:11px;color:var(--amber);
+  background:transparent;border:none;border-bottom:1px solid var(--orange);
+  outline:none;width:90px;text-align:center;display:none;
+}
+.coach-role-el{
+  font-size:10px;color:var(--muted);text-align:center;cursor:pointer;
+  letter-spacing:.06em;
+}
+.coach-role-el.placeholder{font-style:italic;}
+input[type=file]{display:none;}
+
+/* ═══════════════════════════════
+   LANG BAR + TOOLBAR
+   ═══════════════════════════════ */
+.lang-bar{
+  display:flex;justify-content:center;align-items:center;gap:8px;
+  padding:9px 14px;background:var(--bg2);border-bottom:1px solid var(--border);flex-wrap:wrap;
+}
+.lang-btn{
+  padding:5px 13px;border-radius:7px;border:1.5px solid var(--border);
+  background:transparent;color:var(--muted);font-family:'Cinzel',serif;
+  font-size:11px;letter-spacing:.08em;cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;gap:5px;
+}
+.lang-btn:hover{border-color:var(--orange);color:var(--orange);}
+.lang-btn.active{background:var(--orange);border-color:var(--orange);color:#fff;}
+
+.toolbar{
+  display:flex;gap:7px;justify-content:center;flex-wrap:wrap;
+  padding:11px 14px;background:linear-gradient(180deg,var(--bg2),var(--bg));
+  border-bottom:1px solid var(--border);
+}
+.tb-btn{
+  padding:7px 14px;border-radius:8px;border:1.5px solid var(--border);
+  background:transparent;color:var(--muted);font-family:'Cinzel',serif;
+  font-size:11px;letter-spacing:.07em;cursor:pointer;
+  display:flex;align-items:center;gap:5px;transition:all .2s;white-space:nowrap;
+}
+.tb-btn:hover{border-color:var(--orange);color:var(--orange);}
+.tb-btn.primary{
+  background:linear-gradient(135deg,var(--orange),#b85808);
+  border-color:var(--orange);color:#fff;
+  box-shadow:0 2px 10px rgba(230,114,10,.2);
+}
+.tb-btn.primary:hover{opacity:.9;}
+.tb-btn.ranking{
+  background:linear-gradient(135deg,#0d1c2e,#0a1420);
+  border-color:var(--blue2);color:var(--blue2);
+}
+.tb-btn.ranking:hover{color:#7dd4f5;border-color:#7dd4f5;box-shadow:0 0 12px rgba(42,138,191,.2);}
+
+/* ═══════════════════════════════
+   MAIN
+   ═══════════════════════════════ */
+main{max-width:960px;margin:0 auto;padding:22px 14px 70px;}
+
+.ranking-panel{
+  background:linear-gradient(135deg,#09131f,#0b1828);
+  border:1px solid var(--blue2);border-radius:14px;
+  padding:14px 16px;margin-bottom:20px;
+  display:flex;align-items:center;gap:12px;
+  position:relative;overflow:hidden;
+}
+.ranking-panel::after{
+  content:'柔道';position:absolute;right:6px;top:2px;
+  font-size:66px;color:rgba(42,138,191,.05);
+  pointer-events:none;user-select:none;font-weight:900;line-height:1;
+}
+/* lynx paw in corner */
+.ranking-panel::before{
+  content:'🐾';position:absolute;left:8px;bottom:4px;
+  font-size:32px;opacity:.06;pointer-events:none;
+}
+.ranking-icon{font-size:30px;flex-shrink:0;}
+.ranking-text{flex:1;}
+.ranking-title{font-family:'Cinzel',serif;font-size:13px;color:var(--blue2);letter-spacing:.1em;}
+.ranking-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.ranking-go{
+  padding:7px 14px;border-radius:8px;
+  background:linear-gradient(135deg,#133050,#0a1e34);
+  border:1px solid var(--blue2);color:#8cd0f0;
+  font-family:'Cinzel',serif;font-size:11px;letter-spacing:.08em;
+  text-decoration:none;display:flex;align-items:center;gap:5px;transition:all .2s;flex-shrink:0;
+}
+.ranking-go:hover{color:#fff;box-shadow:0 4px 14px rgba(42,138,191,.3);}
+
+.section-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.sh-line{flex:1;height:1px;background:linear-gradient(90deg,var(--orange),transparent);}
+.sh-line.rev{background:linear-gradient(270deg,var(--orange),transparent);}
+.sh-title{font-family:'Cinzel',serif;font-size:11px;color:var(--orange);letter-spacing:.25em;text-transform:uppercase;white-space:nowrap;}
+/* lynx paw accent on section titles */
+.sh-paw{font-size:12px;opacity:.6;}
+
+.filters{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:18px;}
+.filter-btn{padding:5px 13px;border-radius:7px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'Cinzel',serif;font-size:11px;letter-spacing:.1em;cursor:pointer;transition:all .2s;}
+.filter-btn:hover{border-color:var(--orange);color:var(--orange);}
+.filter-btn.active{background:var(--orange);border-color:var(--orange);color:#fff;box-shadow:0 2px 8px rgba(230,114,10,.2);}
+
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(86px,1fr));gap:7px;margin-bottom:18px;}
+.stat-card{
+  background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+  padding:11px 6px;text-align:center;transition:all .2s;position:relative;overflow:hidden;
+}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--orange),transparent);opacity:0;transition:opacity .2s;}
+.stat-card:hover::before{opacity:1;}
+.stat-card:hover{border-color:rgba(230,114,10,.28);transform:translateY(-1px);}
+/* lynx claw scratch on hovered stat */
+.stat-card::after{content:'';position:absolute;bottom:0;right:0;width:30px;height:30px;background:linear-gradient(135deg,transparent 50%,rgba(230,114,10,.03) 50%);pointer-events:none;}
+.stat-icon{font-size:15px;margin-bottom:2px;}
+.stat-val{font-family:'Cinzel',serif;font-size:21px;color:var(--orange2);line-height:1;}
+.stat-lbl{font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
+
+.winbar-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 15px;margin-bottom:20px;}
+.winbar-labels{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:7px;}
+.winbar-track{background:var(--border);border-radius:3px;height:9px;overflow:hidden;}
+.winbar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#1e5a30,var(--green));transition:width .8s cubic-bezier(.4,0,.2,1);}
+
+/* TOURNAMENT CARDS */
+.t-list{display:flex;flex-direction:column;gap:9px;}
+.t-card{
+  border-radius:12px;overflow:hidden;border:1px solid var(--border);
+  border-left:3px solid transparent;transition:all .2s;
+  position:relative;
+}
+/* lynx scratch on card top-right */
+.t-card::after{
+  content:'';position:absolute;top:0;right:0;width:60px;height:60px;
+  background:
+    linear-gradient(135deg,transparent 55%,rgba(230,114,10,.025) 55%,rgba(230,114,10,.025) 57%,transparent 57%),
+    linear-gradient(130deg,transparent 60%,rgba(230,114,10,.018) 60%,rgba(230,114,10,.018) 62%,transparent 62%),
+    linear-gradient(125deg,transparent 65%,rgba(230,114,10,.012) 65%,rgba(230,114,10,.012) 67%,transparent 67%);
+  pointer-events:none;
+}
+.t-card.gold{border-left-color:#c8a020;background:linear-gradient(135deg,#130f00,#1a1400);}
+.t-card.silver{border-left-color:#607080;background:linear-gradient(135deg,#0e1318,#111820);}
+.t-card.bronze{border-left-color:#8a4a10;background:linear-gradient(135deg,#130800,#180d00);}
+.t-card.other{background:var(--bg3);}
+.t-card.gold:hover{border-color:#c8a020;box-shadow:0 4px 16px rgba(200,160,32,.09);}
+.t-card.silver:hover{border-color:#607080;}
+.t-card.bronze:hover{border-color:#8a4a10;}
+.t-card.other:hover{border-color:var(--orange);}
+.t-header{display:flex;align-items:flex-start;padding:11px 13px;gap:8px;cursor:pointer;user-select:none;}
+.t-left{flex:1;min-width:0;}
+.t-date{font-size:10px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;margin-bottom:2px;}
+.t-name{font-family:'Cinzel',serif;font-size:15px;color:var(--text);letter-spacing:.04em;line-height:1.2;}
+.t-location{font-size:12px;color:var(--muted);margin-top:2px;}
+.t-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;}
+.tag{padding:2px 8px;border-radius:4px;font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+.tag-age{background:rgba(42,138,191,.13);color:#7abcdc;border:1px solid rgba(42,138,191,.2);}
+.tag-wt{background:rgba(230,114,10,.13);color:#e89050;border:1px solid rgba(230,114,10,.2);}
+.tag-win{background:rgba(40,160,80,.13);color:#60d888;border:1px solid rgba(40,160,80,.2);}
+.tag-loss{background:rgba(200,50,50,.13);color:#e88080;border:1px solid rgba(200,50,50,.2);}
+.t-medal{flex-shrink:0;min-width:54px;text-align:center;padding:6px 6px;border-radius:8px;font-family:'Cinzel',serif;}
+.medal-icon{font-size:20px;display:block;line-height:1;}
+.medal-txt{font-size:9px;letter-spacing:.06em;margin-top:2px;}
+.t-medal.gold{background:rgba(200,160,32,.1);color:#e8c840;}
+.t-medal.silver{background:rgba(180,190,200,.06);color:#b0c0d0;}
+.t-medal.bronze{background:rgba(180,100,30,.1);color:#d09050;}
+.t-medal.other{background:rgba(255,255,255,.03);color:var(--muted);}
+.t-actions{display:flex;align-items:center;gap:4px;align-self:center;}
+.expand-icon{width:24px;height:24px;border-radius:5px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .3s;}
+.t-card.open .expand-icon{transform:rotate(180deg);background:rgba(230,114,10,.15);color:var(--orange);}
+.t-edit-btn{width:24px;height:24px;border-radius:5px;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.t-edit-btn:hover{border-color:var(--orange);color:var(--orange);}
+.t-body{display:none;padding:0 13px 14px;animation:fadeIn .2s ease;}
+.t-body.open{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-5px);}to{opacity:1;transform:translateY(0);}}
+.fight-bar-title{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;font-family:'Cinzel',serif;}
+.fights-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.fight-bubble{display:flex;flex-direction:column;align-items:center;width:42px;cursor:pointer;transition:transform .15s;}
+.fight-bubble:hover{transform:translateY(-3px);}
+.fight-dot{
+  width:38px;height:38px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cinzel',serif;font-size:14px;border:1.5px solid;
+  transition:box-shadow .2s;position:relative;
+}
+.fight-dot.w{background:rgba(40,160,80,.13);border-color:var(--green);color:var(--green);}
+.fight-dot.l{background:rgba(200,50,50,.13);border-color:var(--red);color:var(--red);}
+.fight-dot:hover{box-shadow:0 0 10px rgba(230,114,10,.3);}
+.fight-num{font-size:9px;color:var(--muted);margin-top:2px;}
+.fight-bubble.has-data .fight-dot::after{content:'';position:absolute;top:2px;right:2px;width:6px;height:6px;border-radius:50%;background:var(--orange);border:1px solid var(--bg);}
+.t-notes{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:10px;}
+.media-section-title{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;font-family:'Cinzel',serif;}
+.media-grid{display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start;margin-bottom:8px;}
+.media-thumb{width:72px;height:52px;border-radius:6px;overflow:hidden;border:1px solid var(--border);cursor:pointer;position:relative;transition:all .2s;flex-shrink:0;}
+.media-thumb:hover{border-color:var(--orange);transform:scale(1.05);}
+.media-thumb img,.media-thumb video{width:100%;height:100%;object-fit:cover;display:block;}
+.play-badge{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.4);color:#fff;font-size:15px;}
+.upload-btn{width:72px;height:52px;border-radius:6px;border:1.5px dashed var(--border);background:transparent;color:var(--muted);font-size:9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:all .2s;font-family:'Cinzel',serif;letter-spacing:.05em;}
+.upload-btn:hover{border-color:var(--orange);color:var(--orange);}
+/* Delete tournament button — always visible, red */
+.delete-comp-btn{
+  background:rgba(180,30,30,.15);
+  border:1.5px solid rgba(200,60,60,.4);
+  color:#e07070;
+  padding:5px 14px;border-radius:7px;
+  font-size:11px;cursor:pointer;
+  font-family:'Cinzel',serif;letter-spacing:.08em;
+  transition:all .2s;flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.delete-comp-btn:hover,.delete-comp-btn:active{
+  background:rgba(200,50,50,.3);
+  border-color:var(--red);color:#fff;
+}
+.media-del-btn{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:rgba(200,50,50,.85);border:none;color:#fff;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:3;padding:0;line-height:1;}
+.media-del-btn:hover{background:var(--red);}
+.media-thumb{position:relative;}
+.yt-link{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#ff6644;text-decoration:none;padding:3px 9px;border-radius:5px;border:1px solid rgba(255,80,0,.3);transition:all .2s;}
+.yt-link:hover{background:rgba(255,80,0,.1);}
+.pdf-link{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);text-decoration:none;padding:3px 9px;border-radius:5px;border:1px solid var(--border);transition:all .2s;}
+.pdf-link:hover{border-color:var(--orange);color:var(--orange);}
+.links-row{display:flex;gap:6px;flex-wrap:wrap;}
+
+/* ═══════════════════════════════
+   MODALS
+   ═══════════════════════════════ */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,3,7,.92);display:none;align-items:center;justify-content:center;z-index:1000;padding:14px;backdrop-filter:blur(6px);}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:linear-gradient(160deg,#0c1822,#070d14);
+  border:1.5px solid var(--orange);border-radius:18px;
+  width:100%;max-width:580px;max-height:90vh;overflow-y:auto;
+  position:relative;animation:modalIn .2s ease;
+}
+/* lynx paw watermark in modal */
+.modal::after{
+  content:'🐾';position:absolute;bottom:12px;right:14px;
+  font-size:60px;opacity:.04;pointer-events:none;user-select:none;
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.95);}to{opacity:1;transform:scale(1);}}
+.modal-close{position:absolute;top:11px;right:11px;background:rgba(230,114,10,.12);border:1px solid rgba(230,114,10,.25);color:var(--orange);width:28px;height:28px;border-radius:6px;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:2;}
+.modal-close:hover{background:rgba(230,114,10,.3);}
+.modal-header{padding:20px 16px 13px;border-bottom:1px solid var(--border);}
+.modal-title{font-family:'Cinzel',serif;font-size:19px;color:var(--orange2);letter-spacing:.1em;}
+.modal-subtitle{font-size:12px;color:var(--muted);margin-top:3px;}
+.modal-body{padding:15px 16px;}
+.modal-section{margin-bottom:17px;}
+.modal-section-title{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.modal-section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(230,114,10,.4),transparent);}
+.modal-actions{padding:0 16px 18px;display:flex;gap:8px;}
+.btn-save{flex:1;padding:10px;border-radius:9px;background:linear-gradient(135deg,var(--orange),#b85808);border:none;color:#fff;font-family:'Cinzel',serif;font-size:14px;letter-spacing:.1em;cursor:pointer;transition:opacity .2s;box-shadow:0 2px 10px rgba(230,114,10,.2);}
+.btn-save:hover{opacity:.88;}
+.btn-cancel{padding:10px 14px;border-radius:9px;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'Cinzel',serif;font-size:14px;cursor:pointer;transition:all .2s;}
+.btn-cancel:hover{border-color:var(--red);color:var(--red);}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.form-field{display:flex;flex-direction:column;gap:3px;}
+.form-field.full{grid-column:1/-1;}
+.form-field label{font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);font-family:'Cinzel',serif;}
+.form-field input,.form-field select,.form-field textarea{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:7px;font-family:'Crimson Pro',serif;font-size:14px;transition:border-color .2s;width:100%;}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{outline:none;border-color:var(--orange);}
+.form-field select option{background:var(--bg2);}
+.form-field textarea{resize:vertical;min-height:75px;}
+.fight-result-badge{display:inline-block;margin-top:7px;padding:4px 15px;border-radius:6px;font-family:'Cinzel',serif;font-size:16px;letter-spacing:.1em;}
+.fight-result-badge.w{background:rgba(40,160,80,.14);color:var(--green);border:1px solid var(--green);}
+.fight-result-badge.l{background:rgba(200,50,50,.14);color:var(--red);border:1px solid var(--red);}
+.score-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:9px;}
+.score-box{background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:10px 14px;text-align:center;min-width:100px;}
+.score-box label{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);display:block;margin-bottom:4px;font-family:'Cinzel',serif;}
+.score-input{width:100%;background:transparent;border:none;color:var(--orange2);font-family:'Cinzel',serif;font-size:28px;text-align:center;outline:none;}
+.score-divider{font-family:'Cinzel',serif;font-size:30px;color:var(--border);}
+.fight-saved-banner{background:rgba(230,114,10,.07);border:1px solid rgba(230,114,10,.18);border-radius:7px;padding:8px 11px;margin-bottom:12px;font-size:12px;display:none;}
+.fight-saved-banner.show{display:block;}
+.fsb-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:2px;}
+.fsb-item{color:var(--muted);}
+.fsb-item b{color:var(--text);}
+
+/* LIGHTBOX */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.94);display:none;align-items:center;justify-content:center;z-index:2000;}
+.lightbox.open{display:flex;}
+.lightbox img,.lightbox video{max-width:94vw;max-height:90vh;border-radius:10px;}
+.lb-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.1);border:none;color:#fff;width:32px;height:32px;border-radius:6px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+/* TOAST */
+#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--orange),#b85808);color:#fff;padding:8px 20px;border-radius:8px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:.1em;z-index:3000;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;box-shadow:0 4px 18px rgba(230,114,10,.35);}
+
+#installBanner{display:none;position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1.5px solid var(--orange);border-radius:12px;padding:10px 14px;z-index:500;align-items:center;gap:10px;max-width:340px;width:calc(100% - 28px);box-shadow:0 4px 18px rgba(230,114,10,.18);}
+#installBanner.show{display:flex;}
+
+footer{text-align:center;padding:22px;color:var(--border);font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-family:'Cinzel',serif;position:relative;}
+footer::before{content:'🐾 🥋 🐾';display:block;font-size:16px;opacity:.15;margin-bottom:6px;letter-spacing:.3em;}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--orange);border-radius:3px;opacity:.5;}
+
+@media(max-width:480px){
+  .form-grid{grid-template-columns:1fr;}
+  .form-field.full{grid-column:1;}
+  .score-box{min-width:85px;}
+  .athlete-live-stats{gap:10px;}
+  .coaches-bottom{justify-content:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO — ATHLETE ═══════════ -->
+<header>
+  <div style="position:relative;overflow:hidden;">
+    <!-- watermarks -->
+    <div class="hero-kanji">柔道</div>
+    <!-- Lynx SVG watermark -->
+    <svg class="lynx-watermark" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- simplified lynx face -->
+      <ellipse cx="100" cy="110" rx="70" ry="75" fill="#e8720a"/>
+      <ellipse cx="100" cy="110" rx="55" ry="60" fill="#8a4a08"/>
+      <!-- ears -->
+      <polygon points="45,55 30,10 70,45" fill="#e8720a"/>
+      <polygon points="155,55 170,10 130,45" fill="#e8720a"/>
+      <polygon points="50,50 38,22 68,44" fill="#2a1a08"/>
+      <polygon points="150,50 162,22 132,44" fill="#2a1a08"/>
+      <!-- ear tufts -->
+      <line x1="38" y1="12" x2="34" y2="0" stroke="#1a0a00" stroke-width="3"/>
+      <line x1="162" y1="12" x2="166" y2="0" stroke="#1a0a00" stroke-width="3"/>
+      <!-- eyes -->
+      <ellipse cx="74" cy="95" rx="14" ry="10" fill="#f5c040"/>
+      <ellipse cx="126" cy="95" rx="14" ry="10" fill="#f5c040"/>
+      <ellipse cx="74" cy="95" rx="5" ry="9" fill="#0a0500"/>
+      <ellipse cx="126" cy="95" rx="5" ry="9" fill="#0a0500"/>
+      <!-- nose -->
+      <ellipse cx="100" cy="118" rx="8" ry="5" fill="#1a0a00"/>
+      <!-- whiskers -->
+      <line x1="60" y1="115" x2="20" y2="108" stroke="#1a0a00" stroke-width="1.5"/>
+      <line x1="60" y1="120" x2="18" y2="120" stroke="#1a0a00" stroke-width="1.5"/>
+      <line x1="140" y1="115" x2="180" y2="108" stroke="#1a0a00" stroke-width="1.5"/>
+      <line x1="140" y1="120" x2="182" y2="120" stroke="#1a0a00" stroke-width="1.5"/>
+      <!-- lynx spots -->
+      <ellipse cx="60" cy="140" rx="8" ry="5" fill="#5a2a04" opacity=".5"/>
+      <ellipse cx="140" cy="140" rx="8" ry="5" fill="#5a2a04" opacity=".5"/>
+      <ellipse cx="80" cy="155" rx="6" ry="4" fill="#5a2a04" opacity=".4"/>
+      <ellipse cx="120" cy="155" rx="6" ry="4" fill="#5a2a04" opacity=".4"/>
+    </svg>
+
+    <div class="hero-inner">
+      <!-- ATHLETE PHOTO -->
+      <label class="hero-photo-col" for="heroPhotoInput" style="cursor:pointer;display:block;">
+        <input type="file" id="heroPhotoInput" accept="image/*" style="display:none;" onchange="handleAthletePhoto(this)"/>
+        <div id="heroPhotoWrap">
+          <div class="hero-photo-placeholder">
+            <svg class="lynx-placeholder" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="100" cy="110" rx="70" ry="75" fill="#e8720a" opacity=".4"/>
+              <polygon points="45,55 30,10 70,45" fill="#e8720a" opacity=".4"/>
+              <polygon points="155,55 170,10 130,45" fill="#e8720a" opacity=".4"/>
+              <ellipse cx="74" cy="95" rx="14" ry="10" fill="#f5c040" opacity=".6"/>
+              <ellipse cx="126" cy="95" rx="14" ry="10" fill="#f5c040" opacity=".6"/>
+              <ellipse cx="74" cy="95" rx="5" ry="9" fill="#0a0500" opacity=".8"/>
+              <ellipse cx="126" cy="95" rx="5" ry="9" fill="#0a0500" opacity=".8"/>
+              <ellipse cx="100" cy="118" rx="8" ry="5" fill="#1a0a00" opacity=".6"/>
+              <line x1="60" y1="115" x2="20" y2="108" stroke="#e8720a" stroke-width="1.5" opacity=".4"/>
+              <line x1="60" y1="120" x2="18" y2="120" stroke="#e8720a" stroke-width="1.5" opacity=".4"/>
+              <line x1="140" y1="115" x2="180" y2="108" stroke="#e8720a" stroke-width="1.5" opacity=".4"/>
+              <line x1="140" y1="120" x2="182" y2="120" stroke="#e8720a" stroke-width="1.5" opacity=".4"/>
+            </svg>
+            <span data-t="addPhoto">+ ФОТО</span>
+          </div>
+        </div>
+        <div class="photo-overlay">
+          <span class="photo-overlay-btn" data-t="changePhoto">📷 ЗМІНИТИ</span>
+        </div>
+      </label>
+
+      <!-- ATHLETE DATA -->
+      <div class="hero-data">
+        <div>
+          <div class="hero-eyebrow"><span data-t="athlete">СПОРТСМЕН</span></div>
+          <div class="athlete-name-display" id="nameDisplay" onclick="startEditName()" data-t-placeholder="Ім'я Прізвище">ІМ'Я СПОРТСМЕНА</div>
+          <input class="athlete-name-input" id="nameInput" onblur="saveName()" onkeydown="if(event.key==='Enter')saveName()"/>
+
+          <div class="athlete-live-stats" id="heroStats"></div>
+
+          <div class="attr-chips">
+            <div class="attr-chip" onclick="editAttr('belt')">
+              <span class="attr-lbl" data-t="belt">Пояс</span>
+              <span class="attr-val" id="attrBelt">—</span>
+            </div>
+            <div class="attr-chip" onclick="editAttr('weight')">
+              <span class="attr-lbl" data-t="weightCat">Вага</span>
+              <span class="attr-val" id="attrWeight">—</span>
+            </div>
+            <div class="attr-chip" onclick="editAttr('dob')">
+              <span class="attr-lbl" data-t="born">Нар.</span>
+              <span class="attr-val" id="attrDob">—</span>
+            </div>
+            <div class="attr-chip" onclick="editAttr('since')">
+              <span class="attr-lbl" data-t="since">З</span>
+              <span class="attr-val" id="attrSince">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BELT VISUAL -->
+        <div class="belt-display" id="beltDisplay" style="margin-top:18px;">
+          <div class="belt-visual-wrap" id="beltVisualWrap">
+            <div class="belt-seg" id="bs0" style="background:#1a1a1a;"></div>
+            <div class="belt-seg" id="bs1" style="background:#1a1a1a;"></div>
+            <div class="belt-seg knot" id="bsKnot" style="background:#1a1a1a;"></div>
+            <div class="belt-seg" id="bs2" style="background:#1a1a1a;"></div>
+            <div class="belt-seg" id="bs3" style="background:#1a1a1a;"></div>
+          </div>
+          <span class="belt-name" id="beltName" style="color:var(--muted);">— <span data-t="belt">пояс</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- LYNX SEPARATOR -->
+<div class="lynx-sep">
+  <span class="lynx-sep-icon">🐾</span>
+  <span style="font-family:'Cinzel',serif;font-size:10px;color:rgba(230,114,10,.4);letter-spacing:.25em;text-transform:uppercase;">KLUB JUDO RYŚ</span>
+  <span class="lynx-sep-icon">🐾</span>
+</div>
+
+<!-- ═══════════ CLUB SECTION ═══════════ -->
+<div class="club-section">
+  <div class="club-header">
+    <div class="club-mon">
+      <!-- Lynx paw SVG as club emblem -->
+      <svg class="club-mon-svg" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- paw pad -->
+        <ellipse cx="30" cy="38" rx="14" ry="15" fill="#e8720a" opacity=".9"/>
+        <!-- toe pads -->
+        <ellipse cx="16" cy="24" rx="6" ry="7" fill="#e8720a" opacity=".85"/>
+        <ellipse cx="26" cy="18" rx="6" ry="7" fill="#e8720a" opacity=".85"/>
+        <ellipse cx="36" cy="18" rx="6" ry="7" fill="#e8720a" opacity=".85"/>
+        <ellipse cx="46" cy="24" rx="6" ry="7" fill="#e8720a" opacity=".85"/>
+        <!-- claws -->
+        <line x1="14" y1="18" x2="11" y2="10" stroke="#f5c040" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="25" y1="12" x2="24" y2="4" stroke="#f5c040" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="36" y1="12" x2="37" y2="4" stroke="#f5c040" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="47" y1="18" x2="50" y2="10" stroke="#f5c040" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="club-info">
+      <div class="club-name">KLUB JUDO RYŚ</div>
+      <div class="club-sub">🐾 <span data-t="clubTagline">Клуб дзюдо · Польща</span></div>
+    </div>
+  </div>
+
+  <!-- COACHES -->
+  <div class="coaches-label"><span data-t="coaches">ТРЕНЕРИ</span></div>
+
+  <!-- TOP: Head coach -->
+  <div class="coaches-top">
+    <div class="coach-card head" id="coachCard0">
+      <div class="head-badge" data-t="headCoach">🏆 Головний тренер</div>
+      <div class="coach-photo-wrap" id="coachWrap0">
+        <input type="file" id="coachPhotoInput0" accept="image/*" style="display:none;" onchange="handleCoachPhoto(0,this)"/>
+        <div class="coach-photo-placeholder" id="coachPlaceholder0">
+          <div class="ph-icon">🥋</div>
+          <span data-t="addCoachPhoto">+ фото</span>
+        </div>
+        <div class="expand-hint" id="coachHint0" onclick="toggleCoachExpand(0)">▼</div>
+        <label class="coach-add-btn" for="coachPhotoInput0" onclick="event.stopPropagation()" title="Завантажити фото" style="cursor:pointer;">📷</label>
+      </div>
+      <div class="coach-name-el placeholder" id="coachName0" onclick="editCoachName(0)" data-t="coachName">Ім'я тренера</div>
+    </div>
+  </div>
+
+  <!-- BOTTOM: 2 coaches side by side -->
+  <div class="coaches-bottom">
+    <!-- COACH 2 -->
+    <div class="coach-card" id="coachCard1">
+      <div class="coach-photo-wrap" id="coachWrap1">
+        <input type="file" id="coachPhotoInput1" accept="image/*" style="display:none;" onchange="handleCoachPhoto(1,this)"/>
+        <div class="coach-photo-placeholder" id="coachPlaceholder1">
+          <div class="ph-icon">🥋</div>
+          <span data-t="addCoachPhoto">+ фото</span>
+        </div>
+        <div class="expand-hint" id="coachHint1" onclick="toggleCoachExpand(1)">▼</div>
+        <label class="coach-add-btn" for="coachPhotoInput1" onclick="event.stopPropagation()" title="Завантажити фото" style="cursor:pointer;">📷</label>
+      </div>
+      <div class="coach-name-el placeholder" id="coachName1" onclick="editCoachName(1)" data-t="coachName">Ім'я тренера</div>
+      <div class="coach-role-el placeholder" id="coachRole1" onclick="editCoachRole(1)" data-t="trainer">Тренер</div>
+    </div>
+    <!-- COACH 3 -->
+    <div class="coach-card" id="coachCard2">
+      <div class="coach-photo-wrap" id="coachWrap2">
+        <input type="file" id="coachPhotoInput2" accept="image/*" style="display:none;" onchange="handleCoachPhoto(2,this)"/>
+        <div class="coach-photo-placeholder" id="coachPlaceholder2">
+          <div class="ph-icon">🥋</div>
+          <span data-t="addCoachPhoto">+ фото</span>
+        </div>
+        <div class="expand-hint" id="coachHint2" onclick="toggleCoachExpand(2)">▼</div>
+        <label class="coach-add-btn" for="coachPhotoInput2" onclick="event.stopPropagation()" title="Завантажити фото" style="cursor:pointer;">📷</label>
+      </div>
+      <div class="coach-name-el placeholder" id="coachName2" onclick="editCoachName(2)" data-t="coachName">Ім'я тренера</div>
+      <div class="coach-role-el placeholder" id="coachRole2" onclick="editCoachRole(2)" data-t="trainer">Тренер</div>
+    </div>
+  </div>
+</div>
+
+<!-- LANG BAR -->
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('uk',this)">🇺🇦 <span>UA</span></button>
+  <button class="lang-btn" onclick="setLang('en',this)">🇬🇧 <span>EN</span></button>
+  <button class="lang-btn" onclick="setLang('pl',this)">🇵🇱 <span>PL</span></button>
+</div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <button class="tb-btn primary" onclick="openAddTournament()">⊕ <span data-t="addTournament">Турнір</span></button>
+  <a class="tb-btn" href="https://judo-rys.pl/kalendarz/index.php" target="_blank" style="text-decoration:none;">📅 <span data-t="calendar">Календар</span></a>
+  <button class="tb-btn" onclick="openBackup()">💾 Backup</button>
+  <button class="tb-btn" id="installBtn" style="display:none;" onclick="installPWA()">📲 <span data-t="install">Встановити</span></button>
+</div>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<main>
+  <!-- RANKING PANEL -->
+  <div class="ranking-panel">
+    <div class="ranking-icon">🏆</div>
+    <div class="ranking-text">
+      <div class="ranking-title" data-t="clubRankingTitle">РЕЙТИНГ KLUB JUDO RYŚ</div>
+      <div class="ranking-sub" data-t="clubRankingSub">Офіційний рейтинг на judo-rys.pl</div>
+    </div>
+    <a class="ranking-go" href="https://judo-rys.pl/rank/sum.php" target="_blank">↗ <span data-t="open">Відкрити</span></a>
+  </div>
+
+  <div class="section-head">
+    <div class="sh-line"></div>
+    <span class="sh-paw">🐾</span>
+    <div class="sh-title" data-t="statistics">СТАТИСТИКА</div>
+    <span class="sh-paw">🐾</span>
+    <div class="sh-line rev"></div>
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <div class="stats-grid" id="statsGrid"></div>
+  <div class="winbar-wrap">
+    <div class="winbar-labels">
+      <span><span data-t="won">Виграно</span>: <b id="wbWins"></b></span>
+      <span style="font-family:'Cinzel',serif;font-size:15px;color:var(--orange2);" id="wbPct"></span>
+      <span><span data-t="lost">Програно</span>: <b id="wbLoss"></b></span>
+    </div>
+    <div class="winbar-track"><div class="winbar-fill" id="winbarFill" style="width:0%"></div></div>
+  </div>
+
+  <div class="section-head" style="margin-top:4px;">
+    <div class="sh-line"></div>
+    <span class="sh-paw">🥋</span>
+    <div class="sh-title" data-t="competitions">ЗМАГАННЯ</div>
+    <span class="sh-paw">🥋</span>
+    <div class="sh-line rev"></div>
+  </div>
+
+  <div class="t-list" id="tournamentList"></div>
+</main>
+
+<!-- ═══════════ FIGHT MODAL ═══════════ -->
+<div class="modal-overlay" id="fightModal" onclick="if(event.target===this)closeModal('fightModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('fightModal')">✕</button>
+    <div class="modal-header">
+      <div style="font-size:9px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;font-family:'Cinzel',serif;" id="mFightNum"></div>
+      <div class="modal-title" id="mTournament"></div>
+      <div id="mResultBadge"></div>
+    </div>
+    <div class="modal-body">
+      <div class="fight-saved-banner" id="fightBanner">
+        <div class="fsb-row">
+          <span class="fsb-item"><span data-t="opponent">Суперник</span>: <b id="b_opp"></b></span>
+          <span class="fsb-item"><span data-t="club">Клуб</span>: <b id="b_club"></b></span>
+          <span class="fsb-item"><span data-t="country">Країна</span>: <b id="b_country"></b></span>
+        </div>
+        <div class="fsb-row">
+          <span class="fsb-item"><span data-t="score">Рахунок</span>: <b id="b_score"></b></span>
+          <span class="fsb-item"><span data-t="technique">Техніка</span>: <b id="b_tech"></b></span>
+          <span class="fsb-item"><span data-t="stage">Стадія</span>: <b id="b_stage"></b></span>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">👤 <span data-t="opponent">СУПЕРНИК</span></div>
+        <div class="form-grid">
+          <div class="form-field"><label data-t="fullName">Прізвище та ім'я</label><input id="f_opp_name" type="text"/></div>
+          <div class="form-field"><label data-t="club">Клуб</label><input id="f_opp_club" type="text"/></div>
+          <div class="form-field"><label data-t="country">Країна</label><input id="f_opp_country" type="text"/></div>
+          <div class="form-field"><label data-t="ageCategory">Вік. категорія</label><input id="f_opp_age" type="text"/></div>
+          <div class="form-field full"><label data-t="oppWeight">Вага суперника</label><input id="f_opp_weight" type="text"/></div>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">📊 <span data-t="score">РАХУНОК</span></div>
+        <div class="score-row">
+          <div class="score-box"><label data-t="myScore">МІЙ</label><input class="score-input" id="f_score_me" placeholder="10" type="text"/></div>
+          <div class="score-divider">:</div>
+          <div class="score-box"><label data-t="oppScore">СУПЕРНИК</label><input class="score-input" id="f_score_opp" placeholder="0" type="text"/></div>
+        </div>
+        <div class="form-grid" style="margin-top:8px;">
+          <div class="form-field"><label data-t="duration">Тривалість</label><input id="f_duration" placeholder="1:45" type="text"/></div>
+          <div class="form-field"><label data-t="stage">Стадія</label>
+            <select id="f_stage">
+              <option value="">—</option>
+              <option data-t="pool">Попередній тур</option>
+              <option>1/16</option><option>1/8</option><option>1/4</option><option>1/2</option>
+              <option data-t="final">Фінал</option><option data-t="bronze">За 3 місце</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">🎯 <span data-t="technique">ТЕХНІКА</span></div>
+        <div class="form-grid">
+          <div class="form-field"><label data-t="technique">Прийом</label>
+            <select id="f_tech">
+              <option value="">—</option>
+              <optgroup label="Nage-waza">
+                <option>Ippon Seoi Nage</option><option>Seoi Nage</option><option>Morote Seoi Nage</option>
+                <option>O Uchi Gari</option><option>Ko Uchi Gari</option><option>O Soto Gari</option>
+                <option>Harai Goshi</option><option>Uchi Mata</option><option>Tai Otoshi</option>
+                <option>De Ashi Barai</option><option>Tomoe Nage</option><option>Sumi Gaeshi</option>
+                <option>Hane Goshi</option><option>Ura Nage</option>
+              </optgroup>
+              <optgroup label="Ne-waza">
+                <option>Hon Kesa Gatame</option><option>Kuzure Kesa Gatame</option>
+                <option>Yoko Shiho Gatame</option><option>Tate Shiho Gatame</option>
+                <option>Ude Garami</option><option>Juji Gatame</option><option>Hadaka Jime</option>
+              </optgroup>
+              <optgroup label="Рішення">
+                <option>Хантей</option><option>Hansoku-make</option><option>Відмова суперника</option>
+              </optgroup>
+              <option value="custom">✏️ Інша...</option>
+            </select>
+          </div>
+          <div class="form-field"><label data-t="score">Оцінка</label>
+            <select id="f_score_type">
+              <option value="">—</option>
+              <option>Ippon</option><option>Waza-ari awasete Ippon</option><option>Waza-ari</option>
+              <option>Хантей — перемога</option><option>Hansoku-make суперника</option>
+              <option>Поразка Ippon</option><option>Поразка Waza-ari</option>
+              <option>Поразка Хантей</option>
+            </select>
+          </div>
+          <div class="form-field full" id="customTechWrap" style="display:none;">
+            <label data-t="customTech">Своя техніка</label><input id="f_tech_custom" type="text"/>
+          </div>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">📝 <span data-t="notes">ВИСНОВКИ</span></div>
+        <div class="form-field">
+          <textarea id="f_notes" placeholder="Що вдалося? Помилки? Що відпрацювати..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-save" onclick="saveFight()" data-t="save">💾 ЗБЕРЕГТИ</button>
+      <button class="btn-cancel" onclick="clearFight()">🗑</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD TOURNAMENT MODAL -->
+<div class="modal-overlay" id="adminModal" onclick="if(event.target===this)closeModal('adminModal')">
+  <div class="modal" style="max-width:600px;">
+    <button class="modal-close" onclick="closeModal('adminModal')">✕</button>
+    <div class="modal-header"><div class="modal-title" id="adminTitle" data-t="newTournament">НОВИЙ ТУРНІР</div></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-field full"><label data-t="tournamentName">Назва *</label><input id="a_name" type="text"/></div>
+        <div class="form-field full">
+          <label data-t="date">Дата змагань</label>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <input id="a_date_picker" type="date"
+              style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:7px;font-size:14px;flex:1;min-width:140px;"
+              onchange="syncDateFromPicker(this.value)"/>
+            <input id="a_date" type="text" placeholder="напр. 15.03.2026"
+              style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:7px;font-size:14px;flex:1;min-width:120px;"
+              onchange="syncDateToSortKey(this.value)"/>
+          </div>
+          <input id="a_year" type="hidden" value="2026"/>
+          <small style="color:var(--muted);font-size:11px;margin-top:3px;display:block;">Оберіть через календар або введіть вручну</small>
+        </div>
+        <div class="form-field"><label data-t="city">Місто</label><input id="a_location" type="text"/></div>
+        <div class="form-field"><label data-t="ageCategory">Вік. кат.</label><input id="a_age_cat" value="U13" type="text"/></div>
+        <div class="form-field"><label data-t="weightCategory">Вага</label><input id="a_weight" type="text"/></div>
+        <div class="form-field"><label data-t="place">Місце</label>
+          <select id="a_place"><option value="1">🥇 1</option><option value="2">🥈 2</option><option value="3">🥉 3</option><option value="4">4</option><option value="5">5</option><option value="">—</option></select>
+        </div>
+        <div class="form-field"><label data-t="fightsCount">Сутичок *</label><input id="a_fights_count" type="number" min="1" max="20"/></div>
+        <div class="form-field full"><label data-t="fightsSeq">Результати (В/W = виграв, П/L = програв)</label><input id="a_fights_seq" placeholder="В В П В" type="text"/></div>
+        <div class="form-field full"><label data-t="notes">Нотатки</label><input id="a_notes" type="text"/></div>
+        <div class="form-field"><label>YouTube</label><input id="a_yt" placeholder="https://..." type="text"/></div>
+        <div class="form-field"><label>PDF</label><input id="a_pdf" placeholder="https://..." type="text"/></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-save" onclick="saveTournament()" data-t="save">✅ ЗБЕРЕГТИ</button>
+      <button class="btn-cancel" onclick="closeModal('adminModal')" data-t="cancel">Скасувати</button>
+    </div>
+  </div>
+</div>
+
+<!-- BACKUP MODAL -->
+<div class="modal-overlay" id="backupModal" onclick="if(event.target===this)closeModal('backupModal')">
+  <div class="modal" style="max-width:460px;">
+    <button class="modal-close" onclick="closeModal('backupModal')">✕</button>
+    <div class="modal-header"><div class="modal-title">💾 BACKUP</div></div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-title" data-t="export">ЕКСПОРТ</div>
+        <button class="btn-save" onclick="exportData()" style="width:100%;" data-t="downloadBackup">⬇️ ЗАВАНТАЖИТИ BACKUP</button>
+      </div>
+      <div class="modal-section" style="margin-top:14px;">
+        <div class="modal-section-title" data-t="import">ІМПОРТ</div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:8px;" data-t="importWarn">⚠️ Поточні дані будуть замінені.</p>
+        <div style="border:1.5px dashed var(--border);border-radius:8px;padding:18px;text-align:center;color:var(--muted);font-size:12px;cursor:pointer;" onclick="document.getElementById('importFile').click()" data-t="dropFile">📁 Натисніть або перетягніть backup.json</div>
+        <input type="file" id="importFile" accept=".json" onchange="importData(this)"/>
+      </div>
+      <div class="modal-section" style="margin-top:14px;">
+        <div class="modal-section-title" data-t="storage">СХОВИЩЕ</div>
+        <p style="font-size:12px;color:var(--muted);line-height:1.7;" data-t="storageInfo">Дані зберігаються <b style="color:var(--text)">локально в браузері</b>. Робіть backup регулярно!</p>
+      </div>
+    </div>
+    <div class="modal-actions"><button class="btn-cancel" onclick="closeModal('backupModal')" style="flex:1;" data-t="close">Закрити</button></div>
+  </div>
+</div>
+
+<!-- CHIP EDIT MODAL -->
+<div class="modal-overlay" id="chipModal" onclick="if(event.target===this)closeModal('chipModal')">
+  <div class="modal" style="max-width:320px;">
+    <button class="modal-close" onclick="closeModal('chipModal')">✕</button>
+    <div class="modal-header"><div class="modal-title" id="chipTitle">РЕДАГУВАТИ</div></div>
+    <div class="modal-body">
+      <div class="form-field"><label id="chipLabel">Значення</label><input id="chipInput" type="text"/></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-save" onclick="saveChip()" data-t="save">✅ OK</button>
+      <button class="btn-cancel" onclick="closeModal('chipModal')" data-t="cancel">✕</button>
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOM CONFIRM MODAL -->
+<div id="confirmOverlay" style="position:fixed;inset:0;background:rgba(0,3,7,.9);display:none;align-items:center;justify-content:center;z-index:3000;padding:20px;backdrop-filter:blur(6px);">
+  <div style="background:linear-gradient(160deg,#0c1822,#070d14);border:1.5px solid #e04444;border-radius:18px;width:100%;max-width:320px;animation:modalIn .2s ease;">
+    <div style="padding:20px 18px 12px;border-bottom:1px solid rgba(200,50,50,.25);">
+      <div style="font-family:'Cinzel',serif;font-size:16px;color:#e04444;letter-spacing:.1em;">⚠️ <span id="cfmTitle" data-t="confirmation">ПІДТВЕРДЖЕННЯ</span></div>
+    </div>
+    <div style="padding:16px 18px;">
+      <p id="cfmMsg" style="font-size:15px;color:#e2dbd0;line-height:1.6;font-family:'Crimson Pro',serif;"></p>
+    </div>
+    <div style="padding:0 18px 18px;display:flex;gap:10px;">
+      <button id="cfmYes" style="flex:1;padding:11px;border-radius:9px;background:linear-gradient(135deg,#c03020,#8a1810);border:none;color:#fff;font-family:'Cinzel',serif;font-size:14px;letter-spacing:.1em;cursor:pointer;"></button>
+      <button id="cfmNo"  style="flex:1;padding:11px;border-radius:9px;background:transparent;border:1px solid #1c2838;color:#52606e;font-family:'Cinzel',serif;font-size:14px;letter-spacing:.1em;cursor:pointer;"></button>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('open')">
+  <button class="lb-close" onclick="document.getElementById('lightbox').classList.remove('open')">✕</button>
+  <img id="lbImg" src="" style="display:none;"/>
+  <video id="lbVid" controls style="display:none;"></video>
+</div>
+
+<div id="toast"></div>
+<div id="installBanner">
+  <span style="font-size:20px;">📲</span>
+  <div style="flex:1;"><div style="font-family:'Cinzel',serif;font-size:12px;color:var(--orange);" data-t="installApp">ВСТАНОВИТИ</div><div style="font-size:10px;color:var(--muted);" data-t="installDesc">Офлайн · як додаток</div></div>
+  <button class="tb-btn primary" onclick="installPWA()" style="padding:5px 10px;font-size:10px;">Так</button>
+  <button onclick="document.getElementById('installBanner').classList.remove('show')" style="background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;">✕</button>
+</div>
+
+<footer>MY JUDO STAT · 柔道 · <span id="footerYear"></span></footer>
+
+<script>
+/* ══════════ I18N ══════════ */
+const TR={
+  uk:{addTournament:'Турнір',clubRanking:'Рейтинг клубу',install:'Встановити',calendar:'Календар',confirmation:'ПІДТВЕРДЖЕННЯ',
+    clubRankingTitle:'РЕЙТИНГ KLUB JUDO RYŚ',clubRankingSub:'Офіційний рейтинг на judo-rys.pl',
+    open:'Відкрити',statistics:'СТАТИСТИКА',competitions:'ЗМАГАННЯ',
+    won:'Виграно',lost:'Програно',opponent:'Суперник',club:'Клуб',country:'Країна',
+    score:'Рахунок',technique:'Техніка',stage:'Стадія',notes:'Нотатки',
+    fullName:"Прізвище та ім'я",ageCategory:'Вік. кат.',oppWeight:'Вага супер.',
+    myScore:'МІЙ',oppScore:'СУПЕРНИК',duration:'Тривалість',
+    pool:'Попередній тур',final:'Фінал',bronze:'За 3 місце',customTech:'Своя техніка',
+    save:'ЗБЕРЕГТИ',cancel:'Скасувати',close:'Закрити',
+    newTournament:'НОВИЙ ТУРНІР',editTournament:'РЕДАГУВАТИ',tournamentName:'Назва *',
+    date:'Дата',year:'Рік',city:'Місто',weightCategory:'Вага',place:'Місце',
+    fightsCount:'Сутичок *',fightsSeq:'Результати (В=виграв П=програв)',
+    export:'ЕКСПОРТ',downloadBackup:'ЗАВАНТАЖИТИ BACKUP',import:'ІМПОРТ',
+    importWarn:'⚠️ Поточні дані будуть замінені.',dropFile:'📁 Натисніть або перетягніть backup.json',
+    storage:'СХОВИЩЕ',storageInfo:'Дані зберігаються <b style="color:var(--text)">локально в браузері</b>. Робіть backup!',
+    installApp:'ВСТАНОВИТИ',installDesc:'Офлайн · як додаток',
+    tournaments:'Турнірів',fights:'Сутичок',wins:'Перемог',losses:'Поразок',winRate:'% перемог',
+    gold:'Золото',silver:'Срібло',bronze2:'Бронза',
+    victory:'ПЕРЕМОГА',defeat:'ПОРАЗКА',fightOf:'Сутичка',of:'з',
+    clickForDetails:'Натисніть для деталей',addMedia:'Додати',
+    confirmDelete:'Видалити турнір?',deleteBtn:'Видалити',confirmClearFight:'Очистити дані сутички?',
+    confirmImport:'Імпортувати {n} турнірів?',
+    saved:'Збережено!',cleared:'Очищено',added:'Додано!',updated:'Оновлено!',deleted:'Видалено',
+    importOk:'Імпорт успішний!',importErr:'Помилка',backupDone:'Backup завантажено!',
+    installed:'Встановлено!',enterName:'Введіть назву',enterFights:'Введіть кількість сутичок',
+    athlete:'СПОРТСМЕН',belt:'Пояс',weightCat:'Вага',born:'Нар.',since:'З',addPhoto:'+ ФОТО',changePhoto:'📷 ЗМІНИТИ',
+    coaches:'ТРЕНЕРИ',coachName:'Ім\'я тренера',headCoach:'Головний тренер',trainer:'Тренер',
+    addCoachPhoto:'+ фото',clubTagline:'Клуб дзюдо · Польща',
+  },
+  en:{addTournament:'Tournament',clubRanking:'Club Ranking',install:'Install',calendar:'Calendar',confirmation:'CONFIRMATION',
+    clubRankingTitle:'KLUB JUDO RYŚ RANKING',clubRankingSub:'Official ranking at judo-rys.pl',
+    open:'Open',statistics:'STATISTICS',competitions:'COMPETITIONS',
+    won:'Won',lost:'Lost',opponent:'Opponent',club:'Club',country:'Country',
+    score:'Score',technique:'Technique',stage:'Stage',notes:'Notes',
+    fullName:'Full name',ageCategory:'Age cat.',oppWeight:'Opp. weight',
+    myScore:'MINE',oppScore:'OPPONENT',duration:'Duration',
+    pool:'Pool round',final:'Final',bronze:'Bronze',customTech:'Custom technique',
+    save:'SAVE',cancel:'Cancel',close:'Close',
+    newTournament:'NEW TOURNAMENT',editTournament:'EDIT',tournamentName:'Name *',
+    date:'Date',year:'Year',city:'City',weightCategory:'Weight',place:'Place',
+    fightsCount:'Fights *',fightsSeq:'Results (W=win L=loss)',
+    export:'EXPORT',downloadBackup:'DOWNLOAD BACKUP',import:'IMPORT',
+    importWarn:'⚠️ Current data will be replaced.',dropFile:'📁 Click or drag backup.json',
+    storage:'STORAGE',storageInfo:'Data stored <b style="color:var(--text)">locally in browser</b>. Make backups!',
+    installApp:'INSTALL',installDesc:'Offline · like a native app',
+    tournaments:'Tournaments',fights:'Fights',wins:'Wins',losses:'Losses',winRate:'Win %',
+    gold:'Gold',silver:'Silver',bronze2:'Bronze',
+    victory:'VICTORY',defeat:'DEFEAT',fightOf:'Fight',of:'of',
+    clickForDetails:'Click for details',addMedia:'Add',
+    confirmDelete:'Delete tournament?',deleteBtn:'Delete',confirmClearFight:'Clear fight data?',
+    confirmImport:'Import {n} tournaments?',
+    saved:'Saved!',cleared:'Cleared',added:'Added!',updated:'Updated!',deleted:'Deleted',
+    importOk:'Import successful!',importErr:'Error',backupDone:'Backup downloaded!',
+    installed:'Installed!',enterName:'Enter name',enterFights:'Enter number of fights',
+    athlete:'ATHLETE',belt:'Belt',weightCat:'Weight',born:'Born',since:'Since',addPhoto:'+ PHOTO',changePhoto:'📷 CHANGE',
+    coaches:'COACHES',coachName:'Coach name',headCoach:'Head Coach',trainer:'Trainer',
+    addCoachPhoto:'+ photo',clubTagline:'Judo Club · Poland',
+  },
+  pl:{addTournament:'Turniej',clubRanking:'Ranking klubu',install:'Zainstaluj',calendar:'Kalendarz',confirmation:'POTWIERDZENIE',
+    clubRankingTitle:'RANKING KLUB JUDO RYŚ',clubRankingSub:'Oficjalny ranking na judo-rys.pl',
+    open:'Otwórz',statistics:'STATYSTYKI',competitions:'ZAWODY',
+    won:'Wygrane',lost:'Przegrane',opponent:'Przeciwnik',club:'Klub',country:'Kraj',
+    score:'Wynik',technique:'Technika',stage:'Etap',notes:'Notatki',
+    fullName:'Nazwisko i imię',ageCategory:'Kat. wiek.',oppWeight:'Waga rywala',
+    myScore:'MÓJ',oppScore:'RYWAL',duration:'Czas',
+    pool:'Runda wstępna',final:'Finał',bronze:'O 3 miejsce',customTech:'Własna technika',
+    save:'ZAPISZ',cancel:'Anuluj',close:'Zamknij',
+    newTournament:'NOWY TURNIEJ',editTournament:'EDYTUJ',tournamentName:'Nazwa *',
+    date:'Data',year:'Rok',city:'Miasto',weightCategory:'Waga',place:'Miejsce',
+    fightsCount:'Walk *',fightsSeq:'Wyniki (W=wygrał P=przegrał)',
+    export:'EKSPORT',downloadBackup:'POBIERZ BACKUP',import:'IMPORT',
+    importWarn:'⚠️ Dane zostaną zastąpione.',dropFile:'📁 Kliknij lub przeciągnij backup.json',
+    storage:'MAGAZYN',storageInfo:'Dane <b style="color:var(--text)">lokalnie w przeglądarce</b>. Rób backupy!',
+    installApp:'ZAINSTALUJ',installDesc:'Offline · jak aplikacja',
+    tournaments:'Turniejów',fights:'Walk',wins:'Wygranych',losses:'Przegranych',winRate:'% wygranych',
+    gold:'Złoto',silver:'Srebro',bronze2:'Brąz',
+    victory:'ZWYCIĘSTWO',defeat:'PORAŻKA',fightOf:'Walka',of:'z',
+    clickForDetails:'Kliknij po szczegóły',addMedia:'Dodaj',
+    confirmDelete:'Usunąć turniej?',deleteBtn:'Usuń',confirmClearFight:'Wyczyścić dane walki?',
+    confirmImport:'Importować {n} turniejów?',
+    saved:'Zapisano!',cleared:'Wyczyszczono',added:'Dodano!',updated:'Zaktualizowano!',deleted:'Usunięto',
+    importOk:'Import OK!',importErr:'Błąd',backupDone:'Backup pobrany!',
+    installed:'Zainstalowano!',enterName:'Podaj nazwę',enterFights:'Podaj liczbę walk',
+    athlete:'ZAWODNIK',belt:'Pas',weightCat:'Waga',born:'Ur.',since:'Od',addPhoto:'+ ZDJĘCIE',changePhoto:'📷 ZMIEŃ',
+    coaches:'TRENERZY',coachName:'Imię trenera',headCoach:'Trener główny',trainer:'Trener',
+    addCoachPhoto:'+ zdjęcie',clubTagline:'Klub Judo · Polska',
+  }
+};
+let LANG=localStorage.getItem('judo_lang')||'uk';
+function t(k){return(TR[LANG]||TR.uk)[k]||k;}
+function applyLang(){
+  document.querySelectorAll('[data-t]').forEach(el=>{
+    const k=el.getAttribute('data-t');const v=t(k);
+    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA')el.placeholder=v;
+    else el.innerHTML=v;
+  });
+  document.documentElement.lang=LANG;
+}
+function setLang(l,btn){
+  LANG=l;localStorage.setItem('judo_lang',l);
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyLang();renderStats();renderTournaments();renderProfile();
+}
+
+/* ══════════ DATA ══════════ */
+const DEFAULT_COMPS=[
+  {id:'c1',date:'Лютий 2024',name:'Siedlce Open',location:'Siedlce',year:2024,ageCategory:'U13',weightCategory:'',place:1,fights:[{r:'w'},{r:'w'},{r:'w'}],notes:'',yt:'',pdf:''},
+  {id:'c2',date:'03.03.2024',name:'Ikizama Cup',location:'',year:2024,ageCategory:'U13',weightCategory:'',place:1,fights:[{r:'w'},{r:'w'},{r:'w'}],notes:'',yt:'',pdf:''},
+  {id:'c3',date:'11.03.2024',name:'XI Ogólnopolski Turniej Judo',location:'Błonie',year:2024,ageCategory:'U13',weightCategory:'',place:1,fights:[{r:'w'},{r:'w'},{r:'w'},{r:'w'}],notes:'',yt:'',pdf:''},
+  {id:'c4',date:'16.03.2024',name:'Wojewódzki Puchar w Judo',location:'Świdnik',year:2024,ageCategory:'U13',weightCategory:'',place:1,fights:[{r:'w'},{r:'w'},{r:'w'},{r:'w'}],notes:'',yt:'',pdf:''},
+  {id:'c5',date:'27.04.2024',name:'Hato Judo Cup',location:'',year:2024,ageCategory:'U13',weightCategory:'',place:1,fights:[{r:'w'},{r:'w'},{r:'w'},{r:'w'},{r:'w'},{r:'w'}],notes:'',yt:'',pdf:''},
+  {id:'c6',date:'11.05.2024',name:'Same Judo Cup 8',location:'',year:2024,ageCategory:'U13',weightCategory:'',place:2,fights:[{r:'w'},{r:'w'},{r:'w'},{r:'l'}],notes:'Програв у фіналі',yt:'https://www.youtube.com/live/C1IBptPjoZg?feature=shared',pdf:''},
+  {id:'c7',date:'19.05.2024',name:'Люблін',location:'Люблін',year:2024,ageCategory:'U13',weightCategory:'',place:1,fights:[{r:'w'},{r:'w'},{r:'w'},{r:'w'}],notes:'',yt:'',pdf:''},
+  {id:'c8',date:'31.05.2024',name:'Gdynia Baltic Cup',location:'Gdynia',year:2024,ageCategory:'U13',weightCategory:'',place:2,fights:[{r:'w'},{r:'w'},{r:'w'},{r:'w'},{r:'l'}],notes:'Програв по хантею',yt:'https://www.youtube.com/live/C1IBptPjoZg',pdf:''},
+  {id:'c9',date:'08.06.2024',name:'WOM',location:'',year:2024,ageCategory:'U13',weightCategory:'',place:1,fights:[{r:'w'},{r:'w'},{r:'w'},{r:'w'},{r:'w'},{r:'w'}],notes:'',yt:'',pdf:''},
+  {id:'c10',date:'21.09.2024',name:'Mistrzostwa Dzieci U13 — Eliminacje PZJ',location:'Регіон Центрально-Східний',year:2024,ageCategory:'U13',weightCategory:'',place:2,fights:[{r:'w'},{r:'w'},{r:'w'},{r:'w'},{r:'l'}],notes:'',yt:'',pdf:''},
+  {id:'c11',date:'28.09.2024',name:'Ogólnopolski Turniej Dzieci Kowala U13',location:'Kowala',year:2024,ageCategory:'U13',weightCategory:'',place:1,fights:[{r:'w'},{r:'w'},{r:'w'},{r:'w'}],notes:'',yt:'',pdf:''},
+  {id:'c12',date:'06.10.2024',name:'Puchar PZJ Judo',location:'Kielce',year:2024,ageCategory:'U13',weightCategory:'',place:1,fights:[{r:'w'},{r:'w'},{r:'w'},{r:'w'},{r:'w'}],notes:'',yt:'https://www.youtube.com/live/JZfxQdP25xI?si=ZN44LEiY5Obatlbf',pdf:'https://cdn.judomanager.com/files/competitions/4519/Puchar_PZJUDO_U13_results_short.pdf?id=28808257'},
+  {id:'c13',date:'09.11.2024',name:'X Turniej Puchar Burmistrza Białołęki U13',location:'Białołęka',year:2024,ageCategory:'U13',weightCategory:'',place:2,fights:[{r:'w'},{r:'w'},{r:'w'},{r:'l'}],notes:'+++-',yt:'',pdf:''},
+  {id:'c14',date:'10.11.2024',name:'Turniej Judo — Dzień Niepodległości',location:'Zamość',year:2024,ageCategory:'U13',weightCategory:'',place:1,fights:[{r:'w'},{r:'w'}],notes:'',yt:'',pdf:''},
+  {id:'c15',date:'12.11.2024',name:'Zamość',location:'Zamość',year:2024,ageCategory:'U13',weightCategory:'',place:1,fights:[{r:'w'},{r:'w'}],notes:'1 людина у вазі',yt:'',pdf:''},
+  {id:'c16',date:'16.11.2024',name:'Skierniewice',location:'Skierniewice',year:2024,ageCategory:'U13',weightCategory:'',place:1,fights:[{r:'w'},{r:'w'},{r:'w'},{r:'w'},{r:'w'}],notes:'+++++',yt:'',pdf:''},
+  {id:'c17',date:'23.11.2024',name:'Siedlce',location:'Siedlce',year:2024,ageCategory:'U13',weightCategory:'',place:1,fights:[{r:'w'}],notes:'',yt:'',pdf:''},
+  {id:'c18',date:'08.12.2024',name:'Start Radom',location:'Radom',year:2024,ageCategory:'U13',weightCategory:'',place:1,fights:[{r:'w'},{r:'w'}],notes:'',yt:'',pdf:''},
+  {id:'c19',date:'09.03.2025',name:'Pesechno',location:'Песечно',year:2025,ageCategory:'U13',weightCategory:'',place:5,fights:[{r:'w'},{r:'w'},{r:'l'},{r:'l'}],notes:'',yt:'',pdf:''},
+  {id:'c20',date:'15.03.2025',name:'Świdnik',location:'Świdnik',year:2025,ageCategory:'U13',weightCategory:'',place:1,fights:[{r:'w'},{r:'w'},{r:'w'}],notes:'',yt:'',pdf:''},
+  {id:'c21',date:'13.04.2025',name:'WOM',location:'',year:2025,ageCategory:'U13',weightCategory:'',place:3,fights:[{r:'w'},{r:'w'},{r:'l'},{r:'w'},{r:'w'},{r:'w'},{r:'w'}],notes:'',yt:'',pdf:'https://datav2.judomanager.com/PDFReports/Draw?weightsIds=10412&competitionsIds=5284'},
+  {id:'c22',date:'10.05.2025',name:'Same Judo Cup 9',location:'',year:2025,ageCategory:'U13',weightCategory:'',place:2,fights:[{r:'w'},{r:'w'},{r:'w'},{r:'l'}],notes:'Програв у фіналі',yt:'https://www.youtube.com/live/eiw_phiaUPI?si=BsvH2dHlznTurLwZ',pdf:'https://datav2.judomanager.com/PDFReports/Draw?weightsIds=10424&competitionsIds=5044'},
+  {id:'c23',date:'24.05.2025',name:'European Hopes Bytom Cup',location:'Bytom',year:2025,ageCategory:'U13',weightCategory:'',place:null,fights:[{r:'l'}],notes:'',yt:'',pdf:'https://datav2.judomanager.com/PDFReports/Draw?weightsIds=29746&competitionsIds=5569'},
+  {id:'c24',date:'06.09.2025',name:'Mizuno Judo Cup',location:'Brno',year:2025,ageCategory:'U13',weightCategory:'',place:null,fights:[{r:'l'},{r:'l'}],notes:'',yt:'',pdf:''},
+  {id:'c25',date:'20.09.2025',name:'Judo Sensei Płock',location:'Płock',year:2025,ageCategory:'U13',weightCategory:'',place:2,fights:[{r:'w'},{r:'w'},{r:'w'},{r:'w'},{r:'l'}],notes:'Програв у фіналі',yt:'',pdf:''},
+  {id:'c26',date:'28.09.2025',name:'Турнір Вересень',location:'',year:2025,ageCategory:'U13',weightCategory:'',place:3,fights:[{r:'w'},{r:'w'},{r:'l'}],notes:'',yt:'',pdf:''},
+  {id:'c27',date:'11.10.2025',name:'Cuma Cup',location:'',year:2025,ageCategory:'U13',weightCategory:'',place:null,fights:[{r:'l'},{r:'w'},{r:'w'},{r:'l'}],notes:'',yt:'',pdf:'https://datav2.judomanager.com/PDFReports/Draw?weightsIds=10413&competitionsIds=5794'},
+  {id:'c28',date:'08.11.2025',name:'Lemur Judo Cup',location:'',year:2025,ageCategory:'U13',weightCategory:'',place:null,fights:[{r:'w'},{r:'l'},{r:'w'},{r:'w'},{r:'l'}],notes:'',yt:'',pdf:''},
+  {id:'c29',date:'23.11.2025',name:'Panda Cup',location:'',year:2025,ageCategory:'U13',weightCategory:'',place:1,fights:[{r:'w'},{r:'w'},{r:'w'},{r:'w'},{r:'w'}],notes:'',yt:'',pdf:''},
+  {id:'c30',date:'08.02.2026',name:'WOM',location:'',year:2026,ageCategory:'U13',weightCategory:'',place:1,fights:[{r:'w'},{r:'w'},{r:'w'},{r:'w'},{r:'w'}],notes:'',yt:'',pdf:''},
+  {id:'c31',date:'07.03.2026',name:'Ikizama Judo Cup',location:'',year:2026,ageCategory:'U13',weightCategory:'60 kg',place:3,fights:[{r:'w'},{r:'w'},{r:'l'},{r:'w'}],notes:'60 kg. Програв вихід у фінал, виграв за 3 місце',yt:'',pdf:'https://wyniki.judostat.pl/ikizama-cup2026/4d5531352d3630.pdf'},
+];
+
+function ls(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
+function lss(k,v){
+  // Always save to IDB as reliable backup (no quota issues)
+  if(v === null || v === undefined){ idbDelete('ls_'+k); } else { idbSet('ls_'+k, v); }
+  try{
+    localStorage.setItem(k, JSON.stringify(v));
+  } catch(e){
+    // localStorage full — IDB backup is the source of truth
+    console.warn('localStorage full, using IDB for:', k);
+  }
+}
+function lsWithFallback(k){
+  // Try localStorage first, then IDB cache
+  var v = ls(k);
+  if(v !== null) return Promise.resolve(v);
+  return idbGet('ls_'+k);
+}
+
+// ── IndexedDB — robust with auto-reconnect ──
+const IDB_NAME='judoPhotos', IDB_VER=1, IDB_STORE='photos';
+let idb=null;
+
+function openIDB(){
+  // If connection is closed/broken, reset and reopen
+  if(idb && idb.objectStoreNames){
+    try{ idb.objectStoreNames.contains(IDB_STORE); /* test if still open */ }
+    catch(e){ idb=null; }
+  }
+  if(idb) return Promise.resolve(idb);
+  return new Promise(function(res,rej){
+    var req = indexedDB.open(IDB_NAME, IDB_VER);
+    req.onupgradeneeded = function(e){
+      var db = e.target.result;
+      if(!db.objectStoreNames.contains(IDB_STORE)) db.createObjectStore(IDB_STORE);
+    };
+    req.onsuccess = function(e){
+      idb = e.target.result;
+      // Auto-reset on unexpected close
+      idb.onclose = function(){ idb = null; };
+      idb.onerror = function(){ idb = null; };
+      res(idb);
+    };
+    req.onerror = function(e){ rej(e.target.error); };
+  });
+}
+
+function idbSet(key, val){
+  return openIDB().then(function(db){
+    return new Promise(function(res, rej){
+      try{
+        var tx = db.transaction(IDB_STORE, 'readwrite');
+        tx.oncomplete = function(){ res(); };
+        tx.onerror = function(e){ rej(e.target.error); };
+        tx.objectStore(IDB_STORE).put(val === null ? undefined : val, key);
+      } catch(e){
+        // Connection closed — reset and retry once
+        idb = null;
+        openIDB().then(function(db2){
+          var tx2 = db2.transaction(IDB_STORE, 'readwrite');
+          tx2.oncomplete = function(){ res(); };
+          tx2.onerror = function(e){ rej(e.target.error); };
+          tx2.objectStore(IDB_STORE).put(val === null ? undefined : val, key);
+        }).catch(rej);
+      }
+    });
+  }).catch(function(e){ console.warn('IDB set failed silently:', e.message||e); });
+}
+
+function idbGet(key){
+  return openIDB().then(function(db){
+    return new Promise(function(res, rej){
+      try{
+        var tx = db.transaction(IDB_STORE, 'readonly');
+        var req = tx.objectStore(IDB_STORE).get(key);
+        req.onsuccess = function(e){ res(e.target.result !== undefined ? e.target.result : null); };
+        req.onerror = function(e){ rej(e.target.error); };
+      } catch(e){
+        idb = null;
+        res(null); // fail gracefully on read
+      }
+    });
+  }).catch(function(){ return null; });
+}
+
+function idbDelete(key){
+  return openIDB().then(function(db){
+    return new Promise(function(res,rej){
+      try{
+        var tx = db.transaction(IDB_STORE,'readwrite');
+        tx.oncomplete = function(){ res(); };
+        tx.onerror = function(){ res(); }; // ignore delete errors
+        tx.objectStore(IDB_STORE).delete(key);
+      } catch(e){ res(); }
+    });
+  }).catch(function(){ return null; });
+}
+
+// In-memory photo cache (key -> dataURL)
+const PHOTO_CACHE={};
+
+function savePhoto(key,dataUrl){
+  PHOTO_CACHE[key]=dataUrl;
+  return idbSet(key,dataUrl).catch(e=>console.error('IDB save error',e));
+}
+function loadPhoto(key){
+  if(PHOTO_CACHE[key]) return Promise.resolve(PHOTO_CACHE[key]);
+  return idbGet(key).then(v=>{if(v)PHOTO_CACHE[key]=v;return v;});
+}
+
+let COMPS = ls('judo_comps') || null; // may be null if localStorage was cleared
+let activeYear='all';
+let modalCtx=null;
+let editingId=null;
+let currentChipKey=null;
+let deferredInstall=null;
+
+/* ══════════ BELT DATA ══════════ */
+// Belt color lookup by keyword (case-insensitive partial match)
+const BELT_COLORS=[
+  {keys:['біл','white','biał','weiß'],color:'#e8e8e8',glow:'#c0c0c0'},
+  {keys:['жовт','yellow','żółt','gelb'],color:'#f5d020',glow:'#f0c000'},
+  {keys:['помаранч','orange','pomarańcz'],color:'#e8720a',glow:'#ff8822'},
+  {keys:['зелен','green','zielon','grün'],color:'#22aa22',glow:'#33cc33'},
+  {keys:['син','blue','niebiesk','blau'],color:'#1a5abf',glow:'#3377ee'},
+  {keys:['коричн','brown','brązow','braun'],color:'#8a4a10',glow:'#bb6622'},
+  {keys:['чорн','black','czarn','schwarz'],color:'#222222',glow:'#888844'},
+];
+function findBeltColor(val){
+  if(!val)return null;
+  const v=val.toLowerCase();
+  for(const b of BELT_COLORS){
+    if(b.keys.some(k=>v.includes(k)))return b;
+  }
+  return null;
+}
+
+/* ══════════ PROFILE ══════════ */
+
+function saveP(p){
+  // Save text data only to localStorage, photos go to IndexedDB
+  const slim={};
+  Object.keys(p).forEach(k=>{
+    if(k==='photo') return; // athlete photo -> IDB only
+    if(k.startsWith('coach') && p[k] && p[k].photo){
+      const {photo,...rest}=p[k];
+      slim[k]=rest;
+    } else {
+      slim[k]=p[k];
+    }
+  });
+  lss('judo_profile',slim);
+  // Save photos to IDB
+  if(p.photo) savePhoto('athlete_photo',p.photo);
+  for(let i=0;i<3;i++){
+    if(p['coach'+i]&&p['coach'+i].photo){
+      savePhoto('coach_photo_'+i, p['coach'+i].photo);
+    }
+  }
+}
+function getP(){
+  const p=ls('judo_profile')||{};
+  // Restore cached photos
+  if(PHOTO_CACHE['athlete_photo']) p.photo=PHOTO_CACHE['athlete_photo'];
+  for(let i=0;i<3;i++){
+    if(PHOTO_CACHE['coach_photo_'+i]){
+      if(!p['coach'+i])p['coach'+i]={};
+      p['coach'+i].photo=PHOTO_CACHE['coach_photo_'+i];
+    }
+  }
+  return p;
+}
+
+function renderProfile(){
+  const p=getP();
+  // name
+  document.getElementById('nameDisplay').textContent=p.name||(LANG==='pl'?'IMIĘ ZAWODNIKA':LANG==='en'?'ATHLETE NAME':'ІМ\'Я СПОРТСМЕНА');
+  document.getElementById('nameInput').value=p.name||'';
+  // photo
+  const wrap=document.getElementById('heroPhotoWrap');
+  if(p.photo){
+    wrap.innerHTML=`<img class="hero-photo-img" src="${p.photo}" alt="athlete"/>`;
+  } else {
+    wrap.innerHTML=`<div class="hero-photo-placeholder"><svg class="lynx-placeholder" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="100" cy="110" rx="70" ry="75" fill="#e8720a" opacity=".35"/><polygon points="45,55 30,10 70,45" fill="#e8720a" opacity=".35"/><polygon points="155,55 170,10 130,45" fill="#e8720a" opacity=".35"/><ellipse cx="74" cy="95" rx="14" ry="10" fill="#f5c040" opacity=".5"/><ellipse cx="126" cy="95" rx="14" ry="10" fill="#f5c040" opacity=".5"/><ellipse cx="74" cy="95" rx="5" ry="9" fill="#0a0500" opacity=".7"/><ellipse cx="126" cy="95" rx="5" ry="9" fill="#0a0500" opacity=".7"/></svg><span>${t('addPhoto')}</span></div>`;
+  }
+  // attrs
+  document.getElementById('attrBelt').textContent=p.belt||'—';
+  document.getElementById('attrWeight').textContent=p.weight||'—';
+  document.getElementById('attrDob').textContent=p.dob||'—';
+  document.getElementById('attrSince').textContent=p.since||'—';
+  // belt visual
+  const bd=findBeltColor(p.belt||'');
+  if(bd){
+    const col=bd.color; const glow=bd.glow;
+    ['bs0','bs1','bsKnot','bs2','bs3'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el){el.style.background=col;el.style.boxShadow=`0 0 16px 4px ${glow}, inset 0 0 8px rgba(255,255,255,.2)`;}
+    });
+    document.getElementById('beltVisualWrap').style.boxShadow=`0 0 28px 6px ${glow}99, 0 0 8px 2px ${glow}`;
+    document.getElementById('beltName').style.color=glow;
+    document.getElementById('beltName').style.textShadow=`0 0 14px ${glow}, 0 0 28px ${glow}88`;
+    document.getElementById('beltName').innerHTML=`${p.belt} <span style="color:var(--muted);font-size:11px;text-shadow:none;">${t('belt')}</span>`;
+  } else {
+    ['bs0','bs1','bsKnot','bs2','bs3'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el){el.style.background='#222';el.style.boxShadow='none';}
+    });
+    document.getElementById('beltVisualWrap').style.boxShadow='none';
+    document.getElementById('beltName').style.color='var(--muted)';
+    document.getElementById('beltName').style.textShadow='none';
+    document.getElementById('beltName').innerHTML=`— <span>${t('belt')}</span>`;
+  }
+  // live stats
+  const s=calcStats(COMPS);const wr=s.fights>0?Math.round(s.wins/s.fights*100):0;
+  document.getElementById('heroStats').innerHTML=[
+    {val:s.tournaments,lbl:t('tournaments')},
+    {val:s.fights,lbl:t('fights')},
+    {val:wr+'%',lbl:t('winRate')},
+    {val:s.gold+'🥇',lbl:t('gold')},
+  ].map(x=>`<div class="als-item"><div class="als-val">${x.val}</div><div class="als-lbl">${x.lbl}</div></div>`).join('');
+  // coaches
+  for(let i=0;i<3;i++){
+    const cd=p[`coach${i}`]||{};
+    const wrap=document.getElementById(`coachWrap${i}`);
+    const ph=document.getElementById(`coachPlaceholder${i}`);
+    if(cd.photo){
+      if(ph) ph.style.display='none';
+      let img=wrap.querySelector('img.coach-img');
+      if(!img){
+        img=document.createElement('img');
+        img.className='coach-img';
+        img.style.cssText='width:100%;height:260px;object-fit:cover;object-position:top center;display:block;position:relative;z-index:1;';
+        wrap.insertBefore(img,wrap.firstChild);
+      }
+      img.src=cd.photo;
+    } else {
+      // no photo - ensure placeholder visible
+      const existImg=wrap.querySelector('img.coach-img');
+      if(existImg)existImg.remove();
+      if(ph)ph.style.display='';
+    }
+    const ne=document.getElementById(`coachName${i}`);
+    if(cd.name){ne.textContent=cd.name;ne.classList.remove('placeholder');}
+    else{ne.textContent=t('coachName');ne.classList.add('placeholder');}
+    if(i>0){
+      const re=document.getElementById(`coachRole${i}`);
+      if(re){
+        if(cd.role){re.textContent=cd.role;re.classList.remove('placeholder');}
+        else{re.textContent=t('trainer');re.classList.add('placeholder');}
+      }
+    }
+  }
+}
+
+function handleAthletePhoto(input){
+  const files = input.files;
+  if(!files || !files.length) return;
+  const f = files[0];
+  const r = new FileReader();
+  r.onload = function(e){
+    try{
+      const dataUrl = e.target.result;
+      PHOTO_CACHE['athlete_photo'] = dataUrl;
+      savePhoto('athlete_photo', dataUrl);
+      const wrap = document.getElementById('heroPhotoWrap');
+      if(wrap){
+        wrap.innerHTML = '<img class="hero-photo-img" src="' + dataUrl + '" alt="athlete" style="width:100%;height:100%;min-height:360px;object-fit:cover;object-position:top center;display:block;"/>';
+      }
+      input.value = '';
+    } catch(err){ console.error('Photo error:', err); }
+  };
+  r.readAsDataURL(f);
+}
+function startEditName(){
+  document.getElementById('nameDisplay').style.display='none';
+  document.getElementById('nameInput').style.display='block';
+  document.getElementById('nameInput').focus();
+}
+function saveName(){
+  const v=document.getElementById('nameInput').value.trim();
+  const p=getP();p.name=v||'';saveP(p);
+  document.getElementById('nameDisplay').textContent=p.name||(LANG==='pl'?'IMIĘ ZAWODNIKA':LANG==='en'?'ATHLETE NAME':'ІМ\'Я СПОРТСМЕНА');
+  document.getElementById('nameDisplay').style.display='';
+  document.getElementById('nameInput').style.display='none';
+}
+
+const ATTR_META={
+  belt:{title:'ПОЯС / BELT / PAS',label:'Колір поясу'},
+  weight:{title:'ВАГА / WEIGHT / WAGA',label:'Категорія ваги'},
+  dob:{title:'РІК НАРОДЖЕННЯ / BORN / URODZONY',label:'Рік народження'},
+  since:{title:'З / SINCE / OD',label:'Рік початку занять дзюдо'},
+};
+function editAttr(k){
+  currentChipKey=k;const m=ATTR_META[k];const p=getP();
+  document.getElementById('chipTitle').textContent=m.title;
+  document.getElementById('chipLabel').textContent=m.label;
+  document.getElementById('chipInput').value=p[k]||'';
+  openModal('chipModal');setTimeout(()=>document.getElementById('chipInput').focus(),80);
+}
+function saveChip(){
+  const v=document.getElementById('chipInput').value.trim();
+  if(currentChipKey&&currentChipKey.startsWith('coachName')){
+    const i=parseInt(currentChipKey.replace('coachName',''));
+    saveCoachField(i,'name');closeModal('chipModal');return;
+  }
+  if(currentChipKey&&currentChipKey.startsWith('coachRole')){
+    const i=parseInt(currentChipKey.replace('coachRole',''));
+    saveCoachField(i,'role');closeModal('chipModal');return;
+  }
+  const p=getP();p[currentChipKey]=v;saveP(p);
+  closeModal('chipModal');renderProfile();
+}
+
+/* ══════════ COACHES ══════════ */
+function toggleCoachExpand(i){
+  const wrap = document.getElementById('coachWrap'+i);
+  const hint = document.getElementById('coachHint'+i);
+  if(!wrap) return;
+  const isExp = wrap.classList.contains('expanded');
+  wrap.classList.toggle('expanded', !isExp);
+  if(hint) hint.textContent = isExp ? '▼' : '▲';
+}
+function handleCoachPhoto(i, input){
+  const files = input.files;
+  if(!files || !files.length) return;
+  const f = files[0];
+  const r = new FileReader();
+  r.onload = function(e){
+    try{
+      const dataUrl = e.target.result;
+      PHOTO_CACHE['coach_photo_'+i] = dataUrl;
+      savePhoto('coach_photo_'+i, dataUrl);
+      const wrap = document.getElementById('coachWrap'+i);
+      const ph = document.getElementById('coachPlaceholder'+i);
+      if(ph) ph.style.display = 'none';
+      let img = wrap ? wrap.querySelector('img.coach-img') : null;
+      if(!img && wrap){
+        img = document.createElement('img');
+        img.className = 'coach-img';
+        img.style.cssText = 'width:100%;height:260px;object-fit:cover;object-position:top center;display:block;position:relative;z-index:1;';
+        wrap.insertBefore(img, wrap.firstChild);
+      }
+      if(img) img.src = dataUrl;
+      input.value = '';
+    } catch(err){ console.error('Coach photo error:', err); }
+  };
+  r.readAsDataURL(f);
+}
+function editCoachName(i){
+  const el=document.getElementById(`coachName${i}`);
+  const p=getP();const cd=p[`coach${i}`]||{};
+  currentChipKey=`coachName${i}`;
+  document.getElementById('chipTitle').textContent=`ТРЕНЕР ${i+1} — ІМ'Я`;
+  document.getElementById('chipLabel').textContent="Прізвище та ім'я";
+  document.getElementById('chipInput').value=cd.name||'';
+  openModal('chipModal');
+  // override saveChip for this case
+  document.getElementById('chipInput').onkeydown=function(e){if(e.key==='Enter'){saveCoachField(i,'name');closeModal('chipModal');}};
+}
+function editCoachRole(i){
+  currentChipKey=`coachRole${i}`;
+  const p=getP();const cd=p[`coach${i}`]||{};
+  document.getElementById('chipTitle').textContent=`ТРЕНЕР ${i+1} — РОЛЬ`;
+  document.getElementById('chipLabel').textContent='Посада / роль';
+  document.getElementById('chipInput').value=cd.role||'';
+  openModal('chipModal');
+  document.getElementById('chipInput').onkeydown=function(e){if(e.key==='Enter'){saveCoachField(i,'role');closeModal('chipModal');}};
+}
+function saveCoachField(i,field){
+  const v=document.getElementById('chipInput').value.trim();
+  const p=getP();if(!p[`coach${i}`])p[`coach${i}`]={};
+  p[`coach${i}`][field]=v;saveP(p);renderProfile();
+}
+
+
+/* ══════════ STATS ══════════ */
+function fkey(c,f){ return 'judo_fight_'+c+'_'+f; }
+function loadFight(c,f){
+  var k=fkey(c,f);
+  return ls(k) || {};
+}
+function saveFightData(c,f,d){
+  var k=fkey(c,f);
+  lss(k,d); // writes to both localStorage + IDB via lss
+}
+// Media stored in IndexedDB (large files - images/videos)
+const MEDIA_CACHE={};  // cid -> [{type,data}, ...]
+function loadMedia(cid){
+  return MEDIA_CACHE[cid]||[];
+}
+function saveMedia(cid,arr){
+  MEDIA_CACHE[cid]=arr;
+  idbSet('media_'+cid, arr).catch(e=>console.error('Media IDB save error',e));
+}
+function loadMediaFromIDB(cid){
+  return idbGet('media_'+cid).then(v=>{
+    if(v){MEDIA_CACHE[cid]=v;}
+    return MEDIA_CACHE[cid]||[];
+  });
+}
+
+function filtered(){return activeYear==='all'?COMPS:COMPS.filter(c=>c.year===activeYear);}
+function calcStats(list){let tu=0,fi=0,w=0,l=0,g=0,s=0,b=0;list.forEach(c=>{tu++;c.fights.forEach(f=>{fi++;if(f.r==='w')w++;else l++;});if(c.place===1)g++;else if(c.place===2)s++;else if(c.place===3)b++;});return{tournaments:tu,fights:fi,wins:w,losses:l,gold:g,silver:s,bronze:b};}
+
+function renderStats(){
+  const s=calcStats(filtered());const wr=s.fights>0?Math.round(s.wins/s.fights*100):0;
+  document.getElementById('statsGrid').innerHTML=[
+    {icon:'📋',val:s.tournaments,k:'tournaments'},{icon:'⚔️',val:s.fights,k:'fights'},
+    {icon:'✅',val:s.wins,k:'wins'},{icon:'❌',val:s.losses,k:'losses'},
+    {icon:'📊',val:wr+'%',k:'winRate'},{icon:'🥇',val:s.gold,k:'gold'},
+    {icon:'🥈',val:s.silver,k:'silver'},{icon:'🥉',val:s.bronze,k:'bronze2'},
+  ].map(x=>`<div class="stat-card"><div class="stat-icon">${x.icon}</div><div class="stat-val">${x.val}</div><div class="stat-lbl">${t(x.k)}</div></div>`).join('');
+  document.getElementById('wbWins').textContent=s.wins;
+  document.getElementById('wbLoss').textContent=s.losses;
+  document.getElementById('wbPct').textContent=`${wr}%`;
+  document.getElementById('winbarFill').style.width=wr+'%';
+  renderFilters();
+}
+function renderFilters(){
+  const years=[...new Set(COMPS.map(c=>c.year))].sort();
+  const f=document.getElementById('filters');
+  const allLabel=LANG==='pl'?'WSZYSTKO':LANG==='en'?'ALL':'ВСІ';
+  f.innerHTML=`<button class="filter-btn ${activeYear==='all'?'active':''}" onclick="filterYear('all',this)">${allLabel}</button>`;
+  years.forEach(y=>f.innerHTML+=`<button class="filter-btn ${activeYear===y?'active':''}" onclick="filterYear(${y},this)">${y}</button>`);
+}
+function filterYear(y,btn){activeYear=y;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderStats();renderTournaments();}
+
+/* ══════════ TOURNAMENTS ══════════ */
+function mc(p){return p===1?'gold':p===2?'silver':p===3?'bronze':'other';}
+function mi(p){return p===1?'🥇':p===2?'🥈':p===3?'🥉':'';}
+function ml(p){if(!p)return'—';return`${p}${LANG==='pl'?' msc.':LANG==='en'?' pl.':' м.'}`;}
+
+function renderTournaments(){
+  const c=document.getElementById('tournamentList');c.innerHTML='';
+  const list=filtered();
+  if(!list.length){c.innerHTML=`<div style="text-align:center;padding:36px;color:var(--muted);font-family:'Cinzel',serif;font-size:13px;letter-spacing:.1em;">🐾 ${LANG==='pl'?'Brak turniejów':LANG==='en'?'No tournaments':'Немає турнірів'}</div>`;return;}
+  list.forEach(comp=>{
+    const cls=mc(comp.place);const div=document.createElement('div');
+    div.className=`t-card ${cls}`;div.id=`card_${comp.id}`;
+    const tags=[];
+    if(comp.ageCategory)tags.push(`<span class="tag tag-age">${comp.ageCategory}</span>`);
+    if(comp.weightCategory)tags.push(`<span class="tag tag-wt">⚖️ ${comp.weightCategory}</span>`);
+    const w=comp.fights.filter(f=>f.r==='w').length,l=comp.fights.filter(f=>f.r==='l').length;
+    if(w)tags.push(`<span class="tag tag-win">✓ ${w}</span>`);
+    if(l)tags.push(`<span class="tag tag-loss">✗ ${l}</span>`);
+    const bubbles=comp.fights.map((f,fi)=>{
+      const fd=loadFight(comp.id,fi);const has=!!(fd.f_opp_name||fd.f_tech||fd.f_notes||fd.f_score_me);
+      return `<div class="fight-bubble${has?' has-data':''}" data-cid="${comp.id}" data-fi="${fi}" title="${t('fightOf')} ${fi+1}"><div class="fight-dot ${f.r}">${fi+1}</div><div class="fight-num">${f.r==='w'?'✓':'✗'}</div></div>`;
+    }).join('');
+    const media=loadMedia(comp.id);
+    const thumbs=media.map(m=>{
+      if(m.type==='image')return`<div class="media-thumb" onclick="openLightbox('img','${m.data}')"><img src="${m.data}" loading="lazy"/></div>`;
+      return`<div class="media-thumb" onclick="openLightbox('vid','${m.data}')"><video src="${m.data}" muted></video><div class="play-badge">▶</div></div>`;
+    }).join('');
+    const links=[];
+    if(comp.yt)links.push(`<a class="yt-link" href="${comp.yt}" target="_blank">▶ YouTube</a>`);
+    if(comp.pdf)links.push(`<a class="pdf-link" href="${comp.pdf}" target="_blank">📄 PDF</a>`);
+    div.innerHTML=`
+      <div class="t-header">
+        <div class="t-left">
+          <div class="t-date">${comp.date}</div>
+          <div class="t-name">${comp.name}</div>
+          ${comp.location?`<div class="t-location">📍 ${comp.location}</div>`:''}
+          <div class="t-tags">${tags.join('')}</div>
+        </div>
+        <div class="t-medal ${cls}"><span class="medal-icon">${mi(comp.place)}</span><div class="medal-txt">${ml(comp.place)}</div></div>
+        <div class="t-actions">
+          <button class="t-edit-btn" data-cid="${comp.id}" title="Edit">✏️</button>
+          <div class="expand-icon">▼</div>
+        </div>
+      </div>
+      <div class="t-body" id="body_${comp.id}">
+        <div class="fight-bar-title">🐾 ${t('clickForDetails')}</div>
+        <div class="fights-row">${bubbles}</div>
+        ${comp.notes?`<div class="t-notes">💬 ${comp.notes}</div>`:''}
+        <div class="media-section-title">📸 ФОТО / ВІДЕО</div>
+        <div class="media-grid" id="mg_${comp.id}">
+          ${thumbs}
+          <label class="upload-btn" for="up_${comp.id}"><span style="font-size:18px;">+</span>${t('addMedia')}</label>
+          <input type="file" id="up_${comp.id}" accept="image/*,video/*" multiple onchange="handleUpload('${comp.id}',this)"/>
+        </div>
+        <div class="links-row" id="lr_${comp.id}">${links.join('')}</div>
+        <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;" class="t-inline-edit" id="ie_${comp.id}">
+          <input type="text" placeholder="▶ YouTube URL" value="${comp.yt||''}"
+            style="flex:1;min-width:130px;max-width:210px;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:6px;font-size:12px;"
+            data-cid="${comp.id}" data-field="yt" class="comp-link-input"/>
+          <input type="text" placeholder="📄 PDF URL" value="${comp.pdf||''}"
+            style="flex:1;min-width:130px;max-width:210px;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:6px;font-size:12px;"
+            data-cid="${comp.id}" data-field="pdf" class="comp-link-input"/>
+        </div>
+      </div>`;
+    c.appendChild(div);
+    // ── Bind events via addEventListener (CSP-safe, works in Claude artifacts) ──
+    // Fight bubbles
+    div.querySelectorAll('.fight-bubble[data-cid]').forEach(function(bub){
+      bub.addEventListener('click', function(){
+        openFightModal(this.dataset.cid, parseInt(this.dataset.fi));
+      });
+    });
+    // Toggle card header
+    var hdr = div.querySelector('.t-header');
+    if(hdr) hdr.addEventListener('click', (function(id){ return function(){ toggleCard(id); }; })(comp.id));
+    // Edit button
+    var editBtn = div.querySelector('.t-edit-btn');
+    if(editBtn) editBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      openEditTournament(editBtn.dataset.cid||comp.id);
+    });
+    // Delete button
+    var delBtn = document.createElement('button');
+    delBtn.className = 'delete-comp-btn';
+    delBtn.innerHTML = '🗑 ' + t('deleteBtn');
+    delBtn.addEventListener('click', (function(id){ return function(){ deleteTournament(id); }; })(comp.id));
+    document.getElementById('ie_'+comp.id).appendChild(delBtn);
+    // YouTube / PDF inputs
+    var linkInputs = document.querySelectorAll('#ie_'+comp.id+' .comp-link-input');
+    linkInputs.forEach(function(inp){
+      inp.addEventListener('change', function(){
+        updateCompLink(this.dataset.cid, this.dataset.field, this.value);
+      });
+    });
+  });
+}
+function toggleCard(id){document.getElementById('body_'+id).classList.toggle('open');document.getElementById('card_'+id).classList.toggle('open');}
+function updateCompLink(cid, field, val){
+  const comp = COMPS.find(x=>x.id===cid);
+  if(!comp) return;
+  comp[field] = val.trim();
+  lss('judo_comps', COMPS);
+  // refresh links row without full re-render
+  const links=[];
+  if(comp.yt) links.push('<a class="yt-link" href="'+comp.yt+'" target="_blank">▶ YouTube</a>');
+  if(comp.pdf) links.push('<a class="pdf-link" href="'+comp.pdf+'" target="_blank">📄 PDF</a>');
+  const lr = document.querySelector('#body_'+cid+' .links-row');
+  if(lr) lr.innerHTML = links.join('');
+  else if(links.length){
+    const editRow = document.querySelector('#body_'+cid+' .t-inline-edit');
+    if(editRow){const d=document.createElement('div');d.className='links-row';d.style.marginBottom='6px';d.innerHTML=links.join('');editRow.parentNode.insertBefore(d,editRow);}
+  }
+}
+
+/* ══════════ ADD/EDIT TOURNAMENT ══════════ */
+function openAddTournament(){
+  editingId=null;document.getElementById('adminTitle').textContent=t('newTournament');
+  ['a_name','a_date','a_location','a_age_cat','a_weight','a_fights_seq','a_notes','a_yt','a_pdf'].forEach(function(id){
+    document.getElementById(id).value = id==='a_age_cat'?'U13':'';
+  });
+  // Prefill today's date
+  var today = new Date();
+  var isoToday = today.toISOString().slice(0,10);
+  var ddMM = today.getDate().toString().padStart(2,'0')+'.'+
+             (today.getMonth()+1).toString().padStart(2,'0')+'.'+
+             today.getFullYear();
+  document.getElementById('a_date').value = ddMM;
+  document.getElementById('a_date_picker').value = isoToday;
+  document.getElementById('a_year').value = today.getFullYear();
+  document.getElementById('a_place').value='1';
+  document.getElementById('a_fights_count').value='';
+  openModal('adminModal');
+}
+function openEditTournament(cid){
+  editingId=cid;const c=COMPS.find(x=>x.id===cid);if(!c)return;
+  document.getElementById('adminTitle').textContent=t('editTournament');
+  document.getElementById('a_name').value=c.name||'';
+  document.getElementById('a_date').value=c.date||'';
+  var sk = c._sortKey || parseDateToSortKey(c.date||'');
+  document.getElementById('a_date_picker').value = sk !== '0000-00-00' ? sk : '';
+  document.getElementById('a_year').value=c.year;document.getElementById('a_location').value=c.location||'';
+  document.getElementById('a_age_cat').value=c.ageCategory||'';document.getElementById('a_weight').value=c.weightCategory||'';
+  document.getElementById('a_place').value=c.place||'';document.getElementById('a_fights_count').value=c.fights.length;
+  document.getElementById('a_fights_seq').value=c.fights.map(f=>f.r==='w'?'В':'П').join(' ');
+  document.getElementById('a_notes').value=c.notes||'';document.getElementById('a_yt').value=c.yt||'';document.getElementById('a_pdf').value=c.pdf||'';
+  openModal('adminModal');
+}
+// Parse "дд.мм.рррр" or "yyyy-mm-dd" -> sortable key "yyyy-mm-dd"
+function parseDateToSortKey(str){
+  if(!str) return '0000-00-00';
+  str = str.trim();
+  // dd.mm.yyyy
+  var m = str.match(/^(\d{1,2})[\.\-\/](\d{1,2})[\.\-\/](\d{4})$/);
+  if(m) return m[3]+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0');
+  // yyyy-mm-dd (from date picker)
+  if(/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
+  // dd.mm (no year — use current year)
+  var m2 = str.match(/^(\d{1,2})[\.\-](\d{1,2})$/);
+  if(m2) return new Date().getFullYear()+'-'+m2[2].padStart(2,'0')+'-'+m2[1].padStart(2,'0');
+  return '0000-00-00';
+}
+function syncDateFromPicker(iso){ // iso = "yyyy-mm-dd"
+  if(!iso) return;
+  var parts = iso.split('-');
+  var display = parts[2]+'.'+parts[1]+'.'+parts[0];
+  document.getElementById('a_date').value = display;
+  document.getElementById('a_year').value = parts[0];
+}
+function syncDateToSortKey(str){
+  var key = parseDateToSortKey(str);
+  if(key !== '0000-00-00'){
+    var yr = key.split('-')[0];
+    document.getElementById('a_year').value = yr;
+    // also set picker
+    document.getElementById('a_date_picker').value = key;
+  }
+}
+function compareDates(a, b){
+  // Compare tournaments by sortKey (oldest first = ascending)
+  var ka = a._sortKey || parseDateToSortKey(a.date);
+  var kb = b._sortKey || parseDateToSortKey(b.date);
+  if(ka < kb) return -1;
+  if(ka > kb) return 1;
+  return 0;
+}
+
+function saveTournament(){
+  const name=document.getElementById('a_name').value.trim();if(!name){showToast('⚠️ '+t('enterName'));return;}
+  const fcnt=parseInt(document.getElementById('a_fights_count').value)||0;if(!fcnt){showToast('⚠️ '+t('enterFights'));return;}
+  const seq=document.getElementById('a_fights_seq').value.toUpperCase().split(/[\s,]+/).filter(x=>x);
+  const fights=Array.from({length:fcnt},(_,i)=>{const tok=seq[i];return{r:(tok==='В'||tok==='W')?'w':'l'};});
+  const placeRaw=document.getElementById('a_place').value;
+  var dateVal = document.getElementById('a_date').value.trim();
+  var sortKey = parseDateToSortKey(dateVal);
+  var yearVal = sortKey !== '0000-00-00' ? parseInt(sortKey.split('-')[0]) : (parseInt(document.getElementById('a_year').value)||new Date().getFullYear());
+  const comp={
+    id:editingId||'c_'+Date.now(),
+    date:dateVal,
+    _sortKey: sortKey,
+    name, location:document.getElementById('a_location').value.trim(),
+    year:yearVal,
+    ageCategory:document.getElementById('a_age_cat').value.trim(),
+    weightCategory:document.getElementById('a_weight').value.trim(),
+    place:placeRaw?parseInt(placeRaw):null,
+    fights,
+    notes:document.getElementById('a_notes').value.trim(),
+    yt:document.getElementById('a_yt').value.trim(),
+    pdf:document.getElementById('a_pdf').value.trim()
+  };
+  if(editingId){const idx=COMPS.findIndex(x=>x.id===editingId);if(idx>=0)COMPS[idx]=comp;}
+  else{ COMPS.push(comp); }
+  // Always re-sort: oldest first (ascending), newest last
+  COMPS.sort(compareDates);
+  lss('judo_comps',COMPS);idbSet('ls_judo_comps',COMPS).catch(function(){});closeModal('adminModal');renderStats();renderTournaments();showToast(editingId?t('updated'):t('added'));
+}
+function deleteTournament(cid){
+  customConfirm(t('confirmDelete')).then(function(ok){
+    if(!ok) return;
+    var comp = COMPS.find(function(x){ return x.id===cid; });
+    if(comp){
+      comp.fights.forEach(function(_,fi){ localStorage.removeItem(fkey(cid,fi)); });
+    }
+    delete MEDIA_CACHE[cid];
+    idbDelete('media_'+cid);
+    COMPS = COMPS.filter(function(x){ return x.id !== cid; });
+    lss('judo_comps', COMPS);
+    idbSet('ls_judo_comps', COMPS);
+    var card = document.getElementById('card_'+cid);
+    if(card) card.remove();
+    renderStats();
+    showToast(t('deleted'));
+  });
+}
+
+/* ══════════ FIGHT MODAL ══════════ */
+const FFIELDS=['f_opp_name','f_opp_club','f_opp_country','f_opp_age','f_opp_weight','f_score_me','f_score_opp','f_duration','f_stage','f_tech','f_score_type','f_tech_custom','f_notes'];
+function openFightModal(cid,fi){
+  modalCtx={cid,fi};const comp=COMPS.find(c=>c.id===cid);const fight=comp.fights[fi];const fd=loadFight(cid,fi);
+  document.getElementById('mFightNum').textContent=`${t('fightOf')} ${fi+1} ${t('of')} ${comp.fights.length}`;
+  document.getElementById('mTournament').textContent=comp.name+(comp.date?' · '+comp.date:'');
+  document.getElementById('mResultBadge').innerHTML=`<span class="fight-result-badge ${fight.r}">${fight.r==='w'?'⚡ '+t('victory'):'✗ '+t('defeat')}</span>`;
+  FFIELDS.forEach(id=>{const el=document.getElementById(id);if(el)el.value=fd[id]||'';});
+  toggleCustomTech();
+  const ban=document.getElementById('fightBanner');
+  if(fd.f_opp_name||fd.f_score_me||fd.f_tech){
+    document.getElementById('b_opp').textContent=fd.f_opp_name||'—';document.getElementById('b_club').textContent=fd.f_opp_club||'—';document.getElementById('b_country').textContent=fd.f_opp_country||'—';
+    document.getElementById('b_score').textContent=(fd.f_score_me&&fd.f_score_opp)?`${fd.f_score_me}:${fd.f_score_opp}`:'—';
+    document.getElementById('b_tech').textContent=fd.f_tech==='custom'?(fd.f_tech_custom||'—'):(fd.f_tech||'—');document.getElementById('b_stage').textContent=fd.f_stage||'—';
+    ban.classList.add('show');
+  }else ban.classList.remove('show');
+  openModal('fightModal');
+}
+function toggleCustomTech(){document.getElementById('customTechWrap').style.display=document.getElementById('f_tech').value==='custom'?'block':'none';}
+document.getElementById('f_tech').addEventListener('change',toggleCustomTech);
+function saveFight(){
+  if(!modalCtx)return;const data={};FFIELDS.forEach(id=>{const el=document.getElementById(id);if(el)data[id]=el.value;});
+  saveFightData(modalCtx.cid,modalCtx.fi,data);
+  const card=document.getElementById(`card_${modalCtx.cid}`);if(card){const bubs=card.querySelectorAll('.fight-bubble');if(bubs[modalCtx.fi])bubs[modalCtx.fi].classList.add('has-data');}
+  closeModal('fightModal');showToast('💾 '+t('saved'));
+}
+function clearFight(){
+  if(!modalCtx) return;
+  customConfirm(t('confirmClearFight')).then(function(ok){
+    if(!ok) return;
+    localStorage.removeItem(fkey(modalCtx.cid, modalCtx.fi));
+    FFIELDS.forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
+    closeModal('fightModal');
+    renderTournaments();
+    showToast(t('cleared'));
+  });
+}
+
+/* ══════════ MEDIA ══════════ */
+function handleUpload(cid, input){
+  const files = Array.from(input.files);
+  if(!files.length) return;
+  // Load existing from IDB first, then append
+  loadMediaFromIDB(cid).then(function(arr){
+    const existing = arr.slice();
+    let done = 0;
+    files.forEach(function(file){
+      const r = new FileReader();
+      r.onload = function(e){
+        existing.push({type: file.type.startsWith('video')?'video':'image', data: e.target.result});
+        done++;
+        if(done === files.length){
+          saveMedia(cid, existing);
+          refreshMG(cid);
+          input.value = '';
+        }
+      };
+      r.readAsDataURL(file);
+    });
+  });
+}
+function refreshMG(cid){
+  const g = document.getElementById('mg_'+cid); if(!g) return;
+  const m = loadMedia(cid);
+  renderMediaGrid(g, cid, m);
+}
+function renderMediaGrid(g, cid, m){
+  // Build grid using DOM — avoids all quote-escaping issues with data URLs
+  g.innerHTML = '';
+  m.forEach(function(x, mi){
+    var thumb = document.createElement('div');
+    thumb.className = 'media-thumb';
+    thumb.addEventListener('click', function(){ openMediaItem(cid, mi); });
+    if(x.type === 'image'){
+      var img = document.createElement('img');
+      img.src = x.data; img.loading = 'lazy';
+      thumb.appendChild(img);
+    } else {
+      var vid = document.createElement('video');
+      vid.src = x.data; vid.muted = true;
+      thumb.appendChild(vid);
+      var play = document.createElement('div');
+      play.className = 'play-badge'; play.textContent = '▶';
+      thumb.appendChild(play);
+    }
+    var del = document.createElement('button');
+    del.className = 'media-del-btn'; del.textContent = '✕'; del.title = 'Видалити';
+    del.addEventListener('click', function(e){ e.stopPropagation(); deleteMedia(cid, mi); });
+    thumb.appendChild(del);
+    g.appendChild(thumb);
+  });
+  // Upload label
+  var lbl = document.createElement('label');
+  lbl.className = 'upload-btn'; lbl.htmlFor = 'up_'+cid;
+  lbl.innerHTML = '<span style="font-size:18px;">+</span>' + t('addMedia');
+  g.appendChild(lbl);
+  // File input
+  var inp = document.createElement('input');
+  inp.type = 'file'; inp.id = 'up_'+cid; inp.accept = 'image/*,video/*'; inp.multiple = true;
+  inp.style.display = 'none';
+  inp.addEventListener('change', function(){ handleUpload(cid, this); });
+  g.appendChild(inp);
+}
+function openMediaItem(cid, idx){
+  const m = loadMedia(cid);
+  if(!m[idx]) return;
+  openLightbox(m[idx].type==='image'?'img':'vid', m[idx].data);
+}
+function deleteMedia(cid, idx){
+  customConfirm(t('deleteBtn')+'?').then(function(ok){
+    if(!ok) return;
+    loadMediaFromIDB(cid).then(function(arr){
+      arr.splice(idx, 1);
+      saveMedia(cid, arr);
+      refreshMG(cid);
+    });
+  });
+}
+function openLightbox(type,src){const lb=document.getElementById('lightbox');const img=document.getElementById('lbImg'),vid=document.getElementById('lbVid');img.style.display='none';vid.style.display='none';if(type==='img'){img.src=src;img.style.display='block';}else{vid.src=src;vid.style.display='block';}lb.classList.add('open');}
+
+/* ══════════ BACKUP ══════════ */
+function openBackup(){openModal('backupModal');}
+function exportData(){
+  const fights={},media={};
+  COMPS.forEach(function(comp){
+    comp.fights.forEach(function(_,fi){
+      var k=fkey(comp.id,fi);
+      var d=ls(k); // try localStorage first
+      if(d) fights[k]=d;
+    });
+    const m=loadMedia(comp.id);
+    if(m.length) media['media_'+comp.id]=m;
+  });
+  const profile=getP();
+  // Include photos from cache in export
+  if(PHOTO_CACHE['athlete_photo']) profile.photo=PHOTO_CACHE['athlete_photo'];
+  for(let i=0;i<3;i++){
+    if(PHOTO_CACHE['coach_photo_'+i]){
+      if(!profile['coach'+i])profile['coach'+i]={};
+      profile['coach'+i].photo=PHOTO_CACHE['coach_photo_'+i];
+    }
+  }
+  const blob=new Blob([JSON.stringify({version:4,exported:new Date().toISOString(),lang:LANG,profile,comps:COMPS,fights,media},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='judo-rys-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href);showToast(t('backupDone'));
+}
+function importData(input){
+  const file=input.files[0]; if(!file) return;
+  const r=new FileReader();
+  r.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.comps) throw new Error('Bad format');
+      customConfirm(t('confirmImport').replace('{n}',data.comps.length)).then(function(ok){
+        if(!ok) return;
+        COMPS=data.comps;
+        lss('judo_comps',COMPS);
+        idbSet('ls_judo_comps',COMPS).catch(function(){});
+        if(data.profile){
+          const dp=data.profile;
+          if(dp.photo){PHOTO_CACHE['athlete_photo']=dp.photo;savePhoto('athlete_photo',dp.photo);}
+          for(let i=0;i<3;i++){
+            if(dp['coach'+i]&&dp['coach'+i].photo){
+              PHOTO_CACHE['coach_photo_'+i]=dp['coach'+i].photo;
+              savePhoto('coach_photo_'+i,dp['coach'+i].photo);
+            }
+          }
+          saveP(dp);
+        }
+        if(data.lang){LANG=data.lang;localStorage.setItem('judo_lang',LANG);}
+        if(data.fights) Object.keys(data.fights).forEach(function(k){lss(k,data.fights[k]);});
+        if(data.media) Object.keys(data.media).forEach(function(k){
+          const cid=k.replace('media_','');
+          MEDIA_CACHE[cid]=data.media[k];
+          idbSet(k,data.media[k]).catch(function(){});
+        });
+        closeModal('backupModal');applyLang();renderProfile();renderStats();renderTournaments();showToast(t('importOk'));
+      });
+    }catch(err){showToast('❌ '+t('importErr')+': '+err.message);}
+  };
+  r.readAsText(file);
+}
+
+/* ══════════ MODALS ══════════ */
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){['fightModal','adminModal','backupModal','chipModal'].forEach(closeModal);document.getElementById('lightbox').classList.remove('open');}});
+
+/* ══════════ TOAST ══════════ */
+/* ── Custom confirm dialog (window.confirm blocked in some environments) ── */
+function customConfirm(msg){
+  return new Promise(function(resolve){
+    var ov  = document.getElementById('confirmOverlay');
+    var msg_el = document.getElementById('cfmMsg');
+    var yes_btn = document.getElementById('cfmYes');
+    var no_btn  = document.getElementById('cfmNo');
+    msg_el.textContent = msg;
+    yes_btn.textContent = LANG==='pl'?'Tak':LANG==='en'?'Yes':'Так';
+    no_btn.textContent  = LANG==='pl'?'Anuluj':LANG==='en'?'Cancel':'Скасувати';
+    var titleEl = document.getElementById('cfmTitle');
+    if(titleEl) titleEl.textContent = t('confirmation');
+    ov.style.display = 'flex';
+    function finish(result){
+      ov.style.display = 'none';
+      resolve(result);
+    }
+    // Clone to remove old listeners
+    var y2 = yes_btn.cloneNode(true); yes_btn.parentNode.replaceChild(y2, yes_btn);
+    var n2 = no_btn.cloneNode(true);  no_btn.parentNode.replaceChild(n2, no_btn);
+    document.getElementById('cfmYes').textContent = LANG==='pl'?'Tak':LANG==='en'?'Yes':'Так';
+    document.getElementById('cfmNo').textContent  = LANG==='pl'?'Anuluj':LANG==='en'?'Cancel':'Скасувати';
+    document.getElementById('cfmYes').addEventListener('click', function(){ finish(true); });
+    document.getElementById('cfmNo').addEventListener('click',  function(){ finish(false); });
+    ov.addEventListener('click', function onBg(e){
+      if(e.target===ov){ ov.removeEventListener('click',onBg); finish(false); }
+    });
+  });
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity=1;setTimeout(()=>t.style.opacity=0,2200);}
+
+/* ══════════ PWA ══════════ */
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;document.getElementById('installBtn').style.display='flex';document.getElementById('installBanner').classList.add('show');});
+function installPWA(){if(!deferredInstall)return;deferredInstall.prompt();deferredInstall.userChoice.then(r=>{if(r.outcome==='accepted'){document.getElementById('installBtn').style.display='none';document.getElementById('installBanner').classList.remove('show');showToast(t('installed'));}deferredInstall=null;});}
+window.addEventListener('appinstalled',()=>document.getElementById('installBanner').classList.remove('show'));
+
+/* ══════════ INIT ══════════ */
+document.getElementById('footerYear').textContent = new Date().getFullYear();
+applyLang();
+
+// Bind file inputs for iOS Safari
+(function bindFileInputs(){
+  var hp = document.getElementById('heroPhotoInput');
+  if(hp) hp.addEventListener('change', function(){ handleAthletePhoto(this); });
+  for(var ci=0; ci<3; ci++){
+    (function(idx){
+      var cp = document.getElementById('coachPhotoInput'+idx);
+      if(cp) cp.addEventListener('change', function(){ handleCoachPhoto(idx, this); });
+    })(ci);
+  }
+})();
+
+// Load everything from IDB (reliable storage), then render
+(function initApp(){
+  // Step 1: Restore COMPS (tournaments) — IDB is authoritative if localStorage empty
+  var compsPromise = (COMPS !== null)
+    ? Promise.resolve(COMPS)
+    : idbGet('ls_judo_comps').then(function(v){ return v || DEFAULT_COMPS; });
+
+  // Step 2: Load photos
+  var photoKeys = ['athlete_photo','coach_photo_0','coach_photo_1','coach_photo_2'];
+  var photoPromises = photoKeys.map(function(k){
+    return idbGet(k).then(function(v){ if(v) PHOTO_CACHE[k]=v; }).catch(function(){});
+  });
+
+  // Step 3: When everything ready — render
+  compsPromise.then(function(comps){
+    COMPS = comps;
+    // Ensure _sortKey on all comps and sort oldest->newest
+    COMPS.forEach(function(comp){
+      if(!comp._sortKey) comp._sortKey = parseDateToSortKey(comp.date||'');
+    });
+    COMPS.sort(compareDates);
+    // Ensure saved to both storages
+    lss('judo_comps', COMPS);
+
+    return Promise.all(photoPromises);
+  }).then(function(){
+    renderStats();
+    renderTournaments();
+    renderProfile();
+
+    // Pre-load media thumbnails from IDB
+    COMPS.forEach(function(comp){
+      loadMediaFromIDB(comp.id).catch(function(){});
+    });
+  }).catch(function(err){
+    console.error('Init error:', err);
+    // Fallback: render with whatever we have
+    if(!COMPS) COMPS = DEFAULT_COMPS;
+    renderStats();
+    renderTournaments();
+    renderProfile();
+  });
+})();
+</script>
+</body>
+</html>
