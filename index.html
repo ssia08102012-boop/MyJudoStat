@@ -882,8 +882,7 @@ footer::before{content:'🐾 🥋 🐾';display:block;font-size:16px;opacity:.15
 <div class="toolbar">
   <button class="tb-btn primary" onclick="openAddTournament()">⊕ <span data-t="addTournament">Турнір</span></button>
   <a class="tb-btn" href="https://judo-rys.pl/kalendarz/index.php" target="_blank" style="text-decoration:none;">📅 <span data-t="calendar">Календар</span></a>
-  <button class="tb-btn" onclick="openBackup()">💾 Backup</button>
-  <button class="tb-btn" id="syncBtn" onclick="showSyncMenu()" title="Хмарна синхронізація">☁️ Sync</button>
+  <button class="tb-btn" onclick="openBackup()">💾 Backup / ☁️ Sync</button>
   <button class="tb-btn" id="installBtn" style="display:none;" onclick="installPWA()">📲 <span data-t="install">Встановити</span></button>
 </div>
 
@@ -2397,15 +2396,28 @@ function showSyncSetup(){
   const existing = getUserId();
   const msg = existing
     ? 'Ваш ID синхронізації:\n\n' + existing + '\n\nВведіть цей самий ID на іншому пристрої.\nАбо введіть інший ID щоб отримати чужі дані:'
-    : '\u2601\ufe0f Хмарна синхронізація\n\nПридумайте унікальний ID (наприклад: ssia_judo або ім'я дитини)\n\u26a0\ufe0f Запишіть його! Він потрібен на кожному пристрої.';
+    : '\u2601\ufe0f Хмарна синхронізація\n\nПридумайте унікальний ID (наприклад: ssia_judo)\n\u26a0\ufe0f Запишіть його! Він потрібен на кожному пристрої.';
   const id = prompt(msg, existing || '');
   if(id && id.trim()){ setUserId(id.trim()); syncPull().then(function(){ syncPush(); }); }
 }
 
 async function autoSync(){
+  // Silent background sync — no toasts, never overwrites local if cloud is empty
   const userId = getUserId(); if(!userId) return;
   const sb = getSB(); if(!sb) return;
-  try { await syncPull(); } catch(e){ console.warn('Auto sync failed:', e); }
+  try {
+    const { data: cr, error } = await sb.from('judo_comps').select('data').eq('user_id',userId).single();
+    if(error || !cr || !cr.data || !cr.data.length) return; // cloud empty — keep local
+    COMPS = cr.data;
+    COMPS.forEach(function(c){ if(!c._sortKey) c._sortKey=parseDateToSortKey(c.date||''); });
+    COMPS.sort(compareDates);
+    lss('judo_comps', COMPS);
+    const { data: pr } = await sb.from('judo_profile').select('data').eq('user_id',userId).single();
+    if(pr && pr.data){ const cur=ls('judo_profile')||{}; lss('judo_profile',Object.assign({},pr.data,{photo:cur.photo||null})); }
+    const { data: fr } = await sb.from('judo_fights').select('data').eq('user_id',userId).single();
+    if(fr && fr.data){ fr.data.forEach(function(item){ lss(fkey(item.cid,item.fi),item.data); }); }
+    renderStats(); renderTournaments(); renderProfile();
+  } catch(e){ console.warn('Auto sync failed:', e); }
 }
 
 // Load everything from IDB (reliable storage), then render
