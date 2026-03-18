@@ -2295,7 +2295,12 @@ async function pushPhotos(sb, userId){
   }
   for(const comp of COMPS){
     try {
-      const media = MEDIA_CACHE[comp.id];
+      // Load from IDB if not in cache
+      let media = MEDIA_CACHE[comp.id];
+      if(!media || !media.length){
+        media = await idbGet('media_'+comp.id).catch(function(){return null;});
+        if(media) MEDIA_CACHE[comp.id] = media;
+      }
       if(!media || !media.length) continue;
       for(let mi=0; mi<media.length; mi++){
         const m = media[mi];
@@ -2304,6 +2309,7 @@ async function pushPhotos(sb, userId){
         if(!blob) continue;
         const path = userId+'/media/'+comp.id+'_'+mi+'.jpg';
         await sb.storage.from('judo-photos').upload(path, blob, {upsert:true, contentType:'image/jpeg'});
+        console.log('Pushed media:', path);
       }
     } catch(e){ console.warn('Media push error:', comp.id, e); }
   }
@@ -2320,24 +2326,40 @@ async function pullPhotos(sb, userId){
       await idbSet(key, dataUrl);
     } catch(e){}
   }
-  for(const comp of COMPS){
-    try {
-      const { data: files } = await sb.storage.from('judo-photos').list(userId+'/media', {search: comp.id+'_'});
-      if(!files || !files.length) continue;
-      const mediaArr = [];
-      for(const file of files){
-        const idx = parseInt((file.name.split('_').pop()||'').replace('.jpg',''))||0;
-        const { data: blob } = await sb.storage.from('judo-photos').download(userId+'/media/'+file.name);
-        if(!blob) continue;
-        const dataUrl = await blobToDataUrl(blob);
-        mediaArr[idx] = {type:'image', data: dataUrl};
+  // Pull all media files at once (list doesn't support search filter)
+  try {
+    const { data: allFiles } = await sb.storage.from('judo-photos').list(userId+'/media');
+    if(allFiles && allFiles.length){
+      // Group files by comp.id
+      const byComp = {};
+      for(const file of allFiles){
+        // filename format: compId_index.jpg
+        const parts = file.name.replace('.jpg','').split('_');
+        const mi = parseInt(parts.pop()) || 0;
+        const cid = parts.join('_');
+        if(!byComp[cid]) byComp[cid] = [];
+        byComp[cid].push({file, mi});
       }
-      if(mediaArr.length){
-        MEDIA_CACHE[comp.id] = mediaArr.filter(Boolean);
-        await idbSet('media_'+comp.id, MEDIA_CACHE[comp.id]);
+      // Download each comp's media
+      for(const cid of Object.keys(byComp)){
+        try {
+          const mediaArr = [];
+          for(const {file, mi} of byComp[cid]){
+            const { data: blob } = await sb.storage.from('judo-photos').download(userId+'/media/'+file.name);
+            if(!blob) continue;
+            const dataUrl = await blobToDataUrl(blob);
+            mediaArr[mi] = {type:'image', data: dataUrl};
+          }
+          const cleaned = mediaArr.filter(Boolean);
+          if(cleaned.length){
+            MEDIA_CACHE[cid] = cleaned;
+            await idbSet('media_'+cid, cleaned);
+            console.log('Pulled media for comp:', cid, cleaned.length, 'files');
+          }
+        } catch(e){ console.warn('Media pull error for comp:', cid, e); }
       }
-    } catch(e){ console.warn('Media pull error:', comp.id, e); }
-  }
+    }
+  } catch(e){ console.warn('Media list error:', e); }
 }
 
 async function syncPush(){
