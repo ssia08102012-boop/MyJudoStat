@@ -7,6 +7,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=3"/>
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=3"/>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
   --bg:#06080b;--bg2:#0b0f14;--bg3:#101620;--border:#1a2838;
@@ -882,6 +883,7 @@ footer::before{content:'🐾 🥋 🐾';display:block;font-size:16px;opacity:.15
   <button class="tb-btn primary" onclick="openAddTournament()">⊕ <span data-t="addTournament">Турнір</span></button>
   <a class="tb-btn" href="https://judo-rys.pl/kalendarz/index.php" target="_blank" style="text-decoration:none;">📅 <span data-t="calendar">Календар</span></a>
   <button class="tb-btn" onclick="openBackup()">💾 Backup</button>
+  <button class="tb-btn" id="syncBtn" onclick="showSyncMenu()" title="Хмарна синхронізація">☁️ Sync</button>
   <button class="tb-btn" id="installBtn" style="display:none;" onclick="installPWA()">📲 <span data-t="install">Встановити</span></button>
 </div>
 
@@ -1088,6 +1090,15 @@ footer::before{content:'🐾 🥋 🐾';display:block;font-size:16px;opacity:.15
         <input type="file" id="importFile" accept=".json" onchange="importData(this)"/>
       </div>
       <div class="modal-section" style="margin-top:14px;">
+        <div class="modal-section-title">☁️ ХМАРНА СИНХРОНІЗАЦІЯ</div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:8px;" id="syncIdDisplay">ID: <span id="syncIdText" style="color:var(--orange);">не налаштовано</span></p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn-save" onclick="closeModal('backupModal');syncPush();" style="flex:1;min-width:120px;">⬆️ Завантажити в хмару</button>
+          <button class="btn-cancel" onclick="closeModal('backupModal');syncPull();" style="flex:1;min-width:120px;">⬇️ Отримати з хмари</button>
+        </div>
+        <button onclick="closeModal('backupModal');showSyncSetup();" style="margin-top:8px;width:100%;background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:8px;cursor:pointer;font-size:12px;">🔑 Налаштувати / Змінити ID</button>
+      </div>
+      <div class="modal-section" style="margin-top:14px;">
         <div class="modal-section-title" data-t="storage">СХОВИЩЕ</div>
         <p style="font-size:12px;color:var(--muted);line-height:1.7;" data-t="storageInfo">Дані зберігаються <b style="color:var(--text)">локально в браузері</b>. Робіть backup регулярно!</p>
       </div>
@@ -1235,6 +1246,10 @@ const TR={
     addCoachPhoto:'+ zdjęcie',clubTagline:'Klub Judo · Polska',
   }
 };
+// sync translations
+Object.assign(TR.uk,{syncOk:'☁️ Синхронізовано!',syncErr:'⚠️ Помилка синхр.',syncing:'⏳ Синхронізація...',syncBtn:'☁️ Синхронізувати'});
+Object.assign(TR.en,{syncOk:'☁️ Synced!',syncErr:'⚠️ Sync error',syncing:'⏳ Syncing...',syncBtn:'☁️ Sync'});
+Object.assign(TR.pl,{syncOk:'☁️ Zsynchronizowano!',syncErr:'⚠️ Błąd sync',syncing:'⏳ Synchronizacja...',syncBtn:'☁️ Synchronizuj'});
 let LANG=localStorage.getItem('judo_lang')||'uk';
 function t(k){return(TR[LANG]||TR.uk)[k]||k;}
 function applyLang(){
@@ -2068,7 +2083,25 @@ function deleteMedia(cid, idx){
 function openLightbox(type,src){const lb=document.getElementById('lightbox');const img=document.getElementById('lbImg'),vid=document.getElementById('lbVid');img.style.display='none';vid.style.display='none';if(type==='img'){img.src=src;img.style.display='block';}else{vid.src=src;vid.style.display='block';}lb.classList.add('open');}
 
 /* ══════════ BACKUP ══════════ */
-function openBackup(){openModal('backupModal');}
+function openBackup(){
+  const uid = getUserId();
+  const el = document.getElementById('syncIdText');
+  if(el) el.textContent = uid || 'не налаштовано';
+  openModal('backupModal');
+}
+
+function showSyncMenu(){
+  const userId = getUserId();
+  if(!userId){
+    showSyncSetup();
+    return;
+  }
+  const status = '☁️ ХМАРНА СИНХРОНІЗАЦІЯ\n\nВаш ID: ' + userId + '\n\nОберіть дію:\n✅ OK → Завантажити на хмару (Push)\n❌ Скасувати → Отримати з хмари (Pull)';
+  customConfirm(status).then(function(yes){
+    if(yes){ syncPush(); }
+    else { syncPull(); }
+  });
+}
 function exportData(){
   const fights={},media={};
   COMPS.forEach(function(comp){
@@ -2208,6 +2241,173 @@ applyLang();
   }
 })();
 
+/* ══════════ SUPABASE SYNC ══════════ */
+const SB_URL = 'https://ogiqpuqeatwhxjezwhai.supabase.co';
+const SB_KEY = 'sb_publishable_eVnn57rF0pMLeW5NLg8hGw_0rCs9pkJ';
+let sbClient = null;
+
+function getSB(){
+  if(!sbClient && window.supabase){
+    sbClient = window.supabase.createClient(SB_URL, SB_KEY);
+  }
+  return sbClient;
+}
+
+function getDeviceId(){
+  let id = localStorage.getItem('judo_device_id');
+  if(!id){ id = 'dev_'+Date.now()+'_'+Math.random().toString(36).slice(2,8); localStorage.setItem('judo_device_id',id); }
+  return id;
+}
+
+function getUserId(){ return localStorage.getItem('judo_user_id') || null; }
+function setUserId(id){ localStorage.setItem('judo_user_id', id); }
+
+function dataUrlToBlob(dataUrl){
+  try {
+    const [header, b64] = dataUrl.split(',');
+    const mime = header.match(/:(.*?);/)[1];
+    const bin = atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i);
+    return new Blob([arr], {type: mime});
+  } catch(e){ return null; }
+}
+
+function blobToDataUrl(blob){
+  return new Promise(function(resolve, reject){
+    const reader = new FileReader();
+    reader.onload = function(){ resolve(reader.result); };
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function pushPhotos(sb, userId){
+  const photoKeys = ['athlete_photo','coach_photo_0','coach_photo_1','coach_photo_2'];
+  for(const key of photoKeys){
+    try {
+      const data = PHOTO_CACHE[key] || await idbGet(key).catch(function(){return null;});
+      if(!data) continue;
+      const blob = dataUrlToBlob(data);
+      if(!blob) continue;
+      const path = userId+'/'+key+'.jpg';
+      await sb.storage.from('judo-photos').upload(path, blob, {upsert:true, contentType:'image/jpeg'});
+    } catch(e){ console.warn('Photo push error:', key, e); }
+  }
+  for(const comp of COMPS){
+    try {
+      const media = MEDIA_CACHE[comp.id];
+      if(!media || !media.length) continue;
+      for(let mi=0; mi<media.length; mi++){
+        const m = media[mi];
+        if(!m || !m.data || m.type==='youtube') continue;
+        const blob = dataUrlToBlob(m.data);
+        if(!blob) continue;
+        const path = userId+'/media/'+comp.id+'_'+mi+'.jpg';
+        await sb.storage.from('judo-photos').upload(path, blob, {upsert:true, contentType:'image/jpeg'});
+      }
+    } catch(e){ console.warn('Media push error:', comp.id, e); }
+  }
+}
+
+async function pullPhotos(sb, userId){
+  const photoKeys = ['athlete_photo','coach_photo_0','coach_photo_1','coach_photo_2'];
+  for(const key of photoKeys){
+    try {
+      const { data: blob } = await sb.storage.from('judo-photos').download(userId+'/'+key+'.jpg');
+      if(!blob) continue;
+      const dataUrl = await blobToDataUrl(blob);
+      PHOTO_CACHE[key] = dataUrl;
+      await idbSet(key, dataUrl);
+    } catch(e){}
+  }
+  for(const comp of COMPS){
+    try {
+      const { data: files } = await sb.storage.from('judo-photos').list(userId+'/media', {search: comp.id+'_'});
+      if(!files || !files.length) continue;
+      const mediaArr = [];
+      for(const file of files){
+        const idx = parseInt((file.name.split('_').pop()||'').replace('.jpg',''))||0;
+        const { data: blob } = await sb.storage.from('judo-photos').download(userId+'/media/'+file.name);
+        if(!blob) continue;
+        const dataUrl = await blobToDataUrl(blob);
+        mediaArr[idx] = {type:'image', data: dataUrl};
+      }
+      if(mediaArr.length){
+        MEDIA_CACHE[comp.id] = mediaArr.filter(Boolean);
+        await idbSet('media_'+comp.id, MEDIA_CACHE[comp.id]);
+      }
+    } catch(e){ console.warn('Media pull error:', comp.id, e); }
+  }
+}
+
+async function syncPush(){
+  const sb = getSB(); if(!sb){ showToast('\u26a0\ufe0f Supabase недоступний'); return; }
+  const userId = getUserId(); if(!userId){ showSyncSetup(); return; }
+  showToast(t('syncing'));
+  try {
+    const compsToSave = COMPS.map(function(c){ const x=Object.assign({},c); delete x._sortKey; return x; });
+    await sb.from('judo_comps').upsert({user_id:userId, data:compsToSave, updated_at:new Date().toISOString()},{onConflict:'user_id'});
+
+    const prof = ls('judo_profile') || {};
+    const profClean = Object.assign({},prof,{photo:null});
+    if(profClean.coach0) profClean.coach0=Object.assign({},profClean.coach0,{photo:null});
+    if(profClean.coach1) profClean.coach1=Object.assign({},profClean.coach1,{photo:null});
+    if(profClean.coach2) profClean.coach2=Object.assign({},profClean.coach2,{photo:null});
+    await sb.from('judo_profile').upsert({user_id:userId, data:profClean, updated_at:new Date().toISOString()},{onConflict:'user_id'});
+
+    const allFights=[];
+    COMPS.forEach(function(comp){ comp.fights.forEach(function(_,fi){ const fd=ls(fkey(comp.id,fi)); if(fd) allFights.push({cid:comp.id,fi:fi,data:fd}); }); });
+    if(allFights.length) await sb.from('judo_fights').upsert({user_id:userId, data:allFights, updated_at:new Date().toISOString()},{onConflict:'user_id'});
+
+    await pushPhotos(sb, userId);
+    showToast(t('syncOk'));
+  } catch(err){ console.error('Push error:',err); showToast(t('syncErr')); }
+}
+
+async function syncPull(){
+  const sb = getSB(); if(!sb){ showToast('\u26a0\ufe0f Supabase недоступний'); return; }
+  const userId = getUserId(); if(!userId){ showSyncSetup(); return; }
+  showToast(t('syncing'));
+  try {
+    const { data: cr } = await sb.from('judo_comps').select('data').eq('user_id',userId).single();
+    if(cr && cr.data){
+      COMPS = cr.data;
+      COMPS.forEach(function(c){ if(!c._sortKey) c._sortKey=parseDateToSortKey(c.date||''); });
+      COMPS.sort(compareDates);
+      lss('judo_comps', COMPS);
+    }
+
+    const { data: pr } = await sb.from('judo_profile').select('data').eq('user_id',userId).single();
+    if(pr && pr.data){
+      const cur = ls('judo_profile') || {};
+      lss('judo_profile', Object.assign({}, pr.data, {photo: cur.photo || null}));
+    }
+
+    const { data: fr } = await sb.from('judo_fights').select('data').eq('user_id',userId).single();
+    if(fr && fr.data){ fr.data.forEach(function(item){ lss(fkey(item.cid,item.fi),item.data); }); }
+
+    await pullPhotos(sb, userId);
+    renderStats(); renderTournaments(); renderProfile();
+    showToast(t('syncOk'));
+  } catch(err){ console.error('Pull error:',err); showToast(t('syncErr')); }
+}
+
+function showSyncSetup(){
+  const existing = getUserId();
+  const msg = existing
+    ? 'Ваш ID синхронізації:\n\n' + existing + '\n\nВведіть цей самий ID на іншому пристрої.\nАбо введіть інший ID щоб отримати чужі дані:'
+    : '\u2601\ufe0f Хмарна синхронізація\n\nПридумайте унікальний ID (наприклад: ssia_judo або ім'я дитини)\n\u26a0\ufe0f Запишіть його! Він потрібен на кожному пристрої.';
+  const id = prompt(msg, existing || '');
+  if(id && id.trim()){ setUserId(id.trim()); syncPull().then(function(){ syncPush(); }); }
+}
+
+async function autoSync(){
+  const userId = getUserId(); if(!userId) return;
+  const sb = getSB(); if(!sb) return;
+  try { await syncPull(); } catch(e){ console.warn('Auto sync failed:', e); }
+}
+
 // Load everything from IDB (reliable storage), then render
 (function initApp(){
   // Step 1: Restore COMPS (tournaments) — IDB is authoritative if localStorage empty
@@ -2242,9 +2442,12 @@ applyLang();
     COMPS.forEach(function(comp){
       loadMediaFromIDB(comp.id).catch(function(){});
     });
+
+    // Auto-sync from cloud (silent, background)
+    setTimeout(function(){ autoSync(); }, 1500);
+
   }).catch(function(err){
     console.error('Init error:', err);
-    // Fallback: render with whatever we have
     if(!COMPS) COMPS = DEFAULT_COMPS;
     renderStats();
     renderTournaments();
