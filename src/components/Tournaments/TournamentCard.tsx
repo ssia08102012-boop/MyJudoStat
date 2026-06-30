@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import { ChevronDown, Pencil, Trash2, Youtube, FileText, MapPin, Share2 } from 'lucide-react'
 import { t } from '@/services/i18n'
+import { getFight } from '@/services/storage'
 import type { Tournament } from '@/types'
 import styles from './TournamentCard.module.css'
 
 interface Props {
   comp: Tournament
-  onEdit: (c: Tournament) => Promise<void>
+  onEdit: (c: Tournament) => void
   onDelete: (id: string) => Promise<void>
+  onOpenFight: (comp: Tournament, fi: number) => void
   showToast: (msg: string) => void
 }
 
@@ -33,17 +35,22 @@ function placeLabel(place: number | null) {
 async function shareResult(comp: Tournament) {
   const wins = comp.fights.filter((f) => f.r === 'w').length
   const losses = comp.fights.filter((f) => f.r === 'l').length
-  const text = `${medalIcon(comp.place)} ${comp.name} · ${comp.date}\n${wins}W / ${losses}L${comp.place ? ` · ${placeLabel(comp.place)}` : ''}`
+  const icon = medalIcon(comp.place)
+  const text = [
+    `${icon} ${comp.name}`,
+    comp.date,
+    comp.location ? `📍 ${comp.location}` : '',
+    `${wins}W / ${losses}L${comp.place ? ` · ${placeLabel(comp.place)}` : ''}`,
+    '\n#MyJudoStat #Judo',
+  ].filter(Boolean).join('\n')
+
   try {
-    if (navigator.share) {
-      await navigator.share({ title: 'My Judo Stat', text })
-    } else {
-      await navigator.clipboard.writeText(text)
-    }
-  } catch {}
+    if (navigator.share) await navigator.share({ title: 'My Judo Stat', text })
+    else await navigator.clipboard.writeText(text)
+  } catch { /* user cancelled or not supported */ }
 }
 
-export default function TournamentCard({ comp, onEdit, onDelete, showToast }: Props) {
+export default function TournamentCard({ comp, onEdit, onDelete, onOpenFight, showToast }: Props) {
   const [open, setOpen] = useState(false)
   const wins = comp.fights.filter((f) => f.r === 'w').length
   const losses = comp.fights.filter((f) => f.r === 'l').length
@@ -68,9 +75,9 @@ export default function TournamentCard({ comp, onEdit, onDelete, showToast }: Pr
             </div>
           )}
           <div className={styles.tags}>
-            {comp.ageCategory && <span className={styles.tagAge}>{comp.ageCategory}</span>}
+            {comp.ageCategory  && <span className={styles.tagAge}>{comp.ageCategory}</span>}
             {comp.weightCategory && <span className={styles.tagWt}>{comp.weightCategory}</span>}
-            {wins > 0 && <span className={styles.tagWin}>✓ {wins}</span>}
+            {wins   > 0 && <span className={styles.tagWin}>✓ {wins}</span>}
             {losses > 0 && <span className={styles.tagLoss}>✗ {losses}</span>}
           </div>
         </div>
@@ -98,23 +105,27 @@ export default function TournamentCard({ comp, onEdit, onDelete, showToast }: Pr
       {/* Body */}
       {open && (
         <div className={styles.body}>
-          {/* Fight bubbles */}
           <div className={styles.fightsLabel}>{t('clickForDetails')}</div>
           <div className={styles.fights}>
-            {comp.fights.map((f, fi) => (
-              <div
-                key={fi}
-                className={`${styles.bubble} ${f.r === 'w' ? styles.bubbleW : styles.bubbleL}`}
-              >
-                <span className={styles.bubbleNum}>{fi + 1}</span>
-                <span className={styles.bubbleRes}>{f.r === 'w' ? '✓' : '✗'}</span>
-              </div>
-            ))}
+            {comp.fights.map((f, fi) => {
+              const detail = getFight(comp.id, fi)
+              const hasData = !!(detail.f_opp_name || detail.f_tech || detail.f_notes || detail.f_score_me)
+              return (
+                <button
+                  key={fi}
+                  className={`${styles.bubble} ${f.r === 'w' ? styles.bubbleW : styles.bubbleL} ${hasData ? styles.bubbleHasData : ''}`}
+                  onClick={() => onOpenFight(comp, fi)}
+                  title={`${t('fightOf')} ${fi + 1}`}
+                >
+                  <span className={styles.bubbleNum}>{fi + 1}</span>
+                  <span className={styles.bubbleRes}>{f.r === 'w' ? '✓' : '✗'}</span>
+                </button>
+              )
+            })}
           </div>
 
           {comp.notes && <div className={styles.notes}>{comp.notes}</div>}
 
-          {/* Links */}
           {(comp.yt || comp.pdf) && (
             <div className={styles.links}>
               {comp.yt && (

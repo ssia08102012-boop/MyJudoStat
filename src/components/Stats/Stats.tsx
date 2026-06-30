@@ -1,9 +1,10 @@
-import { BarChart2, CheckCircle, XCircle, Medal, Trophy, Award } from 'lucide-react'
+import { BarChart2, CheckCircle, XCircle, Medal, Trophy, Award, Percent, type LucideIcon } from 'lucide-react'
 import { t } from '@/services/i18n'
 import { calcStats } from '@/services/storage'
 import type { Tournament, Lang } from '@/types'
 import WinBar from './WinBar'
 import Charts from './Charts'
+import Goals from './Goals'
 import styles from './Stats.module.css'
 
 interface Props {
@@ -14,14 +15,16 @@ interface Props {
   lang: Lang
 }
 
-const STAT_CARDS = [
-  { key: 'tournaments' as const, Icon: BarChart2 },
-  { key: 'fights'      as const, Icon: Award },
-  { key: 'wins'        as const, Icon: CheckCircle },
-  { key: 'losses'      as const, Icon: XCircle },
-  { key: 'gold'        as const, Icon: Trophy },
-  { key: 'silver'      as const, Icon: Medal },
-  { key: 'bronze'      as const, Icon: Medal },
+type S = ReturnType<typeof calcStats>
+const CARDS: { key: string; Icon: LucideIcon; getVal: (s: S, wr: number) => string | number; mod?: string }[] = [
+  { key: 'tournaments', Icon: BarChart2,    getVal: (s) => s.tournaments },
+  { key: 'fights',      Icon: Award,        getVal: (s) => s.fights },
+  { key: 'wins',        Icon: CheckCircle,  getVal: (s) => s.wins,   mod: 'win' },
+  { key: 'losses',      Icon: XCircle,      getVal: (s) => s.losses, mod: 'loss' },
+  { key: 'winRate',     Icon: Percent,      getVal: (_, wr) => `${wr}%` },
+  { key: 'gold',        Icon: Trophy,       getVal: (s) => s.gold },
+  { key: 'silver',      Icon: Medal,        getVal: (s) => s.silver },
+  { key: 'bronze',      Icon: Medal,        getVal: (s) => s.bronze },
 ]
 
 export default function Stats({ comps, filtered, activeYear, onFilterYear, lang: _lang }: Props) {
@@ -52,33 +55,20 @@ export default function Stats({ comps, filtered, activeYear, onFilterYear, lang:
 
       {/* Stat cards */}
       <div className={styles.grid}>
-        {STAT_CARDS.map(({ key, Icon }) => (
-          <div key={key} className={`${styles.card} ${key === 'wins' ? styles.cardWin : ''} ${key === 'losses' ? styles.cardLoss : ''}`}>
-            <Icon size={18} strokeWidth={1.5} className={styles.cardIcon} />
-            <div className={styles.cardVal}>
-              {key === 'fights' ? s.fights
-               : key === 'wins' ? s.wins
-               : key === 'losses' ? s.losses
-               : key === 'gold' ? s.gold
-               : key === 'silver' ? s.silver
-               : key === 'bronze' ? s.bronze
-               : s.tournaments}
-            </div>
-            <div className={styles.cardLbl}>{t(key === 'bronze' ? 'bronze' : key)}</div>
+        {CARDS.map(({ key, Icon, getVal, mod }) => (
+          <div
+            key={key}
+            className={`${styles.card} ${mod === 'win' ? styles.cardWin : ''} ${mod === 'loss' ? styles.cardLoss : ''}`}
+          >
+            <Icon size={17} strokeWidth={1.5} className={styles.cardIcon} />
+            <div className={styles.cardVal}>{getVal(s, winRate)}</div>
+            <div className={styles.cardLbl}>{t(key as Parameters<typeof t>[0])}</div>
           </div>
         ))}
-        {/* Win rate card */}
-        <div className={styles.card}>
-          <BarChart2 size={18} strokeWidth={1.5} className={styles.cardIcon} />
-          <div className={styles.cardVal}>{winRate}%</div>
-          <div className={styles.cardLbl}>{t('winRate')}</div>
-        </div>
       </div>
 
-      {/* Win bar */}
       <WinBar wins={s.wins} losses={s.losses} winRate={winRate} />
-
-      {/* Charts */}
+      <Goals comps={comps} activeYear={activeYear} />
       <Charts comps={comps} activeYear={activeYear} />
     </div>
   )

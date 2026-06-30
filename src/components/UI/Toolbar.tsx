@@ -1,23 +1,22 @@
 import { Plus, Cloud, Trophy, Globe } from 'lucide-react'
 import { t } from '@/services/i18n'
-import type { Lang, Tournament } from '@/types'
+import type { Lang } from '@/types'
 import styles from './Toolbar.module.css'
 
 interface Props {
   lang: Lang
   onChangeLang: (l: Lang) => void
-  comps: Tournament[]
-  onAddComp: (c: Tournament) => Promise<void>
-  showToast: (msg: string) => void
+  onAddTournament: () => void
+  onOpenBackup: () => void
 }
 
 const LANGS: Lang[] = ['uk', 'en', 'pl']
 
-export default function Toolbar({ lang, onChangeLang }: Props) {
+export default function Toolbar({ lang, onChangeLang, onAddTournament, onOpenBackup }: Props) {
   return (
     <div className={styles.toolbar}>
       <div className={styles.left}>
-        <button className={styles.tbBtn}>
+        <button className={`${styles.tbBtn} ${styles.primary}`} onClick={onAddTournament}>
           <Plus size={15} strokeWidth={2.5} />
           <span>{t('addTournament')}</span>
         </button>
@@ -30,7 +29,7 @@ export default function Toolbar({ lang, onChangeLang }: Props) {
           <Trophy size={15} strokeWidth={2} />
           <span>{t('clubRanking')}</span>
         </a>
-        <button className={styles.tbBtn}>
+        <button className={styles.tbBtn} onClick={onOpenBackup}>
           <Cloud size={15} strokeWidth={2} />
           <span>{t('syncBtn')}</span>
         </button>

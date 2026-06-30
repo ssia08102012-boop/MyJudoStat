@@ -65,6 +65,7 @@
 .bubbleRes { font-size: 14px; font-weight: 700; }
 .bubbleW .bubbleRes { color: var(--green); }
 .bubbleL .bubbleRes { color: var(--red); }
+.bubbleHasData { box-shadow: 0 0 0 2px var(--orange); }
 
 .notes {
   margin-top: 10px;
