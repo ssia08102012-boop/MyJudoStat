@@ -1,0 +1,102 @@
+@import './variables.css';
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { min-height: 100vh; }
+
+body {
+  font-family: 'Crimson Pro', Georgia, serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* Tatami grid + paw prints background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(30,50,30,.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30,50,30,.14) 1px, transparent 1px),
+    linear-gradient(rgba(230,114,10,.022) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(230,114,10,.022) 2px, transparent 2px);
+  background-size: 44px 44px, 44px 44px, 220px 220px, 220px 220px;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg opacity='0.035' fill='%23e8720a'%3E%3Cellipse cx='30' cy='75' rx='9' ry='11'/%3E%3Cellipse cx='20' cy='55' rx='6' ry='7'/%3E%3Cellipse cx='32' cy='52' rx='6' ry='7'/%3E%3Cellipse cx='44' cy='55' rx='6' ry='7'/%3E%3Cellipse cx='38' cy='68' rx='5' ry='6'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg opacity='0.025' fill='%23e8720a'%3E%3Cellipse cx='90' cy='30' rx='9' ry='11'/%3E%3Cellipse cx='80' cy='10' rx='6' ry='7'/%3E%3Cellipse cx='92' cy='7' rx='6' ry='7'/%3E%3Cellipse cx='104' cy='10' rx='6' ry='7'/%3E%3Cellipse cx='98' cy='23' rx='5' ry='6'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 240px 240px, 240px 240px;
+  background-position: 0 0, 120px 120px;
+}
+
+#root { position: relative; z-index: 1; }
+
+a { color: var(--orange); text-decoration: none; }
+a:hover { color: var(--orange2); }
+
+button { cursor: pointer; font-family: inherit; }
+
+input, textarea, select {
+  font-family: inherit;
+  color: var(--text);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color var(--transition);
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--orange);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 3px; opacity: .5; }
+
+/* Section divider */
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 24px 0 14px;
+  padding: 0 16px;
+}
+.sh-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--orange), transparent);
+}
+.sh-line.rev {
+  background: linear-gradient(270deg, var(--orange), transparent);
+}
+.sh-paw { font-size: 13px; opacity: .5; }
+.sh-title {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: .2em;
+  color: var(--orange);
+  white-space: nowrap;
+}
+
+/* Utility */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+}

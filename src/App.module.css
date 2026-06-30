@@ -1,0 +1,30 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  padding: 0 0 32px;
+}
+
+.loader {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loaderPaw {
+  font-family: 'Cinzel', serif;
+  font-size: 48px;
+  color: var(--orange);
+  opacity: .3;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: .15; transform: scale(.97); }
+  50%       { opacity: .45; transform: scale(1.03); }
+}

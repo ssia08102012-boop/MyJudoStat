@@ -1,0 +1,18 @@
+.footer {
+  text-align: center;
+  padding: 22px;
+  color: var(--border);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  font-family: 'Cinzel', serif;
+  position: relative;
+}
+.footer::before {
+  content: '🐾 🥋 🐾';
+  display: block;
+  font-size: 16px;
+  opacity: .15;
+  margin-bottom: 6px;
+  letter-spacing: .3em;
+}
