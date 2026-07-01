@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { ExternalLink } from 'lucide-react'
+import logoRys from '@/assets/logo-rys.png'
 import styles from './ExternalLinks.module.css'
 
 interface LinkItem {
@@ -7,6 +9,8 @@ interface LinkItem {
   url: string
   color: string
   abbr: string
+  domain: string
+  logo?: string
 }
 
 const LINKS: LinkItem[] = [
@@ -16,6 +20,7 @@ const LINKS: LinkItem[] = [
     url: 'https://www.ijf.org',
     color: '#1a3a7a',
     abbr: 'IJF',
+    domain: 'ijf.org',
   },
   {
     name: 'JudoTV',
@@ -23,6 +28,7 @@ const LINKS: LinkItem[] = [
     url: 'https://www.judotv.com',
     color: '#c8922a',
     abbr: 'TV',
+    domain: 'judotv.com',
   },
   {
     name: 'Judo Mobile',
@@ -30,6 +36,7 @@ const LINKS: LinkItem[] = [
     url: 'https://pzjudo.pl',
     color: '#cc0000',
     abbr: 'PZJ',
+    domain: 'pzjudo.pl',
   },
   {
     name: 'SportsManago',
@@ -37,6 +44,7 @@ const LINKS: LinkItem[] = [
     url: 'https://sportsmanago.pl',
     color: '#1a7abf',
     abbr: 'SM',
+    domain: 'sportsmanago.pl',
   },
   {
     name: 'JudoManager',
@@ -44,6 +52,7 @@ const LINKS: LinkItem[] = [
     url: 'https://judomanager.eu',
     color: '#222222',
     abbr: 'JM',
+    domain: 'judomanager.eu',
   },
   {
     name: 'Klub Judo Ryś',
@@ -51,8 +60,38 @@ const LINKS: LinkItem[] = [
     url: 'https://judo-rys.pl/rank/sum.php',
     color: '#e8720a',
     abbr: 'RYŚ',
+    domain: 'judo-rys.pl',
+    logo: logoRys,
   },
 ]
+
+function LogoBadge({ link }: { link: LinkItem }) {
+  const [failed, setFailed] = useState(false)
+  const isLocal = Boolean(link.logo)
+  const src = link.logo ?? `https://www.google.com/s2/favicons?sz=128&domain=${link.domain}`
+
+  if (failed) {
+    return (
+      <div className={styles.abbr} style={{ background: link.color }}>
+        {link.abbr}
+      </div>
+    )
+  }
+
+  return (
+    <div
+      className={styles.logoBadge}
+      style={isLocal ? { background: link.color } : undefined}
+    >
+      <img
+        src={src}
+        alt=""
+        className={isLocal ? styles.localImg : styles.faviconImg}
+        onError={() => setFailed(true)}
+      />
+    </div>
+  )
+}
 
 export default function ExternalLinks() {
   return (
@@ -66,9 +105,7 @@ export default function ExternalLinks() {
           className={styles.card}
           style={{ '--accent': link.color } as React.CSSProperties}
         >
-          <div className={styles.abbr} style={{ background: link.color }}>
-            {link.abbr}
-          </div>
+          <LogoBadge link={link} />
           <div className={styles.info}>
             <div className={styles.name}>{link.name}</div>
             <div className={styles.sub}>{link.sub}</div>
