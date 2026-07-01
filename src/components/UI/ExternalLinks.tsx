@@ -65,12 +65,25 @@ const LINKS: LinkItem[] = [
   },
 ]
 
-function LogoBadge({ link }: { link: LinkItem }) {
-  const [failed, setFailed] = useState(false)
-  const isLocal = Boolean(link.logo)
-  const src = link.logo ?? `https://www.google.com/s2/favicons?sz=128&domain=${link.domain}`
+const FAVICON_SOURCES = (domain: string) => [
+  `https://icons.duckduckgo.com/ip3/${domain}.ico`,
+  `https://www.google.com/s2/favicons?sz=64&domain=${domain}`,
+]
 
-  if (failed) {
+function LogoBadge({ link }: { link: LinkItem }) {
+  const [srcIdx, setSrcIdx] = useState(0)
+  const isLocal = Boolean(link.logo)
+  const sources = isLocal ? [] : FAVICON_SOURCES(link.domain)
+
+  if (isLocal) {
+    return (
+      <div className={styles.logoBadge} style={{ background: link.color }}>
+        <img src={link.logo} alt="" className={styles.localImg} />
+      </div>
+    )
+  }
+
+  if (srcIdx >= sources.length) {
     return (
       <div className={styles.abbr} style={{ background: link.color }}>
         {link.abbr}
@@ -79,15 +92,13 @@ function LogoBadge({ link }: { link: LinkItem }) {
   }
 
   return (
-    <div
-      className={styles.logoBadge}
-      style={isLocal ? { background: link.color } : undefined}
-    >
+    <div className={styles.logoBadge}>
       <img
-        src={src}
+        key={srcIdx}
+        src={sources[srcIdx]}
         alt=""
-        className={isLocal ? styles.localImg : styles.faviconImg}
-        onError={() => setFailed(true)}
+        className={styles.faviconImg}
+        onError={() => setSrcIdx((i) => i + 1)}
       />
     </div>
   )
