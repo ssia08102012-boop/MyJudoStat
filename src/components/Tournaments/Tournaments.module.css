@@ -1,0 +1,59 @@
+.wrap { padding: 0 16px 16px; }
+
+.searchBar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 200px;
+  position: relative;
+}
+.searchInput input {
+  width: 100%;
+  padding-left: 34px;
+}
+.searchIcon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.medalFilters {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.mfBtn {
+  padding: 6px 12px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--muted);
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: .08em;
+  transition: all var(--transition);
+}
+.mfBtn.active, .mfBtn:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.list { display: flex; flex-direction: column; gap: 8px; }
+
+.empty {
+  text-align: center;
+  padding: 36px;
+  color: var(--muted);
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: .1em;
+}

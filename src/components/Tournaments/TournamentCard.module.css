@@ -1,0 +1,104 @@
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color var(--transition);
+}
+.gold   { border-left: 3px solid var(--amber); }
+.silver { border-left: 3px solid #9aa0b0; }
+.bronze { border-left: 3px solid #b07840; }
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+.header:hover { background: rgba(255,255,255,.02); }
+
+.left  { flex: 1; min-width: 0; }
+.right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+.date     { font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+.name     { font-family: 'Cinzel', serif; font-size: 14px; color: var(--text); font-weight: 700; }
+.location { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+.tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 6px; }
+.tagAge  { padding: 2px 7px; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; font-size: 10px; color: var(--muted); }
+.tagWt   { padding: 2px 7px; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; font-size: 10px; color: var(--muted); }
+.tagWin  { padding: 2px 7px; background: rgba(61,186,112,.12); border: 1px solid rgba(61,186,112,.3); border-radius: 10px; font-size: 10px; color: var(--green); }
+.tagLoss { padding: 2px 7px; background: rgba(224,68,68,.12); border: 1px solid rgba(224,68,68,.3); border-radius: 10px; font-size: 10px; color: var(--red); }
+
+.medal { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.medalIcon { font-size: 20px; }
+.medalTxt  { font-size: 10px; color: var(--muted); white-space: nowrap; }
+
+.actions { display: flex; gap: 4px; }
+.iconBtn {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 7px;
+  color: var(--muted);
+  transition: all var(--transition);
+}
+.iconBtn:hover { border-color: var(--orange); color: var(--orange); }
+
+.chevron { color: var(--muted); transition: transform var(--transition); }
+.chevronOpen { transform: rotate(180deg); }
+
+/* Body */
+.body { padding: 0 14px 14px; border-top: 1px solid var(--border); }
+
+.fightsLabel { font-size: 10px; color: var(--muted); letter-spacing: .15em; padding: 10px 0 6px; font-family: 'Cinzel', serif; }
+
+.fights { display: flex; gap: 6px; flex-wrap: wrap; }
+.bubble {
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  width: 36px; cursor: pointer; border-radius: 8px; padding: 4px 2px;
+  transition: background var(--transition);
+}
+.bubble:hover { background: var(--bg3); }
+.bubbleNum { font-size: 10px; color: var(--muted); }
+.bubbleRes { font-size: 14px; font-weight: 700; }
+.bubbleW .bubbleRes { color: var(--green); }
+.bubbleL .bubbleRes { color: var(--red); }
+.bubbleHasData { box-shadow: 0 0 0 2px var(--orange); }
+
+.notes {
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: var(--bg3);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  border-left: 2px solid var(--orange);
+}
+
+.links { display: flex; gap: 8px; margin-top: 10px; }
+.ytLink, .pdfLink {
+  display: flex; align-items: center; gap: 5px;
+  padding: 5px 12px;
+  border-radius: 8px; font-size: 12px;
+  transition: all var(--transition);
+  text-decoration: none;
+}
+.ytLink  { background: rgba(255,0,0,.1); color: #ff4444; border: 1px solid rgba(255,0,0,.2); }
+.pdfLink { background: var(--bg3); color: var(--muted); border: 1px solid var(--border); }
+.ytLink:hover  { background: rgba(255,0,0,.2); color: #ff6666; }
+.pdfLink:hover { border-color: var(--orange); color: var(--orange); }
+
+.deleteBtn {
+  display: flex; align-items: center; gap: 5px;
+  margin-top: 12px;
+  padding: 6px 12px;
+  background: rgba(224,68,68,.08);
+  border: 1px solid rgba(224,68,68,.2);
+  border-radius: 8px;
+  color: var(--red);
+  font-size: 12px;
+  transition: all var(--transition);
+}
+.deleteBtn:hover { background: rgba(224,68,68,.18); border-color: var(--red); }

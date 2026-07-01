@@ -1,0 +1,48 @@
+.primary {
+  flex: 1;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, var(--orange), var(--fur2));
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: .1em;
+  transition: filter var(--transition), transform var(--transition);
+  cursor: pointer;
+}
+.primary:hover  { filter: brightness(1.12); }
+.primary:active { transform: scale(.98); }
+.primary.danger {
+  background: linear-gradient(135deg, #c03020, #8a1810);
+}
+
+.ghost {
+  flex: 1;
+  padding: 10px 18px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--muted);
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: .1em;
+  transition: all var(--transition);
+  cursor: pointer;
+}
+.ghost:hover { border-color: var(--muted); color: var(--text); }
+
+.icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  transition: all var(--transition);
+  cursor: pointer;
+}
+.icon:hover { border-color: var(--orange); color: var(--orange); }

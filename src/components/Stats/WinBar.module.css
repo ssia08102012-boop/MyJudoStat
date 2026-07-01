@@ -1,0 +1,28 @@
+.wrap { padding: 0 16px 4px; }
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.pct {
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  color: var(--orange2);
+}
+
+.track {
+  height: 8px;
+  background: rgba(224,68,68,.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green), var(--orange));
+  border-radius: 4px;
+  transition: width .6s ease;
+}

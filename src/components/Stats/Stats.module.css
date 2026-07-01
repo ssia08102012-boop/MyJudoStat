@@ -1,0 +1,50 @@
+.wrap { padding: 0; }
+
+.filters {
+  display: flex;
+  gap: 6px;
+  padding: 8px 16px;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 5px 14px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--muted);
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: .1em;
+  transition: all var(--transition);
+}
+.filterBtn.active,
+.filterBtn:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 8px;
+  padding: 8px 16px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+.cardWin  { border-color: rgba(61,186,112,.3); }
+.cardLoss { border-color: rgba(224,68,68,.3);  }
+
+.cardIcon { color: var(--orange); opacity: .7; margin-bottom: 2px; }
+.cardVal  { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 900; color: var(--text); }
+.cardLbl  { font-size: 10px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
