@@ -5,6 +5,59 @@
   overflow: hidden;
 }
 
+/* Club top bar */
+.clubBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 8px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(90deg, rgba(230,114,10,.06), transparent);
+}
+.clubLogo {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: 50%;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 8px rgba(230,114,10,.4));
+}
+.clubInfo { display: flex; flex-direction: column; gap: 1px; }
+.clubName {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--orange);
+  letter-spacing: .1em;
+}
+.clubSub {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: .05em;
+}
+
+/* Name + edit row */
+.nameRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.editBtn {
+  flex-shrink: 0;
+  margin-top: 4px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--muted);
+  transition: all var(--transition);
+}
+.editBtn:hover { border-color: var(--orange); color: var(--orange); }
+
 .heroKanji {
   position: absolute;
   right: -20px;
@@ -155,7 +208,10 @@
   border-radius: 8px;
   padding: 6px 12px;
   min-width: 60px;
+  cursor: pointer;
+  transition: border-color var(--transition);
 }
+.chip:hover { border-color: var(--orange); }
 .chipLabel {
   font-size: 9px;
   color: var(--muted);

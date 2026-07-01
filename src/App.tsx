@@ -15,6 +15,7 @@ import Toast from '@/components/UI/Toast'
 import TournamentModal from '@/components/Modals/TournamentModal'
 import FightModal from '@/components/Modals/FightModal'
 import BackupModal from '@/components/Modals/BackupModal'
+import ProfileModal from '@/components/Modals/ProfileModal'
 
 type ModalState =
   | { type: 'none' }
@@ -22,6 +23,7 @@ type ModalState =
   | { type: 'editTournament'; comp: Tournament }
   | { type: 'fight'; comp: Tournament; fi: number }
   | { type: 'backup' }
+  | { type: 'profile' }
 
 export default function App() {
   const { lang, changeLang } = useLang()
@@ -85,7 +87,7 @@ export default function App() {
         profile={profile}
         comps={comps}
         onUpdateProfile={updateProfile}
-        lang={lang}
+        onEditProfile={() => setModal({ type: 'profile' })}
       />
 
       <main className={styles.main}>
@@ -149,6 +151,13 @@ export default function App() {
         onClose={closeModal}
         onImport={handleImport}
         showToast={showToast}
+      />
+
+      <ProfileModal
+        open={modal.type === 'profile'}
+        profile={profile}
+        onClose={closeModal}
+        onSave={updateProfile}
       />
     </div>
   )
