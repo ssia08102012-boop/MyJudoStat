@@ -1,4 +1,4 @@
-import { Plus, Cloud, Trophy, Globe, CalendarDays, ExternalLink, Users } from 'lucide-react'
+import { Plus, Cloud, Trophy, Globe } from 'lucide-react'
 import { t } from '@/services/i18n'
 import type { Lang } from '@/types'
 import styles from './Toolbar.module.css'
@@ -28,25 +28,6 @@ export default function Toolbar({ lang, onChangeLang, onAddTournament, onOpenBac
         >
           <Trophy size={15} strokeWidth={2} />
           <span>{t('clubRanking')}</span>
-        </a>
-        <a
-          className={styles.tbBtn}
-          href="https://judo-rys.pl/kalendarz/index.php"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <CalendarDays size={15} strokeWidth={2} />
-          <span>{t('calendar')}</span>
-        </a>
-        <a
-          className={`${styles.tbBtn} ${styles.sportsManago}`}
-          href="https://sportsmanago.pl"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <Users size={15} strokeWidth={2} />
-          <span>SportsManago</span>
-          <ExternalLink size={11} strokeWidth={2} />
         </a>
         <button className={styles.tbBtn} onClick={onOpenBackup}>
           <Cloud size={15} strokeWidth={2} />

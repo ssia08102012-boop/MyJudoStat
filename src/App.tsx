@@ -12,6 +12,7 @@ import Stats from '@/components/Stats/Stats'
 import Tournaments from '@/components/Tournaments/Tournaments'
 import Footer from '@/components/UI/Footer'
 import Toast from '@/components/UI/Toast'
+import ExternalLinks from '@/components/UI/ExternalLinks'
 import TournamentModal from '@/components/Modals/TournamentModal'
 import FightModal from '@/components/Modals/FightModal'
 import BackupModal from '@/components/Modals/BackupModal'
@@ -125,6 +126,16 @@ export default function App() {
           showToast={showToast}
           lang={lang}
         />
+
+        <section className="section-head" style={{ marginTop: 16 }}>
+          <div className="sh-line" />
+          <span className="sh-paw">⛩</span>
+          <div className="sh-title">ПОСИЛАННЯ</div>
+          <span className="sh-paw">⛩</span>
+          <div className="sh-line rev" />
+        </section>
+
+        <ExternalLinks />
       </main>
 
       <Footer />
