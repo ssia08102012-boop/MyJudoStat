@@ -1,18 +1,20 @@
-import { Camera, User } from 'lucide-react'
+import { Camera, User, Pencil } from 'lucide-react'
 import { t } from '@/services/i18n'
 import { calcStats } from '@/services/storage'
-import type { Profile, Tournament, Lang } from '@/types'
+import type { Profile, Tournament } from '@/types'
 import { BELT_COLORS } from './beltColors'
+import Coaches from './Coaches'
+import logoRys from '@/assets/logo-rys.png'
 import styles from './Hero.module.css'
 
 interface Props {
   profile: Profile
   comps: Tournament[]
   onUpdateProfile: (p: Profile) => Promise<void>
-  lang: Lang
+  onEditProfile: () => void
 }
 
-export default function Hero({ profile, comps, onUpdateProfile }: Props) {
+export default function Hero({ profile, comps, onUpdateProfile, onEditProfile }: Props) {
   const s = calcStats(comps)
   const winRate = s.fights > 0 ? Math.round((s.wins / s.fights) * 100) : 0
   const belt = BELT_COLORS.find((b) =>
@@ -38,6 +40,15 @@ export default function Hero({ profile, comps, onUpdateProfile }: Props) {
 
   return (
     <header className={styles.header}>
+      {/* Club top bar */}
+      <div className={styles.clubBar}>
+        <img src={logoRys} alt="Klub Judo Ryś" className={styles.clubLogo} />
+        <div className={styles.clubInfo}>
+          <div className={styles.clubName}>KLUB JUDO RYŚ</div>
+          <div className={styles.clubSub}>{t('clubTagline')}</div>
+        </div>
+      </div>
+
       <div className={styles.heroKanji}>柔道</div>
       <div className={styles.inner}>
 
@@ -59,8 +70,14 @@ export default function Hero({ profile, comps, onUpdateProfile }: Props) {
 
         {/* Data column */}
         <div className={styles.dataCol}>
-          <div className={styles.name}>
-            {profile.name || 'ІМ\'Я СПОРТСМЕНА'}
+          {/* Name + edit button */}
+          <div className={styles.nameRow}>
+            <div className={styles.name}>
+              {profile.name || 'ІМ\'Я СПОРТСМЕНА'}
+            </div>
+            <button className={styles.editBtn} onClick={onEditProfile} title="Редагувати профіль">
+              <Pencil size={13} strokeWidth={2} />
+            </button>
           </div>
 
           {/* Belt visual */}
@@ -76,14 +93,14 @@ export default function Hero({ profile, comps, onUpdateProfile }: Props) {
             </span>
           </div>
 
-          {/* Attributes chips */}
+          {/* Attributes chips — click opens profile edit */}
           <div className={styles.chips}>
             {[
               { label: t('weightCat'), val: profile.weight },
               { label: t('born'),      val: profile.dob },
               { label: t('since'),     val: profile.since },
             ].map(({ label, val }) => (
-              <div key={label} className={styles.chip}>
+              <div key={label} className={styles.chip} onClick={onEditProfile} role="button">
                 <span className={styles.chipLabel}>{label}</span>
                 <span className={styles.chipVal}>{val || '—'}</span>
               </div>
@@ -106,6 +123,9 @@ export default function Hero({ profile, comps, onUpdateProfile }: Props) {
           </div>
         </div>
       </div>
+
+      {/* Coaches section */}
+      <Coaches profile={profile} onUpdateProfile={onUpdateProfile} />
     </header>
   )
 }

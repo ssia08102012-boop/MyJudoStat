@@ -59,6 +59,15 @@
   color: #fff;
 }
 
+.sportsManago {
+  border-color: #1a7abf;
+  color: #4ab0f0;
+}
+.sportsManago:hover {
+  border-color: #4ab0f0;
+  color: #7dd4ff;
+}
+
 .langBtn {
   padding: 4px 8px;
   background: transparent;
