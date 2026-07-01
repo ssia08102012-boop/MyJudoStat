@@ -25,6 +25,7 @@
   color: var(--text);
 }
 
+/* Fallback text badge (shown when image fails to load) */
 .abbr {
   flex-shrink: 0;
   width: 42px;
@@ -38,6 +39,33 @@
   font-weight: 900;
   color: #fff;
   letter-spacing: .04em;
+}
+
+/* Logo badge container */
+.logoBadge {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Favicon from Google API — displayed smaller inside white badge */
+.faviconImg {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+/* Local bundled logo (Ryś PNG) — full bleed */
+.localImg {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
 }
 
 .info {
