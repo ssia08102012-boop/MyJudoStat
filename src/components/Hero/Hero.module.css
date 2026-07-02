@@ -15,10 +15,10 @@
   background: linear-gradient(90deg, rgba(230,114,10,.06), transparent);
 }
 .clubLogo {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   object-fit: contain;
-  border-radius: 50%;
+  border-radius: 10px;
   flex-shrink: 0;
   filter: drop-shadow(0 0 8px rgba(230,114,10,.4));
 }
