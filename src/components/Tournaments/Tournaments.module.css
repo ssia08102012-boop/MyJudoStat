@@ -49,6 +49,40 @@
 
 .list { display: flex; flex-direction: column; gap: 8px; }
 
+.yearGroup { display: flex; flex-direction: column; gap: 8px; }
+
+.yearDivider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0 4px;
+}
+.yearDivider:first-child { margin-top: 0; }
+.yearDividerLine {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.yearDividerLabel {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: .18em;
+  color: var(--muted);
+  padding: 0 4px;
+  white-space: nowrap;
+}
+.yearDividerCount {
+  font-size: 11px;
+  color: var(--border);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-family: 'Cinzel', serif;
+}
+
+.mfBtn { font-size: 11px; }
+
 .empty {
   text-align: center;
   padding: 36px;

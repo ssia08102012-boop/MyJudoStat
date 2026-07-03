@@ -27,10 +27,10 @@
 .location { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); margin-top: 3px; }
 
 .tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 6px; }
-.tagAge  { padding: 2px 7px; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; font-size: 10px; color: var(--muted); }
-.tagWt   { padding: 2px 7px; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; font-size: 10px; color: var(--muted); }
-.tagWin  { padding: 2px 7px; background: rgba(61,186,112,.12); border: 1px solid rgba(61,186,112,.3); border-radius: 10px; font-size: 10px; color: var(--green); }
-.tagLoss { padding: 2px 7px; background: rgba(224,68,68,.12); border: 1px solid rgba(224,68,68,.3); border-radius: 10px; font-size: 10px; color: var(--red); }
+.tagAge  { padding: 2px 8px; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; font-size: 11px; color: var(--muted); }
+.tagWt   { padding: 2px 8px; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; font-size: 11px; color: var(--muted); }
+.tagWin  { padding: 2px 8px; background: rgba(61,186,112,.12); border: 1px solid rgba(61,186,112,.3); border-radius: 10px; font-size: 11px; color: var(--green); }
+.tagLoss { padding: 2px 8px; background: rgba(224,68,68,.12); border: 1px solid rgba(224,68,68,.3); border-radius: 10px; font-size: 11px; color: var(--red); }
 
 .medal { display: flex; flex-direction: column; align-items: center; gap: 2px; }
 .medalIcon { font-size: 20px; }

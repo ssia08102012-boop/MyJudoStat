@@ -61,16 +61,33 @@ export default function Tournaments({ comps, onEdit, onDelete, onOpenFight, show
         <div className={styles.empty}>{t('noTournaments')}</div>
       ) : (
         <div className={styles.list}>
-          {visible.map((comp) => (
-            <TournamentCard
-              key={comp.id}
-              comp={comp}
-              onEdit={onEdit}
-              onDelete={onDelete}
-              onOpenFight={onOpenFight}
-              showToast={showToast}
-            />
-          ))}
+          {(() => {
+            const byYear = visible.reduce<Record<number, typeof visible>>((acc, c) => {
+              ;(acc[c.year] ??= []).push(c)
+              return acc
+            }, {})
+            const sortedYears = Object.keys(byYear).map(Number).sort((a, b) => b - a)
+            return sortedYears.map((year) => (
+              <div key={year} className={styles.yearGroup}>
+                <div className={styles.yearDivider}>
+                  <div className={styles.yearDividerLine} />
+                  <span className={styles.yearDividerLabel}>{year}</span>
+                  <span className={styles.yearDividerCount}>{byYear[year].length}</span>
+                  <div className={styles.yearDividerLine} />
+                </div>
+                {byYear[year].map((comp) => (
+                  <TournamentCard
+                    key={comp.id}
+                    comp={comp}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                    onOpenFight={onOpenFight}
+                    showToast={showToast}
+                  />
+                ))}
+              </div>
+            ))
+          })()}
         </div>
       )}
     </div>
