@@ -469,8 +469,15 @@ const BELT_KEY_MAP: Partial<Record<string, TranslationKeys>> = {
   black3: 'belt_black3',
 }
 
+// Legacy mapping for Ukrainian values stored before i18n migration
+const LEGACY_BELT_MAP: Record<string, string> = {
+  'білий': 'white', 'жовтий': 'yellow', 'помаранчевий': 'orange',
+  'зелений': 'green', 'синій': 'blue', 'коричневий': 'brown',
+  'чорний 1 дан': 'black1', 'чорний 2 дан': 'black2', 'чорний 3 дан': 'black3',
+}
+
 export function tBelt(key: string | undefined): string {
   if (!key) return '—'
-  const tKey = BELT_KEY_MAP[key]
+  const tKey = BELT_KEY_MAP[key] ?? BELT_KEY_MAP[LEGACY_BELT_MAP[key.toLowerCase()]]
   return tKey ? t(tKey) : key
 }
