@@ -2,18 +2,21 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import '@/styles/global.css'
 import App from './App'
+import ErrorBoundary from '@/components/UI/ErrorBoundary'
 
 const root = document.getElementById('root')!
 createRoot(root).render(
   <StrictMode>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </StrictMode>,
 )
 
+// When a new service worker takes over, reload to get fresh content
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/sw.js')
-      .catch((e) => console.warn('SW registration failed:', e))
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    window.location.reload()
   })
 }
+

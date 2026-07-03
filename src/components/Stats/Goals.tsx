@@ -44,7 +44,7 @@ export default function Goals({ comps, activeYear }: Props) {
       <div className={styles.wrap}>
         <button className={styles.setGoalBtn} onClick={() => setEditing(true)}>
           <Target size={14} />
-          Встановити ціль на {year}
+          {t('goalSet')} {year}
         </button>
       </div>
     )
@@ -80,7 +80,7 @@ export default function Goals({ comps, activeYear }: Props) {
           <span>{t('goalTitle')} {year}: <b>{target}%</b></span>
           {achieved && <span className={styles.achieved}>✓</span>}
         </div>
-        <button className={styles.editBtn} onClick={() => setEditing(true)}>змінити</button>
+        <button className={styles.editBtn} onClick={() => setEditing(true)}>{t('goalEdit')}</button>
       </div>
       <div className={styles.track}>
         <div
@@ -91,7 +91,7 @@ export default function Goals({ comps, activeYear }: Props) {
       </div>
       <div className={styles.labels}>
         <span className={styles.current}>{currentWR}%</span>
-        <span className={styles.fights}>{s.wins}W / {s.losses}L · {s.fights} боїв</span>
+        <span className={styles.fights}>{s.wins}W / {s.losses}L · {s.fights} {t('goalFightsStat')}</span>
       </div>
     </div>
   )

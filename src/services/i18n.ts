@@ -156,6 +156,9 @@ const TR = {
     dateHint: 'Оберіть через календар або введіть DD.MM.YYYY',
     tapToToggle: 'Натисніть для зміни результату',
     chartTech: 'Технічний арсенал',
+    goalSet: 'Встановити ціль на',
+    goalEdit: 'Змінити',
+    goalFightsStat: 'боїв',
   },
   en: {
     addTournament: 'Tournament',
@@ -296,6 +299,9 @@ const TR = {
     dateHint: 'Pick from calendar or enter DD.MM.YYYY',
     tapToToggle: 'Tap to toggle fight result',
     chartTech: 'Technique arsenal',
+    goalSet: 'Set goal for',
+    goalEdit: 'Edit',
+    goalFightsStat: 'fights',
   },
   pl: {
     addTournament: 'Turniej',
@@ -436,6 +442,9 @@ const TR = {
     dateHint: 'Wybierz z kalendarza lub wpisz DD.MM.YYYY',
     tapToToggle: 'Kliknij aby zmienić wynik walki',
     chartTech: 'Arsenal techniczny',
+    goalSet: 'Ustaw cel na',
+    goalEdit: 'Zmień',
+    goalFightsStat: 'walk',
   },
 } as const
 
