@@ -1,5 +1,5 @@
 import { Camera, User, Pencil } from 'lucide-react'
-import { t } from '@/services/i18n'
+import { t, tBelt } from '@/services/i18n'
 import { calcStats } from '@/services/storage'
 import type { Profile, Tournament } from '@/types'
 import { BELT_COLORS } from './beltColors'
@@ -89,7 +89,7 @@ export default function Hero({ profile, comps, onUpdateProfile, onEditProfile }:
             />
             <div className={styles.beltStrip} style={belt ? { background: belt.color } : {}} />
             <span className={styles.beltName} style={belt ? { color: belt.glow } : {}}>
-              {profile.belt || '—'} <small>{t('belt')}</small>
+              {tBelt(profile.belt)} <small>{t('belt')}</small>
             </span>
           </div>
 

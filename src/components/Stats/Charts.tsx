@@ -1,15 +1,16 @@
-import { Bar, Doughnut } from 'react-chartjs-2'
+import { Bar, Doughnut, Line } from 'react-chartjs-2'
 import {
   Chart as ChartJS,
   CategoryScale, LinearScale, BarElement,
   ArcElement, Tooltip, Legend,
+  LineElement, PointElement,
 } from 'chart.js'
 import { t } from '@/services/i18n'
-import { calcStats } from '@/services/storage'
+import { calcStats, getAllTechStats } from '@/services/storage'
 import type { Tournament } from '@/types'
 import styles from './Charts.module.css'
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend)
+ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend, LineElement, PointElement)
 
 const FONT = "'Crimson Pro', Georgia, serif"
 const MUTED = '#52606e'
@@ -26,9 +27,18 @@ export default function Charts({ comps, activeYear }: Props) {
 
   const winsByYear  = years.map((y) => source.filter((c) => c.year === y).reduce((s, c) => s + c.fights.filter((f) => f.r === 'w').length, 0))
   const lossByYear  = years.map((y) => source.filter((c) => c.year === y).reduce((s, c) => s + c.fights.filter((f) => f.r === 'l').length, 0))
+  const winRateByYear = years.map((y) => {
+    const yComps = source.filter((c) => c.year === y)
+    const yWins  = yComps.reduce((s, c) => s + c.fights.filter((f) => f.r === 'w').length, 0)
+    const yTotal = yComps.reduce((s, c) => s + c.fights.length, 0)
+    return yTotal > 0 ? Math.round((yWins / yTotal) * 100) : 0
+  })
 
   const overall = calcStats(source)
   const hasData = overall.fights > 0
+
+  const techCounts = getAllTechStats(source)
+  const topTechs = Object.entries(techCounts).sort((a, b) => b[1] - a[1]).slice(0, 8)
 
   if (!hasData) return null
 
@@ -80,6 +90,34 @@ export default function Charts({ comps, activeYear }: Props) {
     },
   }
 
+  const trendData = {
+    labels: years.map(String),
+    datasets: [{
+      label: t('winRate'),
+      data: winRateByYear,
+      borderColor: 'rgba(230,114,10,1)',
+      backgroundColor: 'rgba(230,114,10,.15)',
+      fill: true,
+      tension: 0.4,
+      pointBackgroundColor: 'rgba(230,114,10,1)',
+      pointRadius: 5,
+      pointHoverRadius: 7,
+    }],
+  }
+
+  const trendOptions = {
+    ...baseOptions,
+    scales: {
+      x: { ticks: { color: MUTED }, grid: { color: GRID } },
+      y: {
+        ticks: { color: MUTED, callback: (v: number | string) => `${v}%` },
+        grid: { color: GRID },
+        beginAtZero: true,
+        max: 100,
+      },
+    },
+  }
+
   return (
     <div className={styles.wrap}>
       <div className={styles.card}>
@@ -90,6 +128,36 @@ export default function Charts({ comps, activeYear }: Props) {
         <div className={`${styles.card} ${styles.donutCard}`}>
           <div className={styles.title}>{t('chartMedals')}</div>
           <Doughnut data={donutData} options={{ ...baseOptions, cutout: '65%' }} />
+        </div>
+      )}
+      {years.length >= 2 && (
+        <div className={styles.card}>
+          <div className={styles.title}>{t('chartTrend')}</div>
+          <Line data={trendData} options={trendOptions} />
+        </div>
+      )}
+      {topTechs.length > 0 && (
+        <div className={styles.card}>
+          <div className={styles.title}>{t('chartTech')}</div>
+          <Bar
+            data={{
+              labels: topTechs.map(([name]) => name),
+              datasets: [{
+                label: t('fights'),
+                data: topTechs.map(([, n]) => n),
+                backgroundColor: 'rgba(230,114,10,.72)',
+                borderRadius: 4,
+              }],
+            }}
+            options={{
+              ...baseOptions,
+              indexAxis: 'y' as const,
+              scales: {
+                x: { ticks: { color: MUTED, stepSize: 1 }, grid: { color: GRID }, beginAtZero: true },
+                y: { ticks: { color: MUTED, font: { family: FONT, size: 11 } }, grid: { display: false } },
+              },
+            }}
+          />
         </div>
       )}
     </div>

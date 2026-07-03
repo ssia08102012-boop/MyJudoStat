@@ -61,7 +61,7 @@ const TR = {
     weightCategory: 'Вага',
     place: 'Місце',
     fightsCount: 'Сутичок *',
-    fightsSeq: 'Результати (В=виграв П=програв)',
+    fightsSeq: 'Результати сутичок',
     notes: 'Нотатки',
     // Fight modal
     opponent: 'Суперник',
@@ -137,6 +137,25 @@ const TR = {
     installDesc: 'Офлайн · як додаток',
     enterName: 'Введіть назву',
     enterFights: 'Введіть кількість сутичок',
+    links: 'ПОСИЛАННЯ',
+    cloudSync: 'ХМАРНА СИНХРОНІЗАЦІЯ',
+    cloudEmpty: 'Хмара порожня',
+    idSaved: 'ID збережено!',
+    notConfigured: 'не налаштовано',
+    enterSyncId: 'Введіть ваш унікальний ID',
+    saveSyncId: 'Зберегти ID',
+    belt_white: 'Білий',
+    belt_yellow: 'Жовтий',
+    belt_orange: 'Помаранчевий',
+    belt_green: 'Зелений',
+    belt_blue: 'Синій',
+    belt_brown: 'Коричневий',
+    belt_black1: 'Чорний 1 дан',
+    belt_black2: 'Чорний 2 дан',
+    belt_black3: 'Чорний 3 дан',
+    dateHint: 'Оберіть через календар або введіть DD.MM.YYYY',
+    tapToToggle: 'Натисніть для зміни результату',
+    chartTech: 'Технічний арсенал',
   },
   en: {
     addTournament: 'Tournament',
@@ -191,7 +210,7 @@ const TR = {
     weightCategory: 'Weight',
     place: 'Place',
     fightsCount: 'Fights *',
-    fightsSeq: 'Results (W=win L=loss)',
+    fightsSeq: 'Fight results',
     notes: 'Notes',
     opponent: 'Opponent',
     club: 'Club',
@@ -258,6 +277,25 @@ const TR = {
     installDesc: 'Offline · like a native app',
     enterName: 'Enter name',
     enterFights: 'Enter number of fights',
+    links: 'LINKS',
+    cloudSync: 'CLOUD SYNC',
+    cloudEmpty: 'Cloud is empty',
+    idSaved: 'ID saved!',
+    notConfigured: 'not configured',
+    enterSyncId: 'Enter your unique ID',
+    saveSyncId: 'Save ID',
+    belt_white: 'White',
+    belt_yellow: 'Yellow',
+    belt_orange: 'Orange',
+    belt_green: 'Green',
+    belt_blue: 'Blue',
+    belt_brown: 'Brown',
+    belt_black1: 'Black 1st dan',
+    belt_black2: 'Black 2nd dan',
+    belt_black3: 'Black 3rd dan',
+    dateHint: 'Pick from calendar or enter DD.MM.YYYY',
+    tapToToggle: 'Tap to toggle fight result',
+    chartTech: 'Technique arsenal',
   },
   pl: {
     addTournament: 'Turniej',
@@ -312,7 +350,7 @@ const TR = {
     weightCategory: 'Waga',
     place: 'Miejsce',
     fightsCount: 'Walk *',
-    fightsSeq: 'Wyniki (W=wygrał P=przegrał)',
+    fightsSeq: 'Wyniki walk',
     notes: 'Notatki',
     opponent: 'Przeciwnik',
     club: 'Klub',
@@ -379,6 +417,25 @@ const TR = {
     installDesc: 'Offline · jak aplikacja',
     enterName: 'Podaj nazwę',
     enterFights: 'Podaj liczbę walk',
+    links: 'LINKI',
+    cloudSync: 'SYNCHRONIZACJA CHMURY',
+    cloudEmpty: 'Chmura jest pusta',
+    idSaved: 'ID zapisano!',
+    notConfigured: 'nie skonfigurowano',
+    enterSyncId: 'Podaj swój unikalny ID',
+    saveSyncId: 'Zapisz ID',
+    belt_white: 'Biały',
+    belt_yellow: 'Żółty',
+    belt_orange: 'Pomarańczowy',
+    belt_green: 'Zielony',
+    belt_blue: 'Niebieski',
+    belt_brown: 'Brązowy',
+    belt_black1: 'Czarny 1 dan',
+    belt_black2: 'Czarny 2 dan',
+    belt_black3: 'Czarny 3 dan',
+    dateHint: 'Wybierz z kalendarza lub wpisz DD.MM.YYYY',
+    tapToToggle: 'Kliknij aby zmienić wynik walki',
+    chartTech: 'Arsenal techniczny',
   },
 } as const
 
@@ -398,4 +455,22 @@ export function setLang(lang: Lang): void {
 export function t(key: TranslationKeys): string {
   const dict = TR[currentLang] ?? TR.uk
   return (dict as Record<string, string>)[key] ?? (TR.uk as Record<string, string>)[key] ?? key
+}
+
+const BELT_KEY_MAP: Partial<Record<string, TranslationKeys>> = {
+  white: 'belt_white',
+  yellow: 'belt_yellow',
+  orange: 'belt_orange',
+  green: 'belt_green',
+  blue: 'belt_blue',
+  brown: 'belt_brown',
+  black1: 'belt_black1',
+  black2: 'belt_black2',
+  black3: 'belt_black3',
+}
+
+export function tBelt(key: string | undefined): string {
+  if (!key) return '—'
+  const tKey = BELT_KEY_MAP[key]
+  return tKey ? t(tKey) : key
 }
