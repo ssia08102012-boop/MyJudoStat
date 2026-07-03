@@ -70,25 +70,32 @@ input:focus, textarea:focus, select:focus {
 .section-head {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 24px 0 14px;
+  gap: 12px;
+  margin: 28px 0 16px;
   padding: 0 16px;
 }
 .sh-line {
   flex: 1;
   height: 1px;
   background: linear-gradient(90deg, var(--orange), transparent);
+  opacity: .55;
 }
 .sh-line.rev {
   background: linear-gradient(270deg, var(--orange), transparent);
+  opacity: .55;
 }
-.sh-paw { font-size: 13px; opacity: .5; }
+.sh-paw {
+  font-size: 14px;
+  opacity: .6;
+  color: var(--orange);
+}
 .sh-title {
   font-family: 'Cinzel', serif;
-  font-size: 12px;
-  letter-spacing: .2em;
+  font-size: 13px;
+  letter-spacing: .25em;
   color: var(--orange);
   white-space: nowrap;
+  text-shadow: 0 0 18px rgba(232,114,10,.35);
 }
 
 /* Utility */
