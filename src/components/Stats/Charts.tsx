@@ -3,14 +3,14 @@ import {
   Chart as ChartJS,
   CategoryScale, LinearScale, BarElement,
   ArcElement, Tooltip, Legend,
-  LineElement, PointElement,
+  LineElement, PointElement, Filler,
 } from 'chart.js'
 import { t } from '@/services/i18n'
 import { calcStats, getAllTechStats } from '@/services/storage'
 import type { Tournament } from '@/types'
 import styles from './Charts.module.css'
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend, LineElement, PointElement)
+ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend, LineElement, PointElement, Filler)
 
 const FONT = "'Crimson Pro', Georgia, serif"
 const MUTED = '#52606e'
