@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { User, Weight, CalendarDays } from 'lucide-react'
 import Modal from '@/components/UI/Modal'
 import { BtnPrimary, BtnGhost } from '@/components/UI/Buttons'
-import { t } from '@/services/i18n'
+import { t, tBelt } from '@/services/i18n'
 import type { Profile } from '@/types'
 import styles from './ProfileModal.module.css'
 
@@ -13,11 +13,7 @@ interface Props {
   onSave: (p: Profile) => Promise<void>
 }
 
-const BELTS = [
-  'Білий', 'Жовтий', 'Помаранчевий', 'Зелений',
-  'Синій', 'Коричневий',
-  'Чорний 1 дан', 'Чорний 2 дан', 'Чорний 3 дан',
-]
+const BELT_KEYS = ['white','yellow','orange','green','blue','brown','black1','black2','black3'] as const
 
 export default function ProfileModal({ open, profile, onClose, onSave }: Props) {
   const [form, setForm] = useState({ name: '', belt: '', weight: '', dob: '', since: '' })
@@ -69,8 +65,8 @@ export default function ProfileModal({ open, profile, onClose, onSave }: Props) 
         <div className={styles.field}>
           <label className={styles.label}>{t('belt')}</label>
           <select value={form.belt} onChange={(e) => set('belt', e.target.value)}>
-            <option value="">— пояс —</option>
-            {BELTS.map((b) => <option key={b}>{b}</option>)}
+            <option value="">—</option>
+            {BELT_KEYS.map((k) => <option key={k} value={k}>{tBelt(k)}</option>)}
           </select>
         </div>
 

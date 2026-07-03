@@ -65,7 +65,7 @@ export default function BackupModal({ open, comps, onClose, onImport, showToast 
         showToast(t('syncOk'))
         onClose()
       } else {
-        showToast('Хмара порожня')
+        showToast(t('cloudEmpty'))
       }
       setSyncStatus('ok')
     } catch {
@@ -80,14 +80,14 @@ export default function BackupModal({ open, comps, onClose, onImport, showToast 
     localStorage.setItem('judo_sync_id', id)
     setSyncId(id)
     setShowIdSetup(false)
-    showToast('ID збережено!')
+    showToast(t('idSaved'))
   }
 
   return (
     <Modal
       open={open}
       onClose={onClose}
-      title="💾 BACKUP"
+      title="BACKUP"
       maxWidth={460}
       actions={<BtnGhost onClick={onClose} style={{ flex: 1 }}>{t('close')}</BtnGhost>}
     >
@@ -112,10 +112,10 @@ export default function BackupModal({ open, comps, onClose, onImport, showToast 
 
       {/* Cloud sync */}
       <div className={styles.section}>
-        <div className={styles.sectionTitle}>☁️ ХМАРНА СИНХРОНІЗАЦІЯ</div>
+        <div className={styles.sectionTitle}>{t('cloudSync')}</div>
         <div className={styles.syncIdRow}>
           <span className={styles.syncIdLabel}>ID:</span>
-          <span className={styles.syncIdVal}>{syncId || 'не налаштовано'}</span>
+          <span className={styles.syncIdVal}>{syncId || t('notConfigured')}</span>
           {syncStatus === 'loading' && <span className={styles.syncing}>{t('syncing')}</span>}
           {syncStatus === 'ok'      && <span className={styles.syncOk}>✓</span>}
           {syncStatus === 'err'     && <span className={styles.syncErr}>✗</span>}
@@ -136,9 +136,9 @@ export default function BackupModal({ open, comps, onClose, onImport, showToast 
             <input
               value={idInput}
               onChange={(e) => setIdInput(e.target.value)}
-              placeholder="Введіть ваш унікальний ID"
+              placeholder={t('enterSyncId')}
             />
-            <BtnPrimary onClick={saveId} style={{ width: '100%' }}>Зберегти ID</BtnPrimary>
+            <BtnPrimary onClick={saveId} style={{ width: '100%' }}>{t('saveSyncId')}</BtnPrimary>
           </div>
         )}
       </div>

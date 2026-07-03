@@ -17,6 +17,7 @@ import TournamentModal from '@/components/Modals/TournamentModal'
 import FightModal from '@/components/Modals/FightModal'
 import BackupModal from '@/components/Modals/BackupModal'
 import ProfileModal from '@/components/Modals/ProfileModal'
+import Achievements from '@/components/Achievements/Achievements'
 
 type ModalState =
   | { type: 'none' }
@@ -108,6 +109,8 @@ export default function App() {
           lang={lang}
         />
 
+        <Achievements comps={comps} />
+
         <section className="section-head" style={{ marginTop: 4 }}>
           <div className="sh-line" />
           <span className="sh-paw">勝</span>
@@ -129,9 +132,9 @@ export default function App() {
 
         <section className="section-head" style={{ marginTop: 16 }}>
           <div className="sh-line" />
-          <span className="sh-paw">⛩</span>
-          <div className="sh-title">ПОСИЛАННЯ</div>
-          <span className="sh-paw">⛩</span>
+          <span className="sh-paw">外</span>
+          <div className="sh-title">{t('links')}</div>
+          <span className="sh-paw">外</span>
           <div className="sh-line rev" />
         </section>
 
