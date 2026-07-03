@@ -61,7 +61,7 @@ const TR = {
     weightCategory: 'Вага',
     place: 'Місце',
     fightsCount: 'Сутичок *',
-    fightsSeq: 'Результати (В=виграв П=програв)',
+    fightsSeq: 'Результати сутичок',
     notes: 'Нотатки',
     // Fight modal
     opponent: 'Суперник',
@@ -153,6 +153,9 @@ const TR = {
     belt_black1: 'Чорний 1 дан',
     belt_black2: 'Чорний 2 дан',
     belt_black3: 'Чорний 3 дан',
+    dateHint: 'Оберіть через календар або введіть DD.MM.YYYY',
+    tapToToggle: 'Натисніть для зміни результату',
+    chartTech: 'Технічний арсенал',
   },
   en: {
     addTournament: 'Tournament',
@@ -207,7 +210,7 @@ const TR = {
     weightCategory: 'Weight',
     place: 'Place',
     fightsCount: 'Fights *',
-    fightsSeq: 'Results (W=win L=loss)',
+    fightsSeq: 'Fight results',
     notes: 'Notes',
     opponent: 'Opponent',
     club: 'Club',
@@ -290,6 +293,9 @@ const TR = {
     belt_black1: 'Black 1st dan',
     belt_black2: 'Black 2nd dan',
     belt_black3: 'Black 3rd dan',
+    dateHint: 'Pick from calendar or enter DD.MM.YYYY',
+    tapToToggle: 'Tap to toggle fight result',
+    chartTech: 'Technique arsenal',
   },
   pl: {
     addTournament: 'Turniej',
@@ -344,7 +350,7 @@ const TR = {
     weightCategory: 'Waga',
     place: 'Miejsce',
     fightsCount: 'Walk *',
-    fightsSeq: 'Wyniki (W=wygrał P=przegrał)',
+    fightsSeq: 'Wyniki walk',
     notes: 'Notatki',
     opponent: 'Przeciwnik',
     club: 'Klub',
@@ -427,6 +433,9 @@ const TR = {
     belt_black1: 'Czarny 1 dan',
     belt_black2: 'Czarny 2 dan',
     belt_black3: 'Czarny 3 dan',
+    dateHint: 'Wybierz z kalendarza lub wpisz DD.MM.YYYY',
+    tapToToggle: 'Kliknij aby zmienić wynik walki',
+    chartTech: 'Arsenal techniczny',
   },
 } as const
 

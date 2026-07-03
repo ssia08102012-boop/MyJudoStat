@@ -49,6 +49,58 @@
   color: var(--red);
 }
 
+/* Visual W/L fight sequence */
+.seqWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.fightBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 46px;
+  border-radius: 8px;
+  border: 1.5px solid;
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  padding: 4px 0;
+  transition: transform .1s, box-shadow .1s;
+  background: none;
+}
+.fightBtn:hover { transform: scale(1.08); }
+.fightBtn:active { transform: scale(.96); }
+
+.fightNum {
+  font-size: 9px;
+  opacity: .65;
+  margin-bottom: 3px;
+  font-weight: 400;
+}
+
+.fightW {
+  color: var(--green);
+  border-color: var(--green);
+  background: rgba(61,186,112,.12);
+  box-shadow: 0 0 8px rgba(61,186,112,.15);
+}
+.fightW:hover { background: rgba(61,186,112,.25); }
+
+.fightL {
+  color: var(--red);
+  border-color: var(--red);
+  background: rgba(224,68,68,.1);
+  box-shadow: 0 0 8px rgba(224,68,68,.1);
+}
+.fightL:hover { background: rgba(224,68,68,.22); }
+
 @media (max-width: 480px) {
   .grid { grid-template-columns: 1fr; }
   .full { grid-column: 1; }

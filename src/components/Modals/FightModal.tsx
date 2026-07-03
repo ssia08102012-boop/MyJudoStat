@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { User, Shield, Clock, StickyNote } from 'lucide-react'
+import { User, Shield, Clock, StickyNote, Check, X } from 'lucide-react'
 import Modal from '@/components/UI/Modal'
 import { BtnPrimary, BtnGhost } from '@/components/UI/Buttons'
 import { t } from '@/services/i18n'
@@ -84,8 +84,8 @@ export default function FightModal({ open, comp, fi, onClose, onSaved }: Props) 
       maxWidth={580}
       actions={
         <>
-          <BtnPrimary onClick={handleSave}>✓ {t('save')}</BtnPrimary>
-          <BtnGhost onClick={handleClear} danger style={{ maxWidth: 44, padding: '10px' }}>✕</BtnGhost>
+          <BtnPrimary onClick={handleSave}><Check size={14} /> {t('save')}</BtnPrimary>
+          <BtnGhost onClick={handleClear} danger style={{ maxWidth: 44, padding: '10px' }}><X size={14} /></BtnGhost>
         </>
       }
     >
@@ -166,7 +166,7 @@ export default function FightModal({ open, comp, fi, onClose, onSaved }: Props) 
               {items.map((it) => <option key={it}>{it}</option>)}
             </optgroup>
           ))}
-          <option value="custom">✏️ {t('customTech')}</option>
+          <option value="custom">{t('customTech')}</option>
         </select>
         {showCustomTech && (
           <input

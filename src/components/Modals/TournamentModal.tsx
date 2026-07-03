@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { CalendarDays, MapPin, Weight, Trophy, Hash, AlignLeft, Youtube, FileText } from 'lucide-react'
+import { CalendarDays, MapPin, Weight, Trophy, Hash, AlignLeft, Youtube, FileText, Check } from 'lucide-react'
 import Modal from '@/components/UI/Modal'
 import { BtnPrimary, BtnGhost } from '@/components/UI/Buttons'
 import { t } from '@/services/i18n'
@@ -35,19 +35,6 @@ function parseSortKey(date: string): string {
   return '0000-00-00'
 }
 
-function parseFightSeq(count: number, seq: string): Fight[] {
-  const chars = seq.toUpperCase().replace(/[\s,;]+/g, '')
-  const fights: Fight[] = []
-  for (let i = 0; i < count; i++) {
-    const ch = chars[i] ?? ''
-    fights.push({ r: ch === 'W' || ch === 'В' ? 'w' : 'l' })
-  }
-  return fights
-}
-
-function seqFromFights(fights: Fight[]): string {
-  return fights.map((f) => (f.r === 'w' ? 'В' : 'П')).join(' ')
-}
 
 function todayIso(): string {
   return new Date().toISOString().slice(0, 10)
@@ -62,7 +49,6 @@ const DEFAULT_FORM = {
   weightCategory: '',
   place: '1' as string,
   fightsCount: '',
-  fightsSeq: '',
   notes: '',
   yt: '',
   pdf: '',
@@ -73,6 +59,12 @@ type FormState = typeof DEFAULT_FORM
 export default function TournamentModal({ open, initial, onClose, onSave }: Props) {
   const [form, setForm] = useState<FormState>(DEFAULT_FORM)
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
+  const [fightSeq, setFightSeq] = useState<Array<'w' | 'l'>>([])
+
+  function resizeFightSeq(n: number, prev: Array<'w' | 'l'>): Array<'w' | 'l'> {
+    if (n <= prev.length) return prev.slice(0, n)
+    return [...prev, ...Array.from({ length: n - prev.length }, () => 'l' as const)]
+  }
 
   useEffect(() => {
     if (!open) return
@@ -89,14 +81,15 @@ export default function TournamentModal({ open, initial, onClose, onSave }: Prop
         weightCategory: initial.weightCategory,
         place: initial.place != null ? String(initial.place) : '',
         fightsCount: String(initial.fights.length),
-        fightsSeq: seqFromFights(initial.fights),
         notes: initial.notes,
         yt: initial.yt,
         pdf: initial.pdf,
       })
+      setFightSeq(initial.fights.map((f) => f.r))
     } else {
       const today = todayIso()
       setForm({ ...DEFAULT_FORM, datePicker: today, dateDisplay: datePickerToDisplay(today) })
+      setFightSeq([])
     }
     setErrors({})
   }, [open, initial])
@@ -104,6 +97,16 @@ export default function TournamentModal({ open, initial, onClose, onSave }: Prop
   function set(field: keyof FormState, value: string) {
     setForm((f) => ({ ...f, [field]: value }))
     setErrors((e) => ({ ...e, [field]: undefined }))
+  }
+
+  function onFightsCountChange(val: string) {
+    set('fightsCount', val)
+    const n = Math.max(0, parseInt(val) || 0)
+    setFightSeq((prev) => resizeFightSeq(n, prev))
+  }
+
+  function toggleFight(i: number) {
+    setFightSeq((prev) => prev.map((r, idx) => idx === i ? (r === 'w' ? 'l' : 'w') : r))
   }
 
   function onPickerChange(iso: string) {
@@ -126,7 +129,9 @@ export default function TournamentModal({ open, initial, onClose, onSave }: Prop
   function handleSave() {
     if (!validate()) return
     const count = Math.max(1, parseInt(form.fightsCount) || 1)
-    const fights = parseFightSeq(count, form.fightsSeq)
+    const fights: Fight[] = Array.from({ length: count }, (_, i) => ({
+      r: fightSeq[i] ?? 'l',
+    }))
     const year = extractYear(form.dateDisplay)
     const comp: Tournament = {
       id: initial?.id ?? `c${Date.now()}`,
@@ -158,7 +163,7 @@ export default function TournamentModal({ open, initial, onClose, onSave }: Prop
       maxWidth={600}
       actions={
         <>
-          <BtnPrimary onClick={handleSave}>✓ {t('save')}</BtnPrimary>
+          <BtnPrimary onClick={handleSave}><Check size={14} /> {t('save')}</BtnPrimary>
           <BtnGhost onClick={onClose}>{t('cancel')}</BtnGhost>
         </>
       }
@@ -195,7 +200,7 @@ export default function TournamentModal({ open, initial, onClose, onSave }: Prop
               className={styles.dateText}
             />
           </div>
-          <small className={styles.hint}>Оберіть через календар або введіть DD.MM.YYYY</small>
+          <small className={styles.hint}>{t('dateHint')}</small>
         </div>
 
         {/* Location */}
@@ -220,9 +225,9 @@ export default function TournamentModal({ open, initial, onClose, onSave }: Prop
         <div className={styles.field}>
           <label className={styles.label}><Trophy size={12} /> {t('place')}</label>
           <select value={form.place} onChange={(e) => set('place', e.target.value)}>
-            <option value="1">🥇 1</option>
-            <option value="2">🥈 2</option>
-            <option value="3">🥉 3</option>
+            <option value="1">1 — {t('gold')}</option>
+            <option value="2">2 — {t('silver')}</option>
+            <option value="3">3 — {t('bronze')}</option>
             <option value="4">4</option>
             <option value="5">5</option>
             <option value="">—</option>
@@ -237,22 +242,33 @@ export default function TournamentModal({ open, initial, onClose, onSave }: Prop
             min="1"
             max="20"
             value={form.fightsCount}
-            onChange={(e) => set('fightsCount', e.target.value)}
+            onChange={(e) => onFightsCountChange(e.target.value)}
             className={errors.fightsCount ? styles.errInput : ''}
           />
           {errors.fightsCount && <span className={styles.err}>{errors.fightsCount}</span>}
         </div>
 
-        {/* Fight sequence */}
-        <div className={`${styles.field} ${styles.full}`}>
-          <label className={styles.label}>{t('fightsSeq')}</label>
-          <input
-            value={form.fightsSeq}
-            onChange={(e) => set('fightsSeq', e.target.value)}
-            placeholder="В В П В  або  W W L W"
-          />
-          <small className={styles.hint}>В/W = перемога, П/L = поразка</small>
-        </div>
+        {/* Fight results — visual W/L buttons */}
+        {fightSeq.length > 0 && (
+          <div className={`${styles.field} ${styles.full}`}>
+            <label className={styles.label}>{t('fightsSeq')}</label>
+            <div className={styles.seqWrap}>
+              {fightSeq.map((r, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  className={`${styles.fightBtn} ${r === 'w' ? styles.fightW : styles.fightL}`}
+                  onClick={() => toggleFight(i)}
+                  aria-label={`Fight ${i + 1}`}
+                >
+                  <span className={styles.fightNum}>{i + 1}</span>
+                  <span>{r === 'w' ? 'W' : 'L'}</span>
+                </button>
+              ))}
+            </div>
+            <small className={styles.hint}>{t('tapToToggle')}</small>
+          </div>
+        )}
 
         {/* Notes */}
         <div className={`${styles.field} ${styles.full}`}>

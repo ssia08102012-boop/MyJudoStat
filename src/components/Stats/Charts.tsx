@@ -6,7 +6,7 @@ import {
   LineElement, PointElement,
 } from 'chart.js'
 import { t } from '@/services/i18n'
-import { calcStats } from '@/services/storage'
+import { calcStats, getAllTechStats } from '@/services/storage'
 import type { Tournament } from '@/types'
 import styles from './Charts.module.css'
 
@@ -36,6 +36,9 @@ export default function Charts({ comps, activeYear }: Props) {
 
   const overall = calcStats(source)
   const hasData = overall.fights > 0
+
+  const techCounts = getAllTechStats(source)
+  const topTechs = Object.entries(techCounts).sort((a, b) => b[1] - a[1]).slice(0, 8)
 
   if (!hasData) return null
 
@@ -131,6 +134,30 @@ export default function Charts({ comps, activeYear }: Props) {
         <div className={styles.card}>
           <div className={styles.title}>{t('chartTrend')}</div>
           <Line data={trendData} options={trendOptions} />
+        </div>
+      )}
+      {topTechs.length > 0 && (
+        <div className={styles.card}>
+          <div className={styles.title}>{t('chartTech')}</div>
+          <Bar
+            data={{
+              labels: topTechs.map(([name]) => name),
+              datasets: [{
+                label: t('fights'),
+                data: topTechs.map(([, n]) => n),
+                backgroundColor: 'rgba(230,114,10,.72)',
+                borderRadius: 4,
+              }],
+            }}
+            options={{
+              ...baseOptions,
+              indexAxis: 'y' as const,
+              scales: {
+                x: { ticks: { color: MUTED, stepSize: 1 }, grid: { color: GRID }, beginAtZero: true },
+                y: { ticks: { color: MUTED, font: { family: FONT, size: 11 } }, grid: { display: false } },
+              },
+            }}
+          />
         </div>
       )}
     </div>

@@ -246,6 +246,20 @@ export function saveAchievements(list: Achievement[]): void {
   lsSet('judo_achievements', list)
 }
 
+// ─── Technique statistics ─────────────────────────────────────────────────────
+
+export function getAllTechStats(comps: Tournament[]): Record<string, number> {
+  const counts: Record<string, number> = {}
+  for (const c of comps) {
+    for (let fi = 0; fi < c.fights.length; fi++) {
+      const d = getFight(c.id, fi)
+      const tech = d.f_tech === 'custom' ? (d.f_tech_custom || '') : (d.f_tech || '')
+      if (tech) counts[tech] = (counts[tech] ?? 0) + 1
+    }
+  }
+  return counts
+}
+
 // ─── Export / Import ──────────────────────────────────────────────────────────
 
 export interface BackupData {
