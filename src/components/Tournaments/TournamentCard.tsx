@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronDown, Pencil, Trash2, Youtube, FileText, MapPin, Share2 } from 'lucide-react'
+import { ChevronDown, Pencil, Trash2, Youtube, FileText, MapPin, Share2, Trophy, Medal, Minus } from 'lucide-react'
 import { t } from '@/services/i18n'
 import { getFight } from '@/services/storage'
 import type { Tournament } from '@/types'
@@ -20,11 +20,11 @@ function medalClass(place: number | null) {
   return ''
 }
 
-function medalIcon(place: number | null) {
-  if (place === 1) return '🥇'
-  if (place === 2) return '🥈'
-  if (place === 3) return '🥉'
-  return ''
+function MedalIcon({ place }: { place: number | null }) {
+  if (place === 1) return <Trophy size={18} strokeWidth={1.5} color="var(--amber)" />
+  if (place === 2) return <Medal  size={18} strokeWidth={1.5} color="#9aa0b0" />
+  if (place === 3) return <Medal  size={18} strokeWidth={1.5} color="#b07840" />
+  return <Minus size={14} strokeWidth={1.5} color="var(--border)" />
 }
 
 function placeLabel(place: number | null) {
@@ -35,9 +35,9 @@ function placeLabel(place: number | null) {
 async function shareResult(comp: Tournament) {
   const wins = comp.fights.filter((f) => f.r === 'w').length
   const losses = comp.fights.filter((f) => f.r === 'l').length
-  const icon = medalIcon(comp.place)
+  const placeEmoji = comp.place === 1 ? '🥇' : comp.place === 2 ? '🥈' : comp.place === 3 ? '🥉' : ''
   const text = [
-    `${icon} ${comp.name}`,
+    `${placeEmoji} ${comp.name}`,
     comp.date,
     comp.location ? `📍 ${comp.location}` : '',
     `${wins}W / ${losses}L${comp.place ? ` · ${placeLabel(comp.place)}` : ''}`,
@@ -84,7 +84,7 @@ export default function TournamentCard({ comp, onEdit, onDelete, onOpenFight, sh
 
         <div className={styles.right}>
           <div className={`${styles.medal} ${medalClass(comp.place)}`}>
-            <span className={styles.medalIcon}>{medalIcon(comp.place)}</span>
+            <MedalIcon place={comp.place} />
             <div className={styles.medalTxt}>{placeLabel(comp.place)}</div>
           </div>
           <div className={styles.actions} onClick={(e) => e.stopPropagation()}>

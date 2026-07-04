@@ -46,9 +46,19 @@
 }
 
 .locked .iconWrap {
-  opacity: .35;
+  opacity: .3;
 }
 .locked .label { opacity: .35; }
+
+.hint {
+  font-size: 8px;
+  text-align: center;
+  color: var(--muted);
+  opacity: .55;
+  line-height: 1.3;
+  font-style: italic;
+  max-width: 72px;
+}
 
 .done .label { color: var(--text); }
 

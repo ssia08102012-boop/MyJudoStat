@@ -1,5 +1,5 @@
 .section {
-  padding: 16px 16px 20px;
+  padding: 10px 16px 12px;
   background: var(--bg2);
   border-top: 1px solid var(--border);
 }
@@ -8,7 +8,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 .sectionLabel span {
   font-family: 'Cinzel', serif;
@@ -23,65 +23,51 @@
   background: linear-gradient(90deg, rgba(230,114,10,.35), transparent);
 }
 
-.headCoachLabel {
-  font-family: 'Cinzel', serif;
-  font-size: 9px;
-  letter-spacing: .2em;
-  color: var(--muted);
-  text-align: center;
-  margin-bottom: 10px;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 3px 14px;
-  display: inline-block;
-  margin-left: 50%;
-  transform: translateX(-50%);
-}
-
-.top {
+/* Horizontal strip of coach cards */
+.strip {
   display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.bottom {
-  display: flex;
-  justify-content: center;
-  gap: 32px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
-/* ── Coach Card ── */
+/* ── Coach Card ── compact horizontal chip */
 .card {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 7px;
-  width: 90px;
+  gap: 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 7px 12px 7px 7px;
+  flex: 1;
+  min-width: 160px;
+  max-width: 280px;
+  transition: border-color .2s;
 }
-.head {
-  width: 120px;
-}
+.card:hover { border-color: rgba(230,114,10,.3); }
+.head { border-color: rgba(230,114,10,.2); }
 
+/* Photo thumbnail */
 .photoWrap {
   position: relative;
-  width: 90px;
-  height: 115px;
-  border-radius: 12px;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
   overflow: hidden;
-  border: 2px solid var(--border);
-  transition: border-color .2s, height .3s;
-  background: var(--bg3);
-}
-.head .photoWrap {
-  width: 120px;
-  height: 120px;
+  border: 1.5px solid var(--border);
+  background: var(--bg2);
+  transition: height .25s;
 }
 .photoWrap.expanded {
-  height: 260px !important;
+  height: 130px !important;
+}
+.head .photoWrap {
+  width: 50px;
+  height: 50px;
 }
 .head .photoWrap.expanded {
-  height: 300px !important;
+  height: 150px !important;
 }
 
 .photo {
@@ -98,16 +84,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg3);
+  background: var(--bg2);
 }
 
 /* Camera upload button */
 .cameraBtn {
   position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 26px;
-  height: 26px;
+  top: 3px;
+  right: 3px;
+  width: 20px;
+  height: 20px;
   background: rgba(230,114,10,.85);
   border-radius: 50%;
   display: flex;
@@ -116,18 +102,18 @@
   cursor: pointer;
   color: #fff;
   z-index: 3;
-  transition: background .15s, transform .15s;
+  transition: background .15s;
 }
-.cameraBtn:hover { background: var(--orange2); transform: scale(1.1); }
+.cameraBtn:hover { background: var(--orange2); }
 .fileInput { display: none; }
 
 /* Expand button */
 .expandBtn {
   position: absolute;
-  bottom: 5px;
-  right: 5px;
-  width: 22px;
-  height: 22px;
+  bottom: 3px;
+  right: 3px;
+  width: 18px;
+  height: 18px;
   background: rgba(230,114,10,.75);
   border-radius: 50%;
   display: flex;
@@ -140,17 +126,20 @@
 .expandBtn:hover { background: var(--orange2); }
 .chevronUp { transform: rotate(180deg); }
 
-/* Name & Role */
+/* Text column */
+.info { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+
 .name {
   font-family: 'Cinzel', serif;
   font-size: 11px;
   font-weight: 700;
   color: var(--text);
-  text-align: center;
   cursor: pointer;
   border-bottom: 1px solid transparent;
   transition: border-color .15s;
-  word-break: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .name:hover { border-color: var(--orange); }
 
@@ -159,21 +148,28 @@
   color: var(--muted);
   font-style: italic;
   cursor: pointer;
-  text-align: center;
   border-bottom: 1px solid transparent;
   transition: border-color .15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .role:hover { border-color: var(--muted); }
 
-.placeholder {
-  color: var(--muted);
-  font-style: italic;
+.placeholderText { color: var(--muted); opacity: .5; font-style: italic; }
+
+.headBadge {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: .15em;
+  color: var(--orange);
+  opacity: .7;
+  text-transform: uppercase;
 }
 
 .inlineInput {
   width: 100%;
   font-size: 11px;
-  text-align: center;
   padding: 2px 6px;
   background: var(--bg3);
   border: 1px solid var(--orange);

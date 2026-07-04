@@ -4,7 +4,7 @@ import { calcStats } from '@/services/storage'
 import type { Profile, Tournament } from '@/types'
 import { BELT_COLORS } from './beltColors'
 import Coaches from './Coaches'
-import logoRys from '@/assets/logo-rys.png'
+import logoRys from '@/assets/logo-rys.webp'
 import styles from './Hero.module.css'
 
 interface Props {
@@ -58,8 +58,9 @@ export default function Hero({ profile, comps, onUpdateProfile, onEditProfile }:
             <img className={styles.photo} src={profile.photo} alt="athlete" />
           ) : (
             <div className={styles.photoPlaceholder}>
-              <User size={48} strokeWidth={1} color="var(--orange)" />
+              <User size={40} strokeWidth={1} color="var(--orange)" />
               <span className={styles.addPhotoLabel}>{t('addPhoto')}</span>
+              <span className={styles.placeholderKanji}>柔道</span>
             </div>
           )}
           <div className={styles.photoOverlay}>
