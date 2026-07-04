@@ -12,17 +12,18 @@ interface AchDef {
   id: AchievementId
   icon: typeof Star
   color: string
+  hint: string
 }
 
 const DEFS: AchDef[] = [
-  { id: 'first_tournament', icon: Star,    color: '#f5c040' },
-  { id: 'first_gold',       icon: Trophy,  color: '#f5c040' },
-  { id: 'ten_wins',         icon: Medal,   color: '#3dba70' },
-  { id: 'five_streak',      icon: Flame,   color: '#e8720a' },
-  { id: 'fifty_fights',     icon: Swords,  color: '#2a8abf' },
-  { id: 'abroad',           icon: Globe,   color: '#9b59b6' },
-  { id: 'detailed_five',    icon: BookOpen,color: '#52606e' },
-  { id: 'hundred_fights',   icon: Zap,     color: '#ff9332' },
+  { id: 'first_tournament', icon: Star,    color: '#f5c040', hint: 'Зареєструй 1 турнір' },
+  { id: 'first_gold',       icon: Trophy,  color: '#f5c040', hint: 'Виграй турнір (1 місце)' },
+  { id: 'ten_wins',         icon: Medal,   color: '#3dba70', hint: '10 перемог у боях' },
+  { id: 'five_streak',      icon: Flame,   color: '#e8720a', hint: '5 перемог поспіль' },
+  { id: 'fifty_fights',     icon: Swords,  color: '#2a8abf', hint: '50 боїв' },
+  { id: 'abroad',           icon: Globe,   color: '#9b59b6', hint: 'Турнір не в Польщі' },
+  { id: 'detailed_five',    icon: BookOpen,color: '#52606e', hint: '5 боїв з деталями' },
+  { id: 'hundred_fights',   icon: Zap,     color: '#ff9332', hint: '100 боїв' },
 ]
 
 interface Props {
@@ -57,7 +58,7 @@ export default function Achievements({ comps }: Props) {
     <div className={styles.wrap}>
       <div className={styles.header}>{t('achievementsTitle')}</div>
       <div className={styles.grid}>
-        {DEFS.map(({ id, icon: Icon, color }) => {
+        {DEFS.map(({ id, icon: Icon, color, hint }) => {
           const ach = list.find((a) => a.id === id)
           const done = !!ach?.unlockedAt
           const isNew = newlyUnlocked.has(id)
@@ -65,12 +66,13 @@ export default function Achievements({ comps }: Props) {
             <div
               key={id}
               className={`${styles.badge} ${done ? styles.done : styles.locked} ${isNew ? styles.newBadge : ''}`}
-              title={done ? ach!.unlockedAt!.slice(0, 10) : ''}
+              title={done ? ach!.unlockedAt!.slice(0, 10) : hint}
             >
               <div className={styles.iconWrap} style={done ? { background: `${color}22`, borderColor: color } : {}}>
                 <Icon size={22} strokeWidth={1.5} color={done ? color : 'var(--border)'} />
               </div>
               <span className={styles.label}>{t(`ach_${id}` as Parameters<typeof t>[0])}</span>
+              {!done && <span className={styles.hint}>{hint}</span>}
             </div>
           )
         })}

@@ -60,19 +60,17 @@ export default function Coaches({ profile, onUpdateProfile }: Props) {
 
     return (
       <div className={`${styles.card} ${isHead ? styles.head : ''}`}>
-        {/* Photo wrap */}
+        {/* Photo thumbnail */}
         <div className={`${styles.photoWrap} ${isExpanded ? styles.expanded : ''}`}>
           {coach.photo ? (
             <img className={styles.photo} src={coach.photo} alt={coach.name ?? 'coach'} />
           ) : (
             <div className={styles.placeholder}>
-              <User size={isHead ? 36 : 26} strokeWidth={1} color="var(--orange)" />
+              <User size={isHead ? 22 : 18} strokeWidth={1} color="var(--orange)" />
             </div>
           )}
-
-          {/* Camera upload button */}
           <label className={styles.cameraBtn} onClick={(e) => e.stopPropagation()}>
-            <Camera size={13} />
+            <Camera size={11} />
             <input
               type="file"
               accept="image/*"
@@ -80,41 +78,19 @@ export default function Coaches({ profile, onUpdateProfile }: Props) {
               onChange={(e) => void handlePhoto(i, e.target.files?.[0])}
             />
           </label>
-
-          {/* Expand toggle */}
           <button
             className={styles.expandBtn}
             onClick={() => setExpanded((ex) => ({ ...ex, [i]: !ex[i] }))}
           >
-            <ChevronDown
-              size={13}
-              className={isExpanded ? styles.chevronUp : ''}
-            />
+            <ChevronDown size={11} className={isExpanded ? styles.chevronUp : ''} />
           </button>
         </div>
 
-        {/* Name */}
-        {isEditing('name') ? (
-          <input
-            ref={inputRef}
-            className={styles.inlineInput}
-            value={editVal}
-            onChange={(e) => setEditVal(e.target.value)}
-            onBlur={() => void commitEdit()}
-            onKeyDown={(e) => e.key === 'Enter' && void commitEdit()}
-          />
-        ) : (
-          <div
-            className={`${styles.name} ${!coach.name ? styles.placeholder : ''}`}
-            onClick={() => startEdit(i, 'name')}
-          >
-            {coach.name || t('coachName')}
-          </div>
-        )}
+        {/* Text info */}
+        <div className={styles.info}>
+          {isHead && <span className={styles.headBadge}>{t('headCoach')}</span>}
 
-        {/* Role (coaches 1 & 2 only) */}
-        {!isHead && (
-          isEditing('role') ? (
+          {isEditing('name') ? (
             <input
               ref={inputRef}
               className={styles.inlineInput}
@@ -125,13 +101,31 @@ export default function Coaches({ profile, onUpdateProfile }: Props) {
             />
           ) : (
             <div
-              className={`${styles.role} ${!coach.role ? styles.placeholder : ''}`}
+              className={`${styles.name} ${!coach.name ? styles.placeholderText : ''}`}
+              onClick={() => startEdit(i, 'name')}
+            >
+              {coach.name || t('coachName')}
+            </div>
+          )}
+
+          {isEditing('role') ? (
+            <input
+              ref={inputRef}
+              className={styles.inlineInput}
+              value={editVal}
+              onChange={(e) => setEditVal(e.target.value)}
+              onBlur={() => void commitEdit()}
+              onKeyDown={(e) => e.key === 'Enter' && void commitEdit()}
+            />
+          ) : (
+            <div
+              className={`${styles.role} ${!coach.role ? styles.placeholderText : ''}`}
               onClick={() => startEdit(i, 'role')}
             >
               {coach.role || t('trainer')}
             </div>
-          )
-        )}
+          )}
+        </div>
       </div>
     )
   }
@@ -142,15 +136,8 @@ export default function Coaches({ profile, onUpdateProfile }: Props) {
         <span>{t('coaches')}</span>
         <div className={styles.labelLine} />
       </div>
-
-      {/* Head coach */}
-      <div className={styles.headCoachLabel}>{t('headCoach')}</div>
-      <div className={styles.top}>
+      <div className={styles.strip}>
         <CoachCard i={0} isHead />
-      </div>
-
-      {/* Assistant coaches */}
-      <div className={styles.bottom}>
         <CoachCard i={1} isHead={false} />
         <CoachCard i={2} isHead={false} />
       </div>

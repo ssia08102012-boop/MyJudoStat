@@ -2,7 +2,6 @@ import { BarChart2, CheckCircle, XCircle, Medal, Trophy, Award, type LucideIcon 
 import { t } from '@/services/i18n'
 import { calcStats } from '@/services/storage'
 import type { Tournament, Lang } from '@/types'
-import WinBar from './WinBar'
 import Charts from './Charts'
 import Goals from './Goals'
 import styles from './Stats.module.css'
@@ -95,7 +94,6 @@ export default function Stats({ comps, filtered, activeYear, onFilterYear, lang:
         </div>
       </div>
 
-      <WinBar wins={s.wins} losses={s.losses} winRate={winRate} />
       <Goals comps={comps} activeYear={activeYear} />
       <Charts comps={comps} activeYear={activeYear} />
     </div>
