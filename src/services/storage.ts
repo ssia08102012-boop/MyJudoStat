@@ -260,6 +260,27 @@ export function getAllTechStats(comps: Tournament[]): Record<string, number> {
   return counts
 }
 
+// ─── Site credentials ────────────────────────────────────────────────────────
+
+const CREDS_KEY = 'site_creds'
+
+export interface SiteCred { username: string; password: string }
+
+export function getSiteCredentials(): Record<string, SiteCred> {
+  return lsGet<Record<string, SiteCred>>(CREDS_KEY) ?? {}
+}
+
+export function saveSiteCred(domain: string, cred: SiteCred): void {
+  const all = getSiteCredentials()
+  lsSet(CREDS_KEY, { ...all, [domain]: cred })
+}
+
+export function deleteSiteCred(domain: string): void {
+  const all = getSiteCredentials()
+  delete all[domain]
+  lsSet(CREDS_KEY, all)
+}
+
 // ─── Export / Import ──────────────────────────────────────────────────────────
 
 export interface BackupData {
