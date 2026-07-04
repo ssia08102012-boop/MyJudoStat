@@ -137,9 +137,13 @@ export default function Coaches({ profile, onUpdateProfile }: Props) {
         <div className={styles.labelLine} />
       </div>
       <div className={styles.strip}>
-        <CoachCard i={0} isHead />
-        <CoachCard i={1} isHead={false} />
-        <CoachCard i={2} isHead={false} />
+        <div className={styles.headRow}>
+          <CoachCard i={0} isHead />
+        </div>
+        <div className={styles.assistRow}>
+          <CoachCard i={1} isHead={false} />
+          <CoachCard i={2} isHead={false} />
+        </div>
       </div>
     </div>
   )
