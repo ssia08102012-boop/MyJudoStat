@@ -16,3 +16,12 @@
   margin-bottom: 6px;
   letter-spacing: .3em;
 }
+
+.version {
+  display: block;
+  margin-top: 4px;
+  font-size: 9px;
+  letter-spacing: .15em;
+  color: var(--muted);
+  opacity: .5;
+}
