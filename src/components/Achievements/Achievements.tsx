@@ -22,7 +22,7 @@ const DEFS: AchDef[] = [
   { id: 'five_streak',      icon: Flame,   color: '#e8720a', hint: '5 перемог поспіль' },
   { id: 'fifty_fights',     icon: Swords,  color: '#2a8abf', hint: '50 боїв' },
   { id: 'abroad',           icon: Globe,   color: '#9b59b6', hint: 'Турнір не в Польщі' },
-  { id: 'detailed_five',    icon: BookOpen,color: '#52606e', hint: '5 боїв з деталями' },
+  { id: 'detailed_five',    icon: BookOpen,color: '#2abfa0', hint: '5 боїв з деталями' },
   { id: 'hundred_fights',   icon: Zap,     color: '#ff9332', hint: '100 боїв' },
 ]
 
