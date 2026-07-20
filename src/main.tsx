@@ -13,10 +13,4 @@ createRoot(root).render(
   </StrictMode>,
 )
 
-// When a new service worker takes over, reload to get fresh content
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    window.location.reload()
-  })
-}
 
