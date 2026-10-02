@@ -11,7 +11,7 @@ import ExerciseStats from './ExerciseStats'
 interface Props { onBack: () => void }
 type Draft = Pick<TrainingEntry, 'date' | 'focus' | 'notes'> & { metrics: TrainingMetric[] }
 
-const makeMetric = (): TrainingMetric => ({ id: `m${Date.now()}${Math.random().toString(16).slice(2)}`, name: '', value: 0 })
+const makeMetric = (): TrainingMetric => ({ id: `m${Date.now()}${Math.random().toString(16).slice(2)}`, name: '', value: 0, sets: [0] })
 const empty = (): Draft => ({ date: new Date().toISOString().slice(0, 10), focus: '', notes: '', metrics: [makeMetric()] })
 
 function legacyMetrics(entry: TrainingEntry): TrainingMetric[] {
@@ -29,7 +29,7 @@ function entryMetrics(entry: TrainingEntry): TrainingMetric[] {
 }
 
 function toDraft(entry: TrainingEntry): Draft {
-  return { date: entry.date, focus: entry.focus ?? '', notes: entry.notes ?? '', metrics: entryMetrics(entry).map((metric) => ({ ...metric })) }
+  return { date: entry.date, focus: entry.focus ?? '', notes: entry.notes ?? '', metrics: entryMetrics(entry).map((metric) => ({ ...metric, sets: metric.sets?.length ? metric.sets : [metric.value] })) }
 }
 
 function formatSavedAt(value: string | undefined): string {
@@ -45,6 +45,9 @@ export default function TrainingDiary({ onBack }: Props) {
   const categories = useMemo(() => [...new Set(entries.flatMap(entryMetrics).map(({ name }) => name.trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b)), [entries])
   const changeMetric = (id: string, patch: Partial<TrainingMetric>) => setForm((draft) => ({ ...draft, metrics: draft.metrics.map((metric) => metric.id === id ? { ...metric, ...patch } : metric) }))
   const removeMetric = (id: string) => setForm((draft) => ({ ...draft, metrics: draft.metrics.filter((metric) => metric.id !== id) }))
+  const changeSet = (id: string, index: number, value: string) => setForm((draft) => ({ ...draft, metrics: draft.metrics.map((metric) => metric.id === id ? { ...metric, sets: (metric.sets ?? [metric.value]).map((set, setIndex) => setIndex === index ? Math.max(0, Number(value) || 0) : set) } : metric) }))
+  const addSet = (id: string) => setForm((draft) => ({ ...draft, metrics: draft.metrics.map((metric) => metric.id === id ? { ...metric, sets: [...(metric.sets ?? [metric.value]), 0] } : metric) }))
+  const removeSet = (id: string, index: number) => setForm((draft) => ({ ...draft, metrics: draft.metrics.map((metric) => metric.id === id ? { ...metric, sets: (metric.sets ?? [metric.value]).filter((_, setIndex) => setIndex !== index) } : metric) }))
 
   function startNew() { setEditingId(null); setForm(empty()); setOpen(true) }
   function startEdit(entry: TrainingEntry) { setEditingId(entry.id); setForm(toDraft(entry)); setOpen(true); window.scrollTo({ top: 0, behavior: 'smooth' }) }
@@ -52,7 +55,7 @@ export default function TrainingDiary({ onBack }: Props) {
   function save() {
     const now = new Date().toISOString()
     const existing = entries.find((entry) => entry.id === editingId)
-    const record: TrainingEntry = { id: existing?.id ?? `t${Date.now()}`, date: form.date, focus: form.focus?.trim(), notes: form.notes?.trim(), metrics: form.metrics.map((metric) => ({ ...metric, name: metric.name.trim(), value: Math.max(0, Number(metric.value) || 0) })).filter((metric) => metric.name), createdAt: existing?.createdAt ?? now, updatedAt: now }
+    const record: TrainingEntry = { id: existing?.id ?? `t${Date.now()}`, date: form.date, focus: form.focus?.trim(), notes: form.notes?.trim(), metrics: form.metrics.map((metric) => { const sets = (metric.sets ?? [metric.value]).map((value) => Math.max(0, Number(value) || 0)); return { ...metric, name: metric.name.trim(), sets, value: sets.reduce((total, value) => total + value, 0), bestSet: Math.max(...sets, 0) } }).filter((metric) => metric.name), createdAt: existing?.createdAt ?? now, updatedAt: now }
     const next = existing ? entries.map((entry) => entry.id === existing.id ? record : entry) : [record, ...entries]
     next.sort((a, b) => b.date.localeCompare(a.date) || (b.updatedAt ?? '').localeCompare(a.updatedAt ?? ''))
     setEntries(next); saveTrainingEntries(next); cancel()
@@ -77,12 +80,12 @@ export default function TrainingDiary({ onBack }: Props) {
       <label className={styles.dateField}>{t('trainingDate')}<input type="date" value={form.date} onChange={(e) => setForm((draft) => ({ ...draft, date: e.target.value }))} /></label>
       <div className={styles.metricsTitle}><span>{t('trainingMetrics')}</span><button type="button" onClick={() => setForm((draft) => ({ ...draft, metrics: [...draft.metrics, makeMetric()] }))}><Plus size={14} /> {t('addCategory')}</button></div>
       <datalist id="training-category-suggestions">{categories.map((category) => <option key={category} value={category} />)}</datalist>
-      <div className={styles.metrics}>{form.metrics.map((metric) => <div className={styles.metric} key={metric.id}><input list="training-category-suggestions" value={metric.name} placeholder={t('categoryName')} onChange={(e) => changeMetric(metric.id, { name: e.target.value })} /><div className={styles.metricValues}><label>{t('quantity')}<input type="number" min="0" inputMode="numeric" value={metric.value} onChange={(e) => changeMetric(metric.id, { value: Math.max(0, Number(e.target.value) || 0) })} /></label><label>{t('bestSet')}<input type="number" min="0" inputMode="numeric" value={metric.bestSet ?? ''} placeholder="—" onChange={(e) => changeMetric(metric.id, { bestSet: e.target.value === '' ? undefined : Math.max(0, Number(e.target.value) || 0) })} /></label></div><button type="button" aria-label={t('removeCategory')} onClick={() => removeMetric(metric.id)}><Trash2 size={15} /></button></div>)}</div>
+      <div className={styles.metrics}>{form.metrics.map((metric) => { const sets = metric.sets ?? [metric.value]; const total = sets.reduce((sum, value) => sum + value, 0); return <div className={styles.metric} key={metric.id}><input list="training-category-suggestions" value={metric.name} placeholder={t('categoryName')} onChange={(e) => changeMetric(metric.id, { name: e.target.value })} /><div className={styles.sets}>{sets.map((value, index) => <div className={styles.setRow} key={`${metric.id}-${index}`}><span>{t('setNumber')} {index + 1}</span><input type="number" min="0" inputMode="numeric" value={value} aria-label={`${t('setNumber')} ${index + 1}`} onChange={(e) => changeSet(metric.id, index, e.target.value)} />{sets.length > 1 && <button type="button" aria-label={t('removeSet')} onClick={() => removeSet(metric.id, index)}><Trash2 size={13} /></button>}</div>)}<button className={styles.addSet} type="button" onClick={() => addSet(metric.id)}><Plus size={13} /> {t('addSet')}</button><b className={styles.metricTotal}>{t('trainingTotal')}: {total}</b></div><button type="button" aria-label={t('removeCategory')} onClick={() => removeMetric(metric.id)}><Trash2 size={15} /></button></div> })}</div>
       <input placeholder={t('trainingFocus')} value={form.focus} onChange={(e) => setForm((draft) => ({ ...draft, focus: e.target.value }))} />
       <textarea placeholder={t('trainingNotes')} value={form.notes} onChange={(e) => setForm((draft) => ({ ...draft, notes: e.target.value }))} />
       <div className={styles.editorActions}><button className={styles.cancel} onClick={cancel}>{t('cancel')}</button><button className={styles.save} onClick={save}><Save size={15} /> {t('saveTraining')}</button></div>
     </section>}
-    {entries.length === 0 ? <div className={styles.empty}><Target size={20} /> {t('trainingEmpty')}</div> : <section className={styles.list}>{entries.map((entry) => <article key={entry.id}><div className={styles.entryHead}><div><b>{entry.date}</b><span>{entry.updatedAt && entry.createdAt !== entry.updatedAt ? `${t('editedAt')}: ${formatSavedAt(entry.updatedAt)}` : `${t('savedAt')}: ${formatSavedAt(entry.createdAt)}`}</span></div><div className={styles.entryActions}><button onClick={() => startEdit(entry)} aria-label={t('editTraining')}><Pencil size={15} /></button><button className={styles.delete} onClick={() => setDeleteTarget(entry)} aria-label={t('deleteTraining')}><Trash2 size={15} /></button></div></div>{entryMetrics(entry).length > 0 && <div className={styles.entryMetrics}>{entryMetrics(entry).map((metric) => <span key={metric.id}><b>{metric.value}</b> {metric.name}</span>)}</div>}{entry.focus && <p><b>{t('trainingFocus')}:</b> {entry.focus}</p>}{entry.notes && <p className={styles.notes}>{entry.notes}</p>}</article>)}</section>}
+    {entries.length === 0 ? <div className={styles.empty}><Target size={20} /> {t('trainingEmpty')}</div> : <section className={styles.list}>{entries.map((entry) => <article key={entry.id}><div className={styles.entryHead}><div><b>{entry.date}</b><span>{entry.updatedAt && entry.createdAt !== entry.updatedAt ? `${t('editedAt')}: ${formatSavedAt(entry.updatedAt)}` : `${t('savedAt')}: ${formatSavedAt(entry.createdAt)}`}</span></div><div className={styles.entryActions}><button onClick={() => startEdit(entry)} aria-label={t('editTraining')}><Pencil size={15} /></button><button className={styles.delete} onClick={() => setDeleteTarget(entry)} aria-label={t('deleteTraining')}><Trash2 size={15} /></button></div></div>{entryMetrics(entry).length > 0 && <div className={styles.entryMetrics}>{entryMetrics(entry).map((metric) => <span key={metric.id}><b>{metric.value}</b> {metric.name}{metric.sets && metric.sets.length > 1 && <small> · {metric.sets.join(' + ')}</small>}</span>)}</div>}{entry.focus && <p><b>{t('trainingFocus')}:</b> {entry.focus}</p>}{entry.notes && <p className={styles.notes}>{entry.notes}</p>}</article>)}</section>}
     <ConfirmModal open={Boolean(deleteTarget)} message={t('confirmDeleteTraining')} danger onConfirm={deleteEntry} onCancel={() => setDeleteTarget(null)} />
   </main>
 }

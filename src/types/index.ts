@@ -79,6 +79,7 @@ export interface TrainingMetric {
   name: string
   value: number
   bestSet?: number
+  sets?: number[]
 }
 
 export interface TrainingEntry {

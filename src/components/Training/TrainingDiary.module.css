@@ -15,7 +15,7 @@
 .metrics { display:grid; gap:8px; }
 .metric { display:grid; grid-template-columns:minmax(0, 1fr) 34px; gap:7px; align-items:start; }
 .metric > input { grid-column:1; }.metric > button { grid-column:2; grid-row:1 / span 2; }
-.metricValues { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; }.metricValues label { display:grid; gap:3px; color:var(--muted); font-size:10px; }
+.sets { display:grid; gap:5px; }.setRow { display:grid; grid-template-columns:54px minmax(0,1fr) 28px; align-items:center; gap:6px; }.setRow span { color:var(--muted); font-size:10px; }.setRow button { display:flex; min-height:28px; align-items:center; justify-content:center; padding:0; border:1px solid var(--border); border-radius:6px; color:var(--muted); background:var(--bg3); cursor:pointer; }.addSet { justify-self:start; display:flex; align-items:center; gap:4px; min-height:28px; padding:4px 7px; border:1px dashed var(--border); border-radius:6px; color:var(--orange); background:transparent; font-size:11px; cursor:pointer; }.metricTotal { color:var(--text); font-size:12px; }
 .metric button { border:1px solid var(--border); border-radius:7px; color:var(--muted); background:var(--bg3); cursor:pointer; min-height:34px; }
 .editor textarea { min-height:78px; resize:vertical; }
 .editorActions { display:flex; justify-content:flex-end; gap:8px; }
@@ -26,6 +26,6 @@
 .entryHead { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
 .entryHead > div { display:grid; gap:3px; }.entryHead b { color:var(--text); }.entryHead span { color:var(--muted); font-size:11px; }
 .entryActions { display:flex; gap:6px; }.entryHead button { display:flex; min-height:32px; min-width:32px; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:7px; color:var(--orange); background:var(--bg3); cursor:pointer; }.entryHead .delete { color:var(--red); }
-.entryMetrics { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }.entryMetrics span { padding:4px 7px; border-radius:6px; background:var(--bg3); color:var(--muted); font-size:12px; }.entryMetrics b { color:var(--orange); }
+.entryMetrics { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }.entryMetrics span { padding:4px 7px; border-radius:6px; background:var(--bg3); color:var(--muted); font-size:12px; }.entryMetrics b { color:var(--orange); }.entryMetrics small { color:var(--muted); font-size:10px; }
 .list p { margin:9px 0 0; color:var(--text); font-size:13px; line-height:1.45; }.list .notes { color:var(--muted); white-space:pre-wrap; }
 @media (max-width:580px) { .page { padding:12px 12px 28px; }.pageHeader { flex-wrap:wrap; }.pageHeader > div { order:-1; width:100%; }.back,.add { flex:1; } }

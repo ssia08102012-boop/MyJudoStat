@@ -59,12 +59,12 @@ export default function ExerciseStats({ entries }: Props) {
     <div className={styles.header}><div><BarChart3 size={17} /><h2>{t('exerciseStats')}</h2></div></div>
     <div className={styles.filters}>{(['30d', '6m', '1y', 'all'] as Range[]).map((item) => <button key={item} className={range === item ? styles.active : ''} onClick={() => setRange(item)}>{t(`range_${item}` as Parameters<typeof t>[0])}</button>)}</div>
     {data.length === 0 ? <div className={styles.empty}>{t('exerciseStatsEmpty')}</div> : <>
-      <select value={active?.name.toLocaleLowerCase() ?? ''} onChange={(e) => setSelected(e.target.value)} aria-label={t('categoryName')}>{data.map((item) => <option key={item.name} value={item.name.toLocaleLowerCase()}>{item.name}</option>)}</select>
-      {active && <div className={styles.cards}>
+      <div className={styles.exerciseList}>{data.map((item) => <button key={item.name} className={active?.name === item.name ? styles.selected : ''} onClick={() => setSelected(item.name.toLocaleLowerCase())}><span>{item.name}</span><b>{item.total}</b></button>)}</div>
+      {active && <><div className={styles.selectedTitle}>{t('selectedExercise')}: <b>{active.name}</b></div><div className={styles.cards}>
         <div><BarChart3 size={17} /><span>{t('totalVolume')}</span><b>{active.total}</b><small>{t('trainingDays')}: {active.days}</small></div>
         <div><Trophy size={17} /><span>{t('bestWorkout')}</span><b>{active.bestWorkout}</b><small>{t('bestWorkoutHint')}</small></div>
         <div><Medal size={17} /><span>{t('bestSet')}</span><b>{active.bestSet ?? '—'}</b><small>{active.bestSet === undefined ? t('bestSetEmpty') : t('bestSetHint')}</small></div>
-      </div>}
+      </div></>}
     </>}
   </section>
 }
