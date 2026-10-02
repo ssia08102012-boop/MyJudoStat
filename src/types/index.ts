@@ -97,6 +97,15 @@ export interface TrainingEntry {
   bands?: number
 }
 
+export interface PeriodGoal {
+  id: string
+  title: string
+  deadline: string
+  note?: string
+  createdAt: string
+  completedAt?: string
+}
+
 export type AchievementId =
   | 'first_tournament'
   | 'first_gold'

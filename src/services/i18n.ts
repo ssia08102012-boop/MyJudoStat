@@ -15,6 +15,7 @@ const TR = {
     throws: 'Кидки', techniques: 'Техніки', trainingFights: 'Сутички', pullUps: 'Підтягування', abs: 'Прес', bands: 'Гума',
     trainingFocus: 'На що звернути увагу', trainingNotes: 'Нотатки', saveTraining: 'ЗБЕРЕГТИ ЗАПИС', trainingEmpty: 'Додайте перший запис після тренування',
     diaryShort: 'Щоденник', backToStats: 'До статистики', diaryIntro: 'Ведіть обсяг роботи своїми категоріями. Раніше введені назви з’являються у підказках.', newTraining: 'Новий запис', editTraining: 'Редагувати запис', trainingDate: 'Дата тренування', trainingMetrics: 'Виконана робота', addCategory: 'Додати категорію', categoryName: 'Назва категорії', quantity: 'Кількість', removeCategory: 'Прибрати категорію', savedAt: 'Збережено', editedAt: 'Змінено',
+    periodGoals: 'ЦІЛІ НА ПЕРІОД', addGoal: 'Ціль', newPeriodGoal: 'Нова ціль', editPeriodGoal: 'Редагувати ціль', goalName: 'Назва цілі', goalNote: 'Нотатка (необов’язково)', deadline: 'Дедлайн', saveGoal: 'ЗБЕРЕГТИ ЦІЛЬ', periodGoalsEmpty: 'Додайте ціль і дедлайн — тут з’явиться зворотний відлік.', goalCompleted: 'Виконано', deadlineIn: 'Залишилося', deadlineToday: 'Останній день', deadlinePassed: 'Термін минув', daysShort: 'д.', hoursShort: 'год.',
     // Profile
     athlete: 'СПОРТСМЕН',
     belt: 'Пояс',
@@ -180,6 +181,7 @@ const TR = {
     throws: 'Throws', techniques: 'Techniques', trainingFights: 'Fights', pullUps: 'Pull-ups', abs: 'Abs', bands: 'Resistance band',
     trainingFocus: 'Focus for next training', trainingNotes: 'Notes', saveTraining: 'SAVE ENTRY', trainingEmpty: 'Add your first post-training entry',
     diaryShort: 'Diary', backToStats: 'Back to statistics', diaryIntro: 'Track workload using your own categories. Previously entered names appear as suggestions.', newTraining: 'New entry', editTraining: 'Edit entry', trainingDate: 'Training date', trainingMetrics: 'Completed work', addCategory: 'Add category', categoryName: 'Category name', quantity: 'Quantity', removeCategory: 'Remove category', savedAt: 'Saved', editedAt: 'Edited',
+    periodGoals: 'PERIOD GOALS', addGoal: 'Goal', newPeriodGoal: 'New goal', editPeriodGoal: 'Edit goal', goalName: 'Goal name', goalNote: 'Note (optional)', deadline: 'Deadline', saveGoal: 'SAVE GOAL', periodGoalsEmpty: 'Add a goal and deadline — the countdown will appear here.', goalCompleted: 'Completed', deadlineIn: 'Time left', deadlineToday: 'Last day', deadlinePassed: 'Deadline passed', daysShort: 'd', hoursShort: 'h',
     athlete: 'ATHLETE',
     belt: 'Belt',
     weightCat: 'Weight',
@@ -330,6 +332,7 @@ const TR = {
     throws: 'Rzuty', techniques: 'Techniki', trainingFights: 'Walki', pullUps: 'Podciągania', abs: 'Brzuch', bands: 'Guma',
     trainingFocus: 'Na co zwrócić uwagę', trainingNotes: 'Notatki', saveTraining: 'ZAPISZ WPIS', trainingEmpty: 'Dodaj pierwszy wpis po treningu',
     diaryShort: 'Dziennik', backToStats: 'Do statystyk', diaryIntro: 'Zapisuj objętość pracy we własnych kategoriach. Wcześniejsze nazwy pojawiają się w podpowiedziach.', newTraining: 'Nowy wpis', editTraining: 'Edytuj wpis', trainingDate: 'Data treningu', trainingMetrics: 'Wykonana praca', addCategory: 'Dodaj kategorię', categoryName: 'Nazwa kategorii', quantity: 'Ilość', removeCategory: 'Usuń kategorię', savedAt: 'Zapisano', editedAt: 'Zmieniono',
+    periodGoals: 'CELE OKRESOWE', addGoal: 'Cel', newPeriodGoal: 'Nowy cel', editPeriodGoal: 'Edytuj cel', goalName: 'Nazwa celu', goalNote: 'Notatka (opcjonalnie)', deadline: 'Termin', saveGoal: 'ZAPISZ CEL', periodGoalsEmpty: 'Dodaj cel i termin — odliczanie pojawi się tutaj.', goalCompleted: 'Wykonano', deadlineIn: 'Pozostało', deadlineToday: 'Ostatni dzień', deadlinePassed: 'Termin minął', daysShort: 'd.', hoursShort: 'godz.',
     athlete: 'ZAWODNIK',
     belt: 'Pas',
     weightCat: 'Waga',

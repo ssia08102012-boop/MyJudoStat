@@ -4,6 +4,7 @@ import { getTrainingEntries, saveTrainingEntries } from '@/services/storage'
 import { t } from '@/services/i18n'
 import type { TrainingEntry, TrainingMetric } from '@/types'
 import styles from './TrainingDiary.module.css'
+import PeriodGoals from './PeriodGoals'
 
 interface Props { onBack: () => void }
 type Draft = Pick<TrainingEntry, 'date' | 'focus' | 'notes'> & { metrics: TrainingMetric[] }
@@ -61,6 +62,7 @@ export default function TrainingDiary({ onBack }: Props) {
       <button className={styles.add} onClick={startNew}><Plus size={17} /> {t('addTraining')}</button>
     </header>
     <p className={styles.intro}>{t('diaryIntro')}</p>
+    <PeriodGoals />
     {open && <section className={styles.editor}>
       <div className={styles.editorTitle}><CalendarDays size={16} /><b>{editingId ? t('editTraining') : t('newTraining')}</b></div>
       <label className={styles.dateField}>{t('trainingDate')}<input type="date" value={form.date} onChange={(e) => setForm((draft) => ({ ...draft, date: e.target.value }))} /></label>

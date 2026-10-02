@@ -1,4 +1,4 @@
-import type { Tournament, Profile, FightDetail, MediaItem, Goal, Achievement, TrainingEntry } from '@/types'
+import type { Tournament, Profile, FightDetail, MediaItem, Goal, Achievement, TrainingEntry, PeriodGoal } from '@/types'
 
 // ─── localStorage helpers ───────────────────────────────────────────────────
 
@@ -256,6 +256,16 @@ export function saveTrainingEntries(entries: TrainingEntry[]): void {
   lsSet('judo_training_entries', entries)
 }
 
+// ─── Period goals ───────────────────────────────────────────────────────────
+
+export function getPeriodGoals(): PeriodGoal[] {
+  return lsGet<PeriodGoal[]>('judo_period_goals') ?? []
+}
+
+export function savePeriodGoals(goals: PeriodGoal[]): void {
+  lsSet('judo_period_goals', goals)
+}
+
 // ─── Technique statistics ─────────────────────────────────────────────────────
 
 export function getAllTechStats(comps: Tournament[]): Record<string, number> {
@@ -293,6 +303,7 @@ export interface BackupData {
   goals?: Goal | null
   achievements?: Achievement[]
   trainingEntries?: TrainingEntry[]
+  periodGoals?: PeriodGoal[]
 }
 
 export async function exportBackup(comps: Tournament[]): Promise<void> {
@@ -308,7 +319,7 @@ export async function exportBackup(comps: Tournament[]): Promise<void> {
     if (items.length) media[c.id] = items
   }
   const backup: BackupData = {
-    version: 3,
+    version: 4,
     comps,
     profile,
     fights,
@@ -316,6 +327,7 @@ export async function exportBackup(comps: Tournament[]): Promise<void> {
     goals: getGoal(),
     achievements: getAchievements(),
     trainingEntries: getTrainingEntries(),
+    periodGoals: getPeriodGoals(),
   }
   const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' })
   const a = document.createElement('a')
@@ -345,5 +357,6 @@ export async function importBackup(file: File): Promise<Tournament[]> {
   }
   if (data.achievements) saveAchievements(data.achievements)
   if (data.trainingEntries) saveTrainingEntries(data.trainingEntries)
+  if (data.periodGoals) savePeriodGoals(data.periodGoals)
   return data.comps
 }
