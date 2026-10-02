@@ -23,7 +23,7 @@
 .list article { padding:13px; background:var(--bg2); border:1px solid var(--border); border-radius:12px; }
 .entryHead { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
 .entryHead > div { display:grid; gap:3px; }.entryHead b { color:var(--text); }.entryHead span { color:var(--muted); font-size:11px; }
-.entryHead button { display:flex; min-height:32px; min-width:32px; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:7px; color:var(--orange); background:var(--bg3); cursor:pointer; }
+.entryActions { display:flex; gap:6px; }.entryHead button { display:flex; min-height:32px; min-width:32px; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:7px; color:var(--orange); background:var(--bg3); cursor:pointer; }.entryHead .delete { color:var(--red); }
 .entryMetrics { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }.entryMetrics span { padding:4px 7px; border-radius:6px; background:var(--bg3); color:var(--muted); font-size:12px; }.entryMetrics b { color:var(--orange); }
 .list p { margin:9px 0 0; color:var(--text); font-size:13px; line-height:1.45; }.list .notes { color:var(--muted); white-space:pre-wrap; }
 @media (max-width:580px) { .page { padding:12px 12px 28px; }.pageHeader { flex-wrap:wrap; }.pageHeader > div { order:-1; width:100%; }.back,.add { flex:1; }.metric { grid-template-columns:minmax(0, 1fr) 75px 34px; } }

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Check, CheckCircle2, Circle, Pencil, Plus, Target } from 'lucide-react'
+import { Check, CheckCircle2, Circle, Pencil, Plus, Target, Trash2 } from 'lucide-react'
 import { getPeriodGoals, savePeriodGoals } from '@/services/storage'
 import { t } from '@/services/i18n'
 import type { PeriodGoal } from '@/types'
 import styles from './PeriodGoals.module.css'
+import ConfirmModal from '@/components/UI/ConfirmModal'
 
 type Draft = Pick<PeriodGoal, 'title' | 'deadline' | 'note'>
 const empty = (): Draft => ({ title: '', deadline: '', note: '' })
@@ -23,6 +24,7 @@ export default function PeriodGoals() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [open, setOpen] = useState(false)
   const [now, setNow] = useState(() => new Date())
+  const [deleteTarget, setDeleteTarget] = useState<PeriodGoal | null>(null)
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 60_000)
@@ -45,6 +47,11 @@ export default function PeriodGoals() {
     next.sort((a, b) => Number(Boolean(a.completedAt)) - Number(Boolean(b.completedAt)) || a.deadline.localeCompare(b.deadline))
     setGoals(next); savePeriodGoals(next)
   }
+  function deleteGoal() {
+    if (!deleteTarget) return
+    const next = goals.filter((goal) => goal.id !== deleteTarget.id)
+    setGoals(next); savePeriodGoals(next); setDeleteTarget(null)
+  }
 
   return <section className={styles.wrap}>
     <div className={styles.header}><div><Target size={17} /><h2>{t('periodGoals')}</h2></div><button onClick={startNew}><Plus size={15} /> {t('addGoal')}</button></div>
@@ -60,8 +67,9 @@ export default function PeriodGoals() {
       return <article key={goal.id} className={goal.completedAt ? styles.done : ''}>
         <button className={styles.doneButton} aria-label={t('goalCompleted')} onClick={() => toggleDone(goal)}>{goal.completedAt ? <CheckCircle2 size={20} /> : <Circle size={20} />}</button>
         <div className={styles.goal}><b>{goal.title}</b><span>{t('deadline')}: {goal.deadline}</span>{goal.note && <small>{goal.note}</small>}<em className={left.key === 'deadlinePassed' ? styles.overdue : ''}>{t(left.key)}{left.value ? `: ${left.value}` : ''}</em></div>
-        <button className={styles.edit} aria-label={t('editPeriodGoal')} onClick={() => startEdit(goal)}><Pencil size={15} /></button>
+        <div className={styles.actions}><button className={styles.edit} aria-label={t('editPeriodGoal')} onClick={() => startEdit(goal)}><Pencil size={15} /></button><button className={styles.delete} aria-label={t('deleteGoal')} onClick={() => setDeleteTarget(goal)}><Trash2 size={15} /></button></div>
       </article>
     })}</div>}
+    <ConfirmModal open={Boolean(deleteTarget)} message={t('confirmDeleteGoal')} danger onConfirm={deleteGoal} onCancel={() => setDeleteTarget(null)} />
   </section>
 }
