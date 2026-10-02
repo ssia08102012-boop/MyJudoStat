@@ -6,6 +6,7 @@ import type { TrainingEntry, TrainingMetric } from '@/types'
 import styles from './TrainingDiary.module.css'
 import PeriodGoals from './PeriodGoals'
 import ConfirmModal from '@/components/UI/ConfirmModal'
+import ExerciseStats from './ExerciseStats'
 
 interface Props { onBack: () => void }
 type Draft = Pick<TrainingEntry, 'date' | 'focus' | 'notes'> & { metrics: TrainingMetric[] }
@@ -70,12 +71,13 @@ export default function TrainingDiary({ onBack }: Props) {
     </header>
     <p className={styles.intro}>{t('diaryIntro')}</p>
     <PeriodGoals />
+    <ExerciseStats entries={entries} />
     {open && <section className={styles.editor}>
       <div className={styles.editorTitle}><CalendarDays size={16} /><b>{editingId ? t('editTraining') : t('newTraining')}</b></div>
       <label className={styles.dateField}>{t('trainingDate')}<input type="date" value={form.date} onChange={(e) => setForm((draft) => ({ ...draft, date: e.target.value }))} /></label>
       <div className={styles.metricsTitle}><span>{t('trainingMetrics')}</span><button type="button" onClick={() => setForm((draft) => ({ ...draft, metrics: [...draft.metrics, makeMetric()] }))}><Plus size={14} /> {t('addCategory')}</button></div>
       <datalist id="training-category-suggestions">{categories.map((category) => <option key={category} value={category} />)}</datalist>
-      <div className={styles.metrics}>{form.metrics.map((metric) => <div className={styles.metric} key={metric.id}><input list="training-category-suggestions" value={metric.name} placeholder={t('categoryName')} onChange={(e) => changeMetric(metric.id, { name: e.target.value })} /><input type="number" min="0" inputMode="numeric" value={metric.value} aria-label={t('quantity')} onChange={(e) => changeMetric(metric.id, { value: Math.max(0, Number(e.target.value) || 0) })} /><button type="button" aria-label={t('removeCategory')} onClick={() => removeMetric(metric.id)}><Trash2 size={15} /></button></div>)}</div>
+      <div className={styles.metrics}>{form.metrics.map((metric) => <div className={styles.metric} key={metric.id}><input list="training-category-suggestions" value={metric.name} placeholder={t('categoryName')} onChange={(e) => changeMetric(metric.id, { name: e.target.value })} /><div className={styles.metricValues}><label>{t('quantity')}<input type="number" min="0" inputMode="numeric" value={metric.value} onChange={(e) => changeMetric(metric.id, { value: Math.max(0, Number(e.target.value) || 0) })} /></label><label>{t('bestSet')}<input type="number" min="0" inputMode="numeric" value={metric.bestSet ?? ''} placeholder="—" onChange={(e) => changeMetric(metric.id, { bestSet: e.target.value === '' ? undefined : Math.max(0, Number(e.target.value) || 0) })} /></label></div><button type="button" aria-label={t('removeCategory')} onClick={() => removeMetric(metric.id)}><Trash2 size={15} /></button></div>)}</div>
       <input placeholder={t('trainingFocus')} value={form.focus} onChange={(e) => setForm((draft) => ({ ...draft, focus: e.target.value }))} />
       <textarea placeholder={t('trainingNotes')} value={form.notes} onChange={(e) => setForm((draft) => ({ ...draft, notes: e.target.value }))} />
       <div className={styles.editorActions}><button className={styles.cancel} onClick={cancel}>{t('cancel')}</button><button className={styles.save} onClick={save}><Save size={15} /> {t('saveTraining')}</button></div>

@@ -78,6 +78,7 @@ export interface TrainingMetric {
   id: string
   name: string
   value: number
+  bestSet?: number
 }
 
 export interface TrainingEntry {
