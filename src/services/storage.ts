@@ -1,4 +1,4 @@
-import type { Tournament, Profile, FightDetail, MediaItem, Goal, Achievement } from '@/types'
+import type { Tournament, Profile, FightDetail, MediaItem, Goal, Achievement, TrainingEntry } from '@/types'
 
 // ─── localStorage helpers ───────────────────────────────────────────────────
 
@@ -246,6 +246,16 @@ export function saveAchievements(list: Achievement[]): void {
   lsSet('judo_achievements', list)
 }
 
+// ─── Training diary ─────────────────────────────────────────────────────────
+
+export function getTrainingEntries(): TrainingEntry[] {
+  return lsGet<TrainingEntry[]>('judo_training_entries') ?? []
+}
+
+export function saveTrainingEntries(entries: TrainingEntry[]): void {
+  lsSet('judo_training_entries', entries)
+}
+
 // ─── Technique statistics ─────────────────────────────────────────────────────
 
 export function getAllTechStats(comps: Tournament[]): Record<string, number> {
@@ -260,25 +270,16 @@ export function getAllTechStats(comps: Tournament[]): Record<string, number> {
   return counts
 }
 
-// ─── Site credentials ────────────────────────────────────────────────────────
+// ─── Legacy credential cleanup ───────────────────────────────────────────────
 
-const CREDS_KEY = 'site_creds'
-
-export interface SiteCred { username: string; password: string }
-
-export function getSiteCredentials(): Record<string, SiteCred> {
-  return lsGet<Record<string, SiteCred>>(CREDS_KEY) ?? {}
-}
-
-export function saveSiteCred(domain: string, cred: SiteCred): void {
-  const all = getSiteCredentials()
-  lsSet(CREDS_KEY, { ...all, [domain]: cred })
-}
-
-export function deleteSiteCred(domain: string): void {
-  const all = getSiteCredentials()
-  delete all[domain]
-  lsSet(CREDS_KEY, all)
+// Earlier versions stored third-party credentials in localStorage. Browser
+// storage is not a secure credential vault, so remove the legacy value once.
+export function clearLegacySiteCredentials(): void {
+  try {
+    localStorage.removeItem('site_creds')
+  } catch {
+    // Storage can be unavailable in private browsing.
+  }
 }
 
 // ─── Export / Import ──────────────────────────────────────────────────────────
@@ -288,18 +289,34 @@ export interface BackupData {
   comps: Tournament[]
   profile: Profile
   fights: Array<{ cid: string; fi: number; data: FightDetail }>
+  media?: Record<string, MediaItem[]>
+  goals?: Goal | null
+  achievements?: Achievement[]
+  trainingEntries?: TrainingEntry[]
 }
 
 export async function exportBackup(comps: Tournament[]): Promise<void> {
   const profile = getProfile()
   const fights: BackupData['fights'] = []
+  const media: Record<string, MediaItem[]> = {}
   for (const c of comps) {
     for (let fi = 0; fi < c.fights.length; fi++) {
       const d = getFight(c.id, fi)
       if (Object.keys(d).length) fights.push({ cid: c.id, fi, data: d })
     }
+    const items = await loadMediaFromIDB(c.id)
+    if (items.length) media[c.id] = items
   }
-  const backup: BackupData = { version: 2, comps, profile, fights }
+  const backup: BackupData = {
+    version: 3,
+    comps,
+    profile,
+    fights,
+    media,
+    goals: getGoal(),
+    achievements: getAchievements(),
+    trainingEntries: getTrainingEntries(),
+  }
   const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' })
   const a = document.createElement('a')
   a.href = URL.createObjectURL(blob)
@@ -319,5 +336,14 @@ export async function importBackup(file: File): Promise<Tournament[]> {
       await saveFight(cid, fi, fd)
     }
   }
+  if (data.media) {
+    for (const [cid, items] of Object.entries(data.media)) await saveMedia(cid, items)
+  }
+  if (data.goals !== undefined) {
+    if (data.goals) saveGoal(data.goals)
+    else localStorage.removeItem('judo_goal')
+  }
+  if (data.achievements) saveAchievements(data.achievements)
+  if (data.trainingEntries) saveTrainingEntries(data.trainingEntries)
   return data.comps
 }

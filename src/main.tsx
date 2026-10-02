@@ -4,10 +4,16 @@ import { registerSW } from 'virtual:pwa-register'
 import '@/styles/global.css'
 import App from './App'
 import ErrorBoundary from '@/components/UI/ErrorBoundary'
+import { t } from '@/services/i18n'
 
-// Show update banner when a new SW version is waiting — user decides when to reload
+let updatePromptVisible = false
+
+// The app checks for a new service worker on launch and once per hour. When a
+// deploy is available, the user gets one prominent, safe-to-dismiss update action.
 const updateSW = registerSW({
   onNeedRefresh() {
+    if (updatePromptVisible) return
+    updatePromptVisible = true
     const toast = document.createElement('div')
     toast.id = 'pwa-update-toast'
     toast.style.cssText = [
@@ -18,18 +24,20 @@ const updateSW = registerSW({
       'z-index:9999', 'box-shadow:0 4px 24px rgba(0,0,0,.6)',
       'white-space:nowrap',
     ].join(';')
-    toast.innerHTML = `
-      <span style="color:#e2dbd0;font-size:12px;font-family:Cinzel,serif;letter-spacing:.08em">
-        Нова версія доступна
-      </span>
-      <button id="pwa-update-btn" style="
-        background:#e8720a;border:none;border-radius:8px;
-        color:#fff;padding:5px 13px;font-size:12px;
-        cursor:pointer;font-family:Cinzel,serif;letter-spacing:.05em
-      ">Оновити</button>
-    `
+    const message = document.createElement('span')
+    message.textContent = t('updateAvailable')
+    message.style.cssText = 'color:#e2dbd0;font-size:12px;font-family:Cinzel,serif;letter-spacing:.08em'
+    const button = document.createElement('button')
+    button.textContent = t('updateApp')
+    button.style.cssText = 'background:#e8720a;border:none;border-radius:8px;color:#fff;padding:8px 13px;font-size:12px;cursor:pointer;font-family:Cinzel,serif;letter-spacing:.05em'
+    toast.append(message, button)
     document.body.appendChild(toast)
-    document.getElementById('pwa-update-btn')!.onclick = () => void updateSW(true)
+    button.onclick = () => void updateSW(true)
+  },
+  onRegisteredSW(_swUrl, registration) {
+    if (!registration) return
+    void registration.update()
+    window.setInterval(() => void registration.update(), 60 * 60 * 1000)
   },
 })
 

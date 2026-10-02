@@ -9,6 +9,7 @@ body {
   background: var(--bg);
   color: var(--text);
   overflow-x: hidden;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* Tatami grid + paw prints background */
@@ -45,6 +46,7 @@ a { color: var(--orange); text-decoration: none; }
 a:hover { color: var(--orange2); }
 
 button { cursor: pointer; font-family: inherit; }
+button, a { touch-action: manipulation; }
 
 input, textarea, select {
   font-family: inherit;
@@ -106,4 +108,11 @@ input:focus, textarea:focus, select:focus {
   overflow: hidden;
   clip: rect(0,0,0,0);
   white-space: nowrap;
+}
+
+/* Mobile-first interaction baseline. 16px inputs prevent iOS Safari from
+   zooming the page when a form field receives focus. */
+@media (max-width: 768px) {
+  input, textarea, select { font-size: 16px; }
+  button { min-height: 40px; }
 }

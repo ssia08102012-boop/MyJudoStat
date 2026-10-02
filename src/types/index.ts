@@ -74,6 +74,19 @@ export interface Goal {
   targetWinRate: number
 }
 
+export interface TrainingEntry {
+  id: string
+  date: string
+  throws: number
+  techniques: number
+  fights: number
+  focus: string
+  notes: string
+  pullUps: number
+  abs: number
+  bands: number
+}
+
 export type AchievementId =
   | 'first_tournament'
   | 'first_gold'

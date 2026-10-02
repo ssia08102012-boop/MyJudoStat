@@ -1,8 +1,9 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useComps } from '@/hooks/useComps'
 import { useProfile } from '@/hooks/useProfile'
 import { useLang } from '@/hooks/useLang'
 import { t } from '@/services/i18n'
+import { clearLegacySiteCredentials } from '@/services/storage'
 import type { Lang, Tournament } from '@/types'
 import styles from './App.module.css'
 
@@ -18,6 +19,7 @@ import FightModal from '@/components/Modals/FightModal'
 import BackupModal from '@/components/Modals/BackupModal'
 import ProfileModal from '@/components/Modals/ProfileModal'
 import Achievements from '@/components/Achievements/Achievements'
+import TrainingDiary from '@/components/Training/TrainingDiary'
 
 type ModalState =
   | { type: 'none' }
@@ -35,6 +37,10 @@ export default function App() {
   const [activeYear, setActiveYear] = useState<number | 'all'>('all')
   const [toast, setToast] = useState<string | null>(null)
   const [modal, setModal] = useState<ModalState>({ type: 'none' })
+
+  useEffect(() => {
+    clearLegacySiteCredentials()
+  }, [])
 
   function showToast(msg: string) {
     setToast(msg)
@@ -108,6 +114,15 @@ export default function App() {
           onFilterYear={setActiveYear}
           lang={lang}
         />
+
+        <section className="section-head">
+          <div className="sh-line" />
+          <span className="sh-paw">鍛</span>
+          <div className="sh-title">{t('trainingDiary')}</div>
+          <span className="sh-paw">錬</span>
+          <div className="sh-line rev" />
+        </section>
+        <TrainingDiary />
 
         <Achievements comps={comps} />
 
