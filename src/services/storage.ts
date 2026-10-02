@@ -1,4 +1,4 @@
-import type { Tournament, Profile, FightDetail, MediaItem, Goal, Achievement, TrainingEntry, PeriodGoal } from '@/types'
+import type { Tournament, Profile, FightDetail, MediaItem, Goal, Achievement, TrainingEntry, PeriodGoal, PartnerData } from '@/types'
 
 // ─── localStorage helpers ───────────────────────────────────────────────────
 
@@ -266,6 +266,16 @@ export function savePeriodGoals(goals: PeriodGoal[]): void {
   lsSet('judo_period_goals', goals)
 }
 
+// ─── Training partner ───────────────────────────────────────────────────────
+
+export function getPartnerData(): PartnerData {
+  return lsGet<PartnerData>('judo_training_partner') ?? { name: '', entries: [] }
+}
+
+export function savePartnerData(data: PartnerData): void {
+  lsSet('judo_training_partner', data)
+}
+
 // ─── Technique statistics ─────────────────────────────────────────────────────
 
 export function getAllTechStats(comps: Tournament[]): Record<string, number> {
@@ -304,6 +314,7 @@ export interface BackupData {
   achievements?: Achievement[]
   trainingEntries?: TrainingEntry[]
   periodGoals?: PeriodGoal[]
+  partnerData?: PartnerData
 }
 
 export async function exportBackup(comps: Tournament[]): Promise<void> {
@@ -319,7 +330,7 @@ export async function exportBackup(comps: Tournament[]): Promise<void> {
     if (items.length) media[c.id] = items
   }
   const backup: BackupData = {
-    version: 4,
+    version: 5,
     comps,
     profile,
     fights,
@@ -328,6 +339,7 @@ export async function exportBackup(comps: Tournament[]): Promise<void> {
     achievements: getAchievements(),
     trainingEntries: getTrainingEntries(),
     periodGoals: getPeriodGoals(),
+    partnerData: getPartnerData(),
   }
   const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' })
   const a = document.createElement('a')
@@ -358,5 +370,6 @@ export async function importBackup(file: File): Promise<Tournament[]> {
   if (data.achievements) saveAchievements(data.achievements)
   if (data.trainingEntries) saveTrainingEntries(data.trainingEntries)
   if (data.periodGoals) savePeriodGoals(data.periodGoals)
+  if (data.partnerData) savePartnerData(data.partnerData)
   return data.comps
 }

@@ -108,6 +108,11 @@ export interface PeriodGoal {
   completedAt?: string
 }
 
+export interface PartnerData {
+  name: string
+  entries: TrainingEntry[]
+}
+
 export type AchievementId =
   | 'first_tournament'
   | 'first_gold'

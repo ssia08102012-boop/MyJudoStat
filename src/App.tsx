@@ -3,7 +3,7 @@ import { useComps } from '@/hooks/useComps'
 import { useProfile } from '@/hooks/useProfile'
 import { useLang } from '@/hooks/useLang'
 import { t } from '@/services/i18n'
-import { clearLegacySiteCredentials } from '@/services/storage'
+import { clearLegacySiteCredentials, getTrainingEntries } from '@/services/storage'
 import type { Lang, Tournament } from '@/types'
 import styles from './App.module.css'
 
@@ -20,6 +20,7 @@ import BackupModal from '@/components/Modals/BackupModal'
 import ProfileModal from '@/components/Modals/ProfileModal'
 import Achievements from '@/components/Achievements/Achievements'
 import TrainingDiary from '@/components/Training/TrainingDiary'
+import TrainingPartner from '@/components/Training/TrainingPartner'
 
 type ModalState =
   | { type: 'none' }
@@ -38,6 +39,7 @@ export default function App() {
   const [toast, setToast] = useState<string | null>(null)
   const [modal, setModal] = useState<ModalState>({ type: 'none' })
   const [diaryOpen, setDiaryOpen] = useState(false)
+  const [partnerOpen, setPartnerOpen] = useState(false)
 
   useEffect(() => {
     clearLegacySiteCredentials()
@@ -90,10 +92,11 @@ export default function App() {
         onChangeLang={changeLang as (l: Lang) => void}
         onAddTournament={() => setModal({ type: 'addTournament' })}
         onOpenBackup={() => setModal({ type: 'backup' })}
-        onOpenDiary={() => setDiaryOpen(true)}
+        onOpenDiary={() => { setPartnerOpen(false); setDiaryOpen(true) }}
+        onOpenPartner={() => { setDiaryOpen(false); setPartnerOpen(true) }}
       />
 
-      {diaryOpen ? <TrainingDiary onBack={() => setDiaryOpen(false)} /> : <>
+      {diaryOpen ? <TrainingDiary onBack={() => setDiaryOpen(false)} /> : partnerOpen ? <TrainingPartner entries={getTrainingEntries()} onBack={() => setPartnerOpen(false)} /> : <>
       <Hero
         profile={profile}
         comps={comps}

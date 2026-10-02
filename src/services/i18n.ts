@@ -20,6 +20,7 @@ const TR = {
     exerciseStats: 'СТАТИСТИКА ВПРАВ', range_30d: '30 ДНІВ', range_6m: '6 МІСЯЦІВ', range_1y: '1 РІК', range_all: 'ВСЕ', exerciseStatsEmpty: 'Додайте виконану роботу в щоденник, щоб побачити статистику.', totalVolume: 'Загальний обсяг', trainingDays: 'Днів тренувань', bestWorkout: 'Рекорд за тренування', bestWorkoutHint: 'за один день', bestSet: 'Рекорд за підхід', bestSetHint: 'найкращий підхід', bestSetEmpty: 'внесіть у записі',
     selectedExercise: 'Статистика вправи',
     setNumber: 'Підхід', addSet: 'Додати підхід', removeSet: 'Прибрати підхід', trainingTotal: 'Разом за тренування',
+    partnerShort: 'Партнер', trainingPartner: 'ПАРТНЕР ПО ФІЗУХІ', partnerName: 'Ім’я партнера', editPartner: 'Змінити', partnerComparison: 'ПОРІВНЯННЯ РЕЗУЛЬТАТІВ', partnerComparisonEmpty: 'Додайте результати хоча б для однієї вправи.', me: 'Я', partnerResults: 'РЕЗУЛЬТАТИ ПАРТНЕРА', partnerEntriesEmpty: 'Додайте перший результат партнера.', confirmDeletePartnerTraining: 'Видалити цей результат партнера? Дію неможливо скасувати.',
     // Profile
     athlete: 'СПОРТСМЕН',
     belt: 'Пояс',
@@ -190,6 +191,7 @@ const TR = {
     exerciseStats: 'EXERCISE STATISTICS', range_30d: '30 DAYS', range_6m: '6 MONTHS', range_1y: '1 YEAR', range_all: 'ALL', exerciseStatsEmpty: 'Add completed work to the diary to see statistics.', totalVolume: 'Total volume', trainingDays: 'Training days', bestWorkout: 'Training record', bestWorkoutHint: 'in one day', bestSet: 'Best set', bestSetHint: 'best single set', bestSetEmpty: 'add it to an entry',
     selectedExercise: 'Exercise statistics',
     setNumber: 'Set', addSet: 'Add set', removeSet: 'Remove set', trainingTotal: 'Training total',
+    partnerShort: 'Partner', trainingPartner: 'FITNESS PARTNER', partnerName: 'Partner name', editPartner: 'Edit', partnerComparison: 'RESULT COMPARISON', partnerComparisonEmpty: 'Add results for at least one exercise.', me: 'Me', partnerResults: 'PARTNER RESULTS', partnerEntriesEmpty: 'Add the first partner result.', confirmDeletePartnerTraining: 'Delete this partner result? This cannot be undone.',
     athlete: 'ATHLETE',
     belt: 'Belt',
     weightCat: 'Weight',
@@ -345,6 +347,7 @@ const TR = {
     exerciseStats: 'STATYSTYKI ĆWICZEŃ', range_30d: '30 DNI', range_6m: '6 MIESIĘCY', range_1y: '1 ROK', range_all: 'WSZYSTKO', exerciseStatsEmpty: 'Dodaj wykonaną pracę do dziennika, aby zobaczyć statystyki.', totalVolume: 'Łączna objętość', trainingDays: 'Dni treningowe', bestWorkout: 'Rekord treningu', bestWorkoutHint: 'w jednym dniu', bestSet: 'Rekord serii', bestSetHint: 'najlepsza seria', bestSetEmpty: 'dodaj we wpisie',
     selectedExercise: 'Statystyki ćwiczenia',
     setNumber: 'Seria', addSet: 'Dodaj serię', removeSet: 'Usuń serię', trainingTotal: 'Razem za trening',
+    partnerShort: 'Partner', trainingPartner: 'PARTNER TRENINGOWY', partnerName: 'Imię partnera', editPartner: 'Edytuj', partnerComparison: 'PORÓWNANIE WYNIKÓW', partnerComparisonEmpty: 'Dodaj wyniki co najmniej jednego ćwiczenia.', me: 'Ja', partnerResults: 'WYNIKI PARTNERA', partnerEntriesEmpty: 'Dodaj pierwszy wynik partnera.', confirmDeletePartnerTraining: 'Usunąć ten wynik partnera? Tej czynności nie można cofnąć.',
     athlete: 'ZAWODNIK',
     belt: 'Pas',
     weightCat: 'Waga',
