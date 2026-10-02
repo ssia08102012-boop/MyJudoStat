@@ -49,12 +49,12 @@
   border-color: var(--orange);
   color: var(--orange);
 }
-.tbBtn:first-child {
+.primary {
   background: linear-gradient(135deg, var(--orange), var(--fur2));
   border-color: transparent;
   color: #fff;
 }
-.tbBtn:first-child:hover {
+.primary:hover {
   background: linear-gradient(135deg, var(--orange2), var(--orange));
   color: #fff;
 }

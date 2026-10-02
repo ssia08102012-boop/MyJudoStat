@@ -1,4 +1,4 @@
-import { Plus, Cloud, Trophy, Globe } from 'lucide-react'
+import { Plus, Cloud, Trophy, Globe, NotebookPen } from 'lucide-react'
 import { t } from '@/services/i18n'
 import type { Lang } from '@/types'
 import styles from './Toolbar.module.css'
@@ -8,14 +8,19 @@ interface Props {
   onChangeLang: (l: Lang) => void
   onAddTournament: () => void
   onOpenBackup: () => void
+  onOpenDiary: () => void
 }
 
 const LANGS: Lang[] = ['uk', 'en', 'pl']
 
-export default function Toolbar({ lang, onChangeLang, onAddTournament, onOpenBackup }: Props) {
+export default function Toolbar({ lang, onChangeLang, onAddTournament, onOpenBackup, onOpenDiary }: Props) {
   return (
     <div className={styles.toolbar}>
       <div className={styles.left}>
+        <button className={styles.tbBtn} onClick={onOpenDiary}>
+          <NotebookPen size={15} strokeWidth={2} />
+          <span>{t('diaryShort')}</span>
+        </button>
         <button className={`${styles.tbBtn} ${styles.primary}`} onClick={onAddTournament}>
           <Plus size={15} strokeWidth={2.5} />
           <span>{t('addTournament')}</span>

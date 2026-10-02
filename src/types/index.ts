@@ -74,17 +74,27 @@ export interface Goal {
   targetWinRate: number
 }
 
+export interface TrainingMetric {
+  id: string
+  name: string
+  value: number
+}
+
 export interface TrainingEntry {
   id: string
   date: string
-  throws: number
-  techniques: number
-  fights: number
-  focus: string
-  notes: string
-  pullUps: number
-  abs: number
-  bands: number
+  metrics?: TrainingMetric[]
+  focus?: string
+  notes?: string
+  createdAt?: string
+  updatedAt?: string
+  // Дані ранньої версії щоденника: зберігаємо, щоб старі записи не зникли.
+  throws?: number
+  techniques?: number
+  fights?: number
+  pullUps?: number
+  abs?: number
+  bands?: number
 }
 
 export type AchievementId =

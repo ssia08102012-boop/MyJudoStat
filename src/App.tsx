@@ -37,6 +37,7 @@ export default function App() {
   const [activeYear, setActiveYear] = useState<number | 'all'>('all')
   const [toast, setToast] = useState<string | null>(null)
   const [modal, setModal] = useState<ModalState>({ type: 'none' })
+  const [diaryOpen, setDiaryOpen] = useState(false)
 
   useEffect(() => {
     clearLegacySiteCredentials()
@@ -89,8 +90,10 @@ export default function App() {
         onChangeLang={changeLang as (l: Lang) => void}
         onAddTournament={() => setModal({ type: 'addTournament' })}
         onOpenBackup={() => setModal({ type: 'backup' })}
+        onOpenDiary={() => setDiaryOpen(true)}
       />
 
+      {diaryOpen ? <TrainingDiary onBack={() => setDiaryOpen(false)} /> : <>
       <Hero
         profile={profile}
         comps={comps}
@@ -114,15 +117,6 @@ export default function App() {
           onFilterYear={setActiveYear}
           lang={lang}
         />
-
-        <section className="section-head">
-          <div className="sh-line" />
-          <span className="sh-paw">鍛</span>
-          <div className="sh-title">{t('trainingDiary')}</div>
-          <span className="sh-paw">錬</span>
-          <div className="sh-line rev" />
-        </section>
-        <TrainingDiary />
 
         <Achievements comps={comps} />
 
@@ -155,6 +149,7 @@ export default function App() {
 
         <ExternalLinks />
       </main>
+      </>}
 
       <Footer />
       {toast && <Toast message={toast} />}

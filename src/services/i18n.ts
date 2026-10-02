@@ -14,6 +14,7 @@ const TR = {
     addTraining: 'Запис',
     throws: 'Кидки', techniques: 'Техніки', trainingFights: 'Сутички', pullUps: 'Підтягування', abs: 'Прес', bands: 'Гума',
     trainingFocus: 'На що звернути увагу', trainingNotes: 'Нотатки', saveTraining: 'ЗБЕРЕГТИ ЗАПИС', trainingEmpty: 'Додайте перший запис після тренування',
+    diaryShort: 'Щоденник', backToStats: 'До статистики', diaryIntro: 'Ведіть обсяг роботи своїми категоріями. Раніше введені назви з’являються у підказках.', newTraining: 'Новий запис', editTraining: 'Редагувати запис', trainingDate: 'Дата тренування', trainingMetrics: 'Виконана робота', addCategory: 'Додати категорію', categoryName: 'Назва категорії', quantity: 'Кількість', removeCategory: 'Прибрати категорію', savedAt: 'Збережено', editedAt: 'Змінено',
     // Profile
     athlete: 'СПОРТСМЕН',
     belt: 'Пояс',
@@ -178,6 +179,7 @@ const TR = {
     addTraining: 'Entry',
     throws: 'Throws', techniques: 'Techniques', trainingFights: 'Fights', pullUps: 'Pull-ups', abs: 'Abs', bands: 'Resistance band',
     trainingFocus: 'Focus for next training', trainingNotes: 'Notes', saveTraining: 'SAVE ENTRY', trainingEmpty: 'Add your first post-training entry',
+    diaryShort: 'Diary', backToStats: 'Back to statistics', diaryIntro: 'Track workload using your own categories. Previously entered names appear as suggestions.', newTraining: 'New entry', editTraining: 'Edit entry', trainingDate: 'Training date', trainingMetrics: 'Completed work', addCategory: 'Add category', categoryName: 'Category name', quantity: 'Quantity', removeCategory: 'Remove category', savedAt: 'Saved', editedAt: 'Edited',
     athlete: 'ATHLETE',
     belt: 'Belt',
     weightCat: 'Weight',
@@ -327,6 +329,7 @@ const TR = {
     addTraining: 'Wpis',
     throws: 'Rzuty', techniques: 'Techniki', trainingFights: 'Walki', pullUps: 'Podciągania', abs: 'Brzuch', bands: 'Guma',
     trainingFocus: 'Na co zwrócić uwagę', trainingNotes: 'Notatki', saveTraining: 'ZAPISZ WPIS', trainingEmpty: 'Dodaj pierwszy wpis po treningu',
+    diaryShort: 'Dziennik', backToStats: 'Do statystyk', diaryIntro: 'Zapisuj objętość pracy we własnych kategoriach. Wcześniejsze nazwy pojawiają się w podpowiedziach.', newTraining: 'Nowy wpis', editTraining: 'Edytuj wpis', trainingDate: 'Data treningu', trainingMetrics: 'Wykonana praca', addCategory: 'Dodaj kategorię', categoryName: 'Nazwa kategorii', quantity: 'Ilość', removeCategory: 'Usuń kategorię', savedAt: 'Zapisano', editedAt: 'Zmieniono',
     athlete: 'ZAWODNIK',
     belt: 'Pas',
     weightCat: 'Waga',
