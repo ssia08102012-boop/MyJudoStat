@@ -28,17 +28,22 @@ const DEFS: AchDef[] = [
 
 interface Props {
   comps: Tournament[]
+  activeYear: number | 'all'
 }
 
-export default function Achievements({ comps }: Props) {
+export default function Achievements({ comps, activeYear }: Props) {
   const [list, setList] = useState<Achievement[]>([])
   const [newlyUnlocked, setNewlyUnlocked] = useState<Set<AchievementId>>(new Set())
   const [recordsOpen, setRecordsOpen] = useState(false)
   const live = useMemo(() => {
-    const streak = getWinStreaks(comps)
+    const periodComps = activeYear === 'all' ? comps : comps.filter((comp) => comp.year === activeYear)
+    const periodEntries = activeYear === 'all'
+      ? getTrainingEntries()
+      : getTrainingEntries().filter((entry) => Number(entry.date.slice(0, 4)) === activeYear)
+    const streak = getWinStreaks(periodComps)
     const records = new Map<string, { name: string, bestSet: number, bestWorkout: number }>()
 
-    getTrainingEntries().forEach((entry) => {
+    periodEntries.forEach((entry) => {
       const totalsInWorkout = new Map<string, number>()
       ;(entry.metrics ?? []).forEach((metric) => {
         const name = metric.name.trim()
@@ -57,7 +62,7 @@ export default function Achievements({ comps }: Props) {
     })
 
     return { ...streak, records: [...records.values()].sort((a, b) => a.name.localeCompare(b.name)) }
-  }, [comps])
+  }, [comps, activeYear])
 
   useEffect(() => {
     const existing = getAchievements()

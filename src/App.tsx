@@ -129,7 +129,7 @@ export default function App() {
           lang={lang}
         />
 
-        <Achievements comps={comps} />
+        <Achievements comps={comps} activeYear={activeYear} />
 
         <section className="section-head" style={{ marginTop: 4 }}>
           <div className="sh-line" />
