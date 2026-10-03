@@ -25,7 +25,13 @@ export default function DiaryReportModal({ open, entries, profile, onClose, show
   const [error, setError] = useState('')
   const included = useMemo(() => entries.filter((entry) => entry.date >= from && entry.date <= to), [entries, from, to])
 
-  useEffect(() => { if (open) setError('') }, [open])
+  useEffect(() => {
+    if (!open) return
+    setError('')
+    // Preload both generators before the final export action on iPhone.
+    void import('@/services/diaryReport')
+    void import('@/services/excelReport')
+  }, [open])
 
   async function generate() {
     if (from > to) return setError(t('reportInvalidPeriod'))

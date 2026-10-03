@@ -8,7 +8,9 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'prompt',
+      // An installed iPhone PWA otherwise can continue using an old export
+      // bundle after a Pages deploy. Apply the new worker on the next launch.
+      registerType: 'autoUpdate',
       includeAssets: ['apple-touch-icon.png', 'icon-192.png', 'icon-512.png'],
       manifest: {
         id: '/',

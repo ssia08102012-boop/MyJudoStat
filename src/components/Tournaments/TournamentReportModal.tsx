@@ -23,7 +23,14 @@ export default function TournamentReportModal({ open, comps, profile, onClose, s
   const [error, setError] = useState('')
   const included = useMemo(() => year === 'all' ? comps : comps.filter((comp) => comp.year === year), [comps, year])
 
-  useEffect(() => { if (open) setError('') }, [open])
+  useEffect(() => {
+    if (!open) return
+    setError('')
+    // Load the large generators while the user chooses a period. On iOS this
+    // keeps the final PDF/Excel tap inside the browser's user-activation window.
+    void import('@/services/tournamentReport')
+    void import('@/services/excelReport')
+  }, [open])
 
   async function generate() {
     if (included.length === 0) return setError(t('reportNoTournaments'))
