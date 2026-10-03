@@ -21,6 +21,7 @@ const TR = {
     selectedExercise: 'Статистика вправи',
     setNumber: 'Підхід', addSet: 'Додати підхід', removeSet: 'Прибрати підхід', trainingTotal: 'Разом за тренування',
     partnerShort: 'Партнер', trainingPartner: 'ПАРТНЕР ПО ФІЗУХІ', partnerName: 'Ім’я партнера', editPartner: 'Змінити', partnerComparison: 'ПОРІВНЯННЯ РЕЗУЛЬТАТІВ', partnerComparisonEmpty: 'Додайте результати хоча б для однієї вправи.', me: 'Я', partnerResults: 'РЕЗУЛЬТАТИ ПАРТНЕРА', partnerEntriesEmpty: 'Додайте перший результат партнера.', confirmDeletePartnerTraining: 'Видалити цей результат партнера? Дію неможливо скасувати.',
+    addPartner: 'Додати', partnerArchive: 'Архів партнерів', archivePartner: 'В архів', restorePartner: 'Відновити', archiveEmpty: 'В архіві поки немає партнерів.', partnerEmpty: 'Додайте партнера для спільного обліку.', confirmDeletePartner: 'Видалити партнера й усі його результати? Дію неможливо скасувати.',
     // Profile
     athlete: 'СПОРТСМЕН',
     belt: 'Пояс',
@@ -192,6 +193,7 @@ const TR = {
     selectedExercise: 'Exercise statistics',
     setNumber: 'Set', addSet: 'Add set', removeSet: 'Remove set', trainingTotal: 'Training total',
     partnerShort: 'Partner', trainingPartner: 'FITNESS PARTNER', partnerName: 'Partner name', editPartner: 'Edit', partnerComparison: 'RESULT COMPARISON', partnerComparisonEmpty: 'Add results for at least one exercise.', me: 'Me', partnerResults: 'PARTNER RESULTS', partnerEntriesEmpty: 'Add the first partner result.', confirmDeletePartnerTraining: 'Delete this partner result? This cannot be undone.',
+    addPartner: 'Add', partnerArchive: 'Partner archive', archivePartner: 'Archive', restorePartner: 'Restore', archiveEmpty: 'There are no partners in the archive yet.', partnerEmpty: 'Add a partner for shared tracking.', confirmDeletePartner: 'Delete this partner and all their results? This cannot be undone.',
     athlete: 'ATHLETE',
     belt: 'Belt',
     weightCat: 'Weight',
@@ -348,6 +350,7 @@ const TR = {
     selectedExercise: 'Statystyki ćwiczenia',
     setNumber: 'Seria', addSet: 'Dodaj serię', removeSet: 'Usuń serię', trainingTotal: 'Razem za trening',
     partnerShort: 'Partner', trainingPartner: 'PARTNER TRENINGOWY', partnerName: 'Imię partnera', editPartner: 'Edytuj', partnerComparison: 'PORÓWNANIE WYNIKÓW', partnerComparisonEmpty: 'Dodaj wyniki co najmniej jednego ćwiczenia.', me: 'Ja', partnerResults: 'WYNIKI PARTNERA', partnerEntriesEmpty: 'Dodaj pierwszy wynik partnera.', confirmDeletePartnerTraining: 'Usunąć ten wynik partnera? Tej czynności nie można cofnąć.',
+    addPartner: 'Dodaj', partnerArchive: 'Archiwum partnerów', archivePartner: 'Archiwizuj', restorePartner: 'Przywróć', archiveEmpty: 'W archiwum nie ma jeszcze partnerów.', partnerEmpty: 'Dodaj partnera do wspólnego śledzenia.', confirmDeletePartner: 'Usunąć partnera i wszystkie jego wyniki? Tej czynności nie można cofnąć.',
     athlete: 'ZAWODNIK',
     belt: 'Pas',
     weightCat: 'Waga',

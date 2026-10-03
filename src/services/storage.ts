@@ -269,11 +269,16 @@ export function savePeriodGoals(goals: PeriodGoal[]): void {
 // ─── Training partner ───────────────────────────────────────────────────────
 
 export function getPartnerData(): PartnerData {
-  return lsGet<PartnerData>('judo_training_partner') ?? { name: '', entries: [] }
+  const saved = lsGet<PartnerData | { name?: string; entries?: TrainingEntry[] }>('judo_training_partner')
+  if (!saved) return { partners: [] }
+  if ('partners' in saved) return saved
+  // Міграція першого локального партнера в новий список.
+  return saved.name ? { partners: [{ id: 'legacy-partner', name: saved.name, entries: saved.entries ?? [] }] } : { partners: [] }
 }
 
 export function savePartnerData(data: PartnerData): void {
-  lsSet('judo_training_partner', data)
+  const slim: PartnerData = { partners: data.partners.map(({ photo: _photo, ...partner }) => partner) }
+  lsSet('judo_training_partner', slim)
 }
 
 // ─── Technique statistics ─────────────────────────────────────────────────────

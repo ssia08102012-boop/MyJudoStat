@@ -108,9 +108,16 @@ export interface PeriodGoal {
   completedAt?: string
 }
 
-export interface PartnerData {
+export interface TrainingPartner {
+  id: string
   name: string
+  photo?: string
   entries: TrainingEntry[]
+  archivedAt?: string
+}
+
+export interface PartnerData {
+  partners: TrainingPartner[]
 }
 
 export type AchievementId =
