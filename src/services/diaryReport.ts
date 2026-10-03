@@ -61,11 +61,6 @@ function dateTime(): string {
   return new Date().toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
 }
 
-function initials(name: string | undefined): string {
-  if (!name?.trim()) return t('reportEmpty')
-  return `${name.trim().split(/\s+/).map((part) => part[0]?.toLocaleUpperCase()).filter(Boolean).join('. ')}.`
-}
-
 export async function createDiaryReport(entries: TrainingEntry[], profile: Profile, from: string, to: string): Promise<File> {
   const [font, logo] = await Promise.all([assetDataUrl(fontUrl), assetDataUrl(logoUrl)])
   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
@@ -100,7 +95,7 @@ export async function createDiaryReport(entries: TrainingEntry[], profile: Profi
   doc.text(t('reportAthlete').toUpperCase(), 16, 68)
 
   const athlete = [
-    [t('athlete'), initials(profile.name)],
+    [t('athlete'), profile.name?.trim() || t('reportEmpty')],
     [t('height'), profile.height || t('reportEmpty')],
     [t('weightCat'), profile.weight || t('reportEmpty')],
     [t('born'), profile.dob || t('reportEmpty')],
