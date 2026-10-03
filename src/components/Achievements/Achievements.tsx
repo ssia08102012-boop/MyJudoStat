@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
-  Star, Medal, Zap, Flame, Swords, Globe, BookOpen, Trophy,
+  Award, Star, Medal, Zap, Flame, Swords, Globe, BookOpen, Trophy,
 } from 'lucide-react'
 import { t } from '@/services/i18n'
-import { getAchievements, saveAchievements } from '@/services/storage'
-import { computeAchievements } from '@/services/achievements'
+import { getAchievements, getTrainingEntries, saveAchievements } from '@/services/storage'
+import { computeAchievements, getWinStreaks } from '@/services/achievements'
 import type { Tournament, Achievement, AchievementId } from '@/types'
 import styles from './Achievements.module.css'
 
@@ -33,6 +33,11 @@ interface Props {
 export default function Achievements({ comps }: Props) {
   const [list, setList] = useState<Achievement[]>([])
   const [newlyUnlocked, setNewlyUnlocked] = useState<Set<AchievementId>>(new Set())
+  const live = useMemo(() => {
+    const streak = getWinStreaks(comps)
+    const exercises = new Set(getTrainingEntries().flatMap((entry) => entry.metrics ?? []).map((metric) => metric.name.trim().toLocaleLowerCase()).filter(Boolean))
+    return { ...streak, recordCount: exercises.size }
+  }, [comps])
 
   useEffect(() => {
     const existing = getAchievements()
@@ -52,11 +57,15 @@ export default function Achievements({ comps }: Props) {
   }, [comps])
 
   const unlocked = list.filter((a) => a.unlockedAt)
-  if (unlocked.length === 0) return null
+  if (unlocked.length === 0 && comps.length === 0 && live.recordCount === 0) return null
 
   return (
     <div className={styles.wrap}>
       <div className={styles.header}>{t('achievementsTitle')}</div>
+      <div className={styles.liveGrid}>
+        <div className={styles.liveCard} title={`${t('streakBest')}: ${live.best}`}><Flame size={19} /><div><span>{t('streakTitle')}</span><b>{live.current}</b><small>{t('streakBest')}: {live.best}</small></div></div>
+        <div className={styles.liveCard} title={t('recordsHint')}><Award size={19} /><div><span>{t('recordsTitle')}</span><b>{live.recordCount}</b><small>{t('recordsHint')}</small></div></div>
+      </div>
       <div className={styles.grid}>
         {DEFS.map(({ id, icon: Icon, color, hint }) => {
           const ach = list.find((a) => a.id === id)

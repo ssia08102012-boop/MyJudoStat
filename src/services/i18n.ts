@@ -5,6 +5,7 @@ const TR = {
     // Nav / toolbar
     addTournament: 'Турнір',
     switchToLight: 'Увімкнути світлу тему', switchToDark: 'Увімкнути темну тему',
+    streakTitle: 'Серія перемог', streakBest: 'Найкраща', recordsTitle: 'Персональні рекорди', recordsHint: 'вправ у щоденнику',
     clubRanking: 'Рейтинг клубу',
     install: 'Встановити',
     updateAvailable: 'Доступна нова версія',
@@ -178,6 +179,7 @@ const TR = {
   en: {
     addTournament: 'Tournament',
     switchToLight: 'Switch to light theme', switchToDark: 'Switch to dark theme',
+    streakTitle: 'Win streak', streakBest: 'Best', recordsTitle: 'Personal records', recordsHint: 'exercises in diary',
     clubRanking: 'Club Ranking',
     install: 'Install',
     updateAvailable: 'A new version is available',
@@ -336,6 +338,7 @@ const TR = {
   pl: {
     addTournament: 'Turniej',
     switchToLight: 'Włącz jasny motyw', switchToDark: 'Włącz ciemny motyw',
+    streakTitle: 'Seria zwycięstw', streakBest: 'Najlepsza', recordsTitle: 'Rekordy osobiste', recordsHint: 'ćwiczeń w dzienniku',
     clubRanking: 'Ranking klubu',
     install: 'Zainstaluj',
     updateAvailable: 'Dostępna jest nowa wersja',

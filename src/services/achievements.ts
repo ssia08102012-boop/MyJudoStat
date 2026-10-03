@@ -90,3 +90,19 @@ export function computeAchievements(
   }
   return result
 }
+
+export function getWinStreaks(comps: Tournament[]): { current: number; best: number } {
+  let current = 0
+  let best = 0
+  for (const tournament of comps) {
+    for (const fight of tournament.fights) {
+      if (fight.r === 'w') {
+        current++
+        best = Math.max(best, current)
+      } else {
+        current = 0
+      }
+    }
+  }
+  return { current, best }
+}
