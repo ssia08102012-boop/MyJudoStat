@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { FileDown } from 'lucide-react'
+import { FileDown, FileSpreadsheet } from 'lucide-react'
 import Modal from '@/components/UI/Modal'
 import { BtnGhost, BtnPrimary } from '@/components/UI/Buttons'
 import { t } from '@/services/i18n'
@@ -52,7 +52,34 @@ export default function DiaryReportModal({ open, entries, profile, onClose, show
     }
   }
 
-  return <Modal open={open} onClose={onClose} title={t('exportDiaryTitle')} maxWidth={430} actions={<><BtnPrimary onClick={generate} disabled={busy}><FileDown size={15} /> {busy ? '…' : t('generateReport')}</BtnPrimary><BtnGhost onClick={onClose} disabled={busy}>{t('cancel')}</BtnGhost></>}>
+  async function generateExcel() {
+    if (from > to) return setError(t('reportInvalidPeriod'))
+    if (included.length === 0) return setError(t('reportNoEntries'))
+    setBusy(true)
+    setError('')
+    try {
+      const { createDiaryExcel } = await import('@/services/excelReport')
+      const file = await createDiaryExcel(included, profile, from, to)
+      if (navigator.share && (!navigator.canShare || navigator.canShare({ files: [file] }))) {
+        await navigator.share({ title: t('reportExcelTitle'), files: [file] })
+      } else {
+        const url = URL.createObjectURL(file)
+        const anchor = document.createElement('a')
+        anchor.href = url
+        anchor.download = file.name
+        anchor.click()
+        URL.revokeObjectURL(url)
+        showToast(t('reportShareUnsupported'))
+      }
+      onClose()
+    } catch (reason) {
+      if ((reason as DOMException).name !== 'AbortError') setError(t('importErr'))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return <Modal open={open} onClose={onClose} title={t('exportDiaryTitle')} maxWidth={430} actions={<><BtnPrimary onClick={generate} disabled={busy}><FileDown size={15} /> PDF</BtnPrimary><BtnGhost onClick={generateExcel} disabled={busy}><FileSpreadsheet size={15} /> EXCEL</BtnGhost><BtnGhost onClick={onClose} disabled={busy}>{t('cancel')}</BtnGhost></>}>
     <div className={styles.form}>
       <p>{t('diaryIntro')}</p>
       <div className={styles.dates}>
