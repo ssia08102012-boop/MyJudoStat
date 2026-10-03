@@ -5,7 +5,7 @@ const TR = {
     // Nav / toolbar
     addTournament: 'Турнір',
     switchToLight: 'Увімкнути світлу тему', switchToDark: 'Увімкнути темну тему',
-    streakTitle: 'Серія перемог', streakBest: 'Найкраща', recordsTitle: 'Персональні рекорди', recordsHint: 'вправ у щоденнику',
+    streakTitle: 'Серія перемог', streakBest: 'Найкраща', recordsTitle: 'Персональні рекорди', recordsHint: 'вправ з рекордами', recordsOpenHint: 'Показати рекорди за вправами',
     clubRanking: 'Рейтинг клубу',
     install: 'Встановити',
     updateAvailable: 'Доступна нова версія',
@@ -179,7 +179,7 @@ const TR = {
   en: {
     addTournament: 'Tournament',
     switchToLight: 'Switch to light theme', switchToDark: 'Switch to dark theme',
-    streakTitle: 'Win streak', streakBest: 'Best', recordsTitle: 'Personal records', recordsHint: 'exercises in diary',
+    streakTitle: 'Win streak', streakBest: 'Best', recordsTitle: 'Personal records', recordsHint: 'exercises with records', recordsOpenHint: 'Show records by exercise',
     clubRanking: 'Club Ranking',
     install: 'Install',
     updateAvailable: 'A new version is available',
@@ -338,7 +338,7 @@ const TR = {
   pl: {
     addTournament: 'Turniej',
     switchToLight: 'Włącz jasny motyw', switchToDark: 'Włącz ciemny motyw',
-    streakTitle: 'Seria zwycięstw', streakBest: 'Najlepsza', recordsTitle: 'Rekordy osobiste', recordsHint: 'ćwiczeń w dzienniku',
+    streakTitle: 'Seria zwycięstw', streakBest: 'Najlepsza', recordsTitle: 'Rekordy osobiste', recordsHint: 'ćwiczeń z rekordami', recordsOpenHint: 'Pokaż rekordy według ćwiczeń',
     clubRanking: 'Ranking klubu',
     install: 'Zainstaluj',
     updateAvailable: 'Dostępna jest nowa wersja',

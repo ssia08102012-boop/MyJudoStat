@@ -12,7 +12,13 @@
 }
 
 .liveGrid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-bottom:12px; }
-.liveCard { display:flex; align-items:center; gap:9px; padding:9px; border:1px solid var(--border); border-radius:10px; background:var(--bg2); color:var(--orange); }.liveCard > div { display:grid; gap:1px; min-width:0; }.liveCard span,.liveCard small { color:var(--muted); font-size:10px; }.liveCard b { color:var(--text); font:18px Cinzel,serif; }.liveCard small { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.liveCard { display:flex; align-items:center; gap:9px; padding:9px; min-height:0; border:1px solid var(--border); border-radius:10px; background:var(--bg2); color:var(--orange); text-align:left; }.liveCard > div { display:grid; gap:1px; min-width:0; }.liveCard span,.liveCard small { color:var(--muted); font-size:10px; }.liveCard b { color:var(--text); font:18px Cinzel,serif; }.liveCard small { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+button.liveCard { cursor:pointer; font:inherit; }
+button.liveCard:focus-visible { outline:2px solid var(--orange); outline-offset:2px; }
+.records { display:grid; gap:6px; margin:-4px 0 12px; }
+.recordRow { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:3px 10px; padding:8px 9px; border:1px solid var(--border); border-radius:9px; background:var(--bg2); font-size:10px; color:var(--muted); }
+.recordRow b { grid-row:span 2; align-self:center; color:var(--text); font:12px Cinzel,serif; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.recordRow strong { color:var(--text); font-size:11px; }
 
 .grid {
   display: flex;

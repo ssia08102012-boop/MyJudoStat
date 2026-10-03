@@ -33,10 +33,30 @@ interface Props {
 export default function Achievements({ comps }: Props) {
   const [list, setList] = useState<Achievement[]>([])
   const [newlyUnlocked, setNewlyUnlocked] = useState<Set<AchievementId>>(new Set())
+  const [recordsOpen, setRecordsOpen] = useState(false)
   const live = useMemo(() => {
     const streak = getWinStreaks(comps)
-    const exercises = new Set(getTrainingEntries().flatMap((entry) => entry.metrics ?? []).map((metric) => metric.name.trim().toLocaleLowerCase()).filter(Boolean))
-    return { ...streak, recordCount: exercises.size }
+    const records = new Map<string, { name: string, bestSet: number, bestWorkout: number }>()
+
+    getTrainingEntries().forEach((entry) => {
+      const totalsInWorkout = new Map<string, number>()
+      ;(entry.metrics ?? []).forEach((metric) => {
+        const name = metric.name.trim()
+        if (!name) return
+        const key = name.toLocaleLowerCase()
+        const stored = records.get(key) ?? { name, bestSet: 0, bestWorkout: 0 }
+        const bestSet = metric.bestSet ?? Math.max(...(metric.sets ?? [metric.value]), 0)
+        stored.bestSet = Math.max(stored.bestSet, bestSet)
+        records.set(key, stored)
+        totalsInWorkout.set(key, (totalsInWorkout.get(key) ?? 0) + metric.value)
+      })
+      totalsInWorkout.forEach((total, key) => {
+        const record = records.get(key)
+        if (record) record.bestWorkout = Math.max(record.bestWorkout, total)
+      })
+    })
+
+    return { ...streak, records: [...records.values()].sort((a, b) => a.name.localeCompare(b.name)) }
   }, [comps])
 
   useEffect(() => {
@@ -57,15 +77,26 @@ export default function Achievements({ comps }: Props) {
   }, [comps])
 
   const unlocked = list.filter((a) => a.unlockedAt)
-  if (unlocked.length === 0 && comps.length === 0 && live.recordCount === 0) return null
+  if (unlocked.length === 0 && comps.length === 0 && live.records.length === 0) return null
 
   return (
     <div className={styles.wrap}>
       <div className={styles.header}>{t('achievementsTitle')}</div>
       <div className={styles.liveGrid}>
         <div className={styles.liveCard} title={`${t('streakBest')}: ${live.best}`}><Flame size={19} /><div><span>{t('streakTitle')}</span><b>{live.current}</b><small>{t('streakBest')}: {live.best}</small></div></div>
-        <div className={styles.liveCard} title={t('recordsHint')}><Award size={19} /><div><span>{t('recordsTitle')}</span><b>{live.recordCount}</b><small>{t('recordsHint')}</small></div></div>
+        <button className={styles.liveCard} type="button" onClick={() => setRecordsOpen((open) => !open)} aria-expanded={recordsOpen} title={t('recordsOpenHint')}><Award size={19} /><div><span>{t('recordsTitle')}</span><b>{live.records.length}</b><small>{t('recordsHint')}</small></div></button>
       </div>
+      {recordsOpen && (
+        <div className={styles.records} aria-label={t('recordsTitle')}>
+          {live.records.map((record) => (
+            <div key={record.name} className={styles.recordRow}>
+              <b>{record.name}</b>
+              <span>{t('bestSet')}: <strong>{record.bestSet}</strong></span>
+              <span>{t('bestWorkout')}: <strong>{record.bestWorkout}</strong></span>
+            </div>
+          ))}
+        </div>
+      )}
       <div className={styles.grid}>
         {DEFS.map(({ id, icon: Icon, color, hint }) => {
           const ach = list.find((a) => a.id === id)
