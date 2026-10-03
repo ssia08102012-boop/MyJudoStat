@@ -104,7 +104,7 @@ export default function App() {
         onToggleTheme={() => setTheme((current) => current === 'dark' ? 'light' : 'dark')}
       />
 
-      {diaryOpen ? <TrainingDiary onBack={() => setDiaryOpen(false)} /> : partnerOpen ? <TrainingPartner entries={getTrainingEntries()} onBack={() => setPartnerOpen(false)} /> : <>
+      {diaryOpen ? <TrainingDiary onBack={() => setDiaryOpen(false)} profile={profile} showToast={showToast} /> : partnerOpen ? <TrainingPartner entries={getTrainingEntries()} onBack={() => setPartnerOpen(false)} /> : <>
       <Hero
         profile={profile}
         comps={comps}

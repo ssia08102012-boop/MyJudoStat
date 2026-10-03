@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { User, Weight, CalendarDays } from 'lucide-react'
+import { User, Weight, CalendarDays, Ruler } from 'lucide-react'
 import Modal from '@/components/UI/Modal'
 import { BtnPrimary, BtnGhost } from '@/components/UI/Buttons'
 import { t, tBelt } from '@/services/i18n'
@@ -16,13 +16,14 @@ interface Props {
 const BELT_KEYS = ['white','yellow','orange','green','blue','brown','black1','black2','black3'] as const
 
 export default function ProfileModal({ open, profile, onClose, onSave }: Props) {
-  const [form, setForm] = useState({ name: '', belt: '', weight: '', dob: '', since: '' })
+  const [form, setForm] = useState({ name: '', belt: '', height: '', weight: '', dob: '', since: '' })
 
   useEffect(() => {
     if (!open) return
     setForm({
       name:   profile.name   ?? '',
       belt:   profile.belt   ?? '',
+      height: profile.height ?? '',
       weight: profile.weight ?? '',
       dob:    profile.dob    ?? '',
       since:  profile.since  ?? '',
@@ -68,6 +69,15 @@ export default function ProfileModal({ open, profile, onClose, onSave }: Props) 
             <option value="">—</option>
             {BELT_KEYS.map((k) => <option key={k} value={k}>{tBelt(k)}</option>)}
           </select>
+        </div>
+
+        <div className={styles.field}>
+          <label className={styles.label}><Ruler size={12} /> {t('height')}</label>
+          <input
+            value={form.height}
+            onChange={(e) => set('height', e.target.value)}
+            placeholder="160 cm"
+          />
         </div>
 
         <div className={styles.field}>

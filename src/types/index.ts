@@ -45,6 +45,7 @@ export interface Coach {
 export interface Profile {
   name?: string
   belt?: string
+  height?: string
   weight?: string
   dob?: string
   since?: string

@@ -1,0 +1,8 @@
+.form { display:grid; gap:14px; }
+.form p { margin:0; color:var(--muted); font-size:12px; line-height:1.45; }
+.dates { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.dates label { display:grid; gap:5px; color:var(--muted); font-size:11px; }
+.dates input { width:100%; }
+.count { padding:9px 10px; border:1px solid var(--border); border-radius:8px; background:var(--bg3); color:var(--text); font-size:12px; }
+.error { color:var(--red); font-size:12px; }
+@media (max-width:420px) { .dates { grid-template-columns:1fr; } }

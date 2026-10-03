@@ -1,14 +1,15 @@
 import { useMemo, useState } from 'react'
-import { ArrowLeft, CalendarDays, Dumbbell, Pencil, Plus, Save, Target, Trash2 } from 'lucide-react'
+import { ArrowLeft, CalendarDays, Dumbbell, FileDown, Pencil, Plus, Save, Target, Trash2 } from 'lucide-react'
 import { getTrainingEntries, saveTrainingEntries } from '@/services/storage'
 import { t } from '@/services/i18n'
-import type { TrainingEntry, TrainingMetric } from '@/types'
+import type { Profile, TrainingEntry, TrainingMetric } from '@/types'
 import styles from './TrainingDiary.module.css'
 import PeriodGoals from './PeriodGoals'
 import ConfirmModal from '@/components/UI/ConfirmModal'
 import ExerciseStats from './ExerciseStats'
+import DiaryReportModal from './DiaryReportModal'
 
-interface Props { onBack: () => void }
+interface Props { onBack: () => void, profile: Profile, showToast: (message: string) => void }
 type Draft = Pick<TrainingEntry, 'date' | 'focus' | 'notes'> & { metrics: TrainingMetric[] }
 
 const makeMetric = (): TrainingMetric => ({ id: `m${Date.now()}${Math.random().toString(16).slice(2)}`, name: '', value: 0, sets: [0] })
@@ -36,12 +37,13 @@ function formatSavedAt(value: string | undefined): string {
   return value ? new Date(value).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : '—'
 }
 
-export default function TrainingDiary({ onBack }: Props) {
+export default function TrainingDiary({ onBack, profile, showToast }: Props) {
   const [entries, setEntries] = useState<TrainingEntry[]>(getTrainingEntries)
   const [form, setForm] = useState<Draft>(empty)
   const [open, setOpen] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<TrainingEntry | null>(null)
+  const [reportOpen, setReportOpen] = useState(false)
   const categories = useMemo(() => [...new Set(entries.flatMap(entryMetrics).map(({ name }) => name.trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b)), [entries])
   const changeMetric = (id: string, patch: Partial<TrainingMetric>) => setForm((draft) => ({ ...draft, metrics: draft.metrics.map((metric) => metric.id === id ? { ...metric, ...patch } : metric) }))
   const removeMetric = (id: string) => setForm((draft) => ({ ...draft, metrics: draft.metrics.filter((metric) => metric.id !== id) }))
@@ -70,7 +72,7 @@ export default function TrainingDiary({ onBack }: Props) {
     <header className={styles.pageHeader}>
       <button className={styles.back} onClick={onBack}><ArrowLeft size={17} /> {t('backToStats')}</button>
       <div><Dumbbell size={18} /><h1>{t('trainingDiary')}</h1></div>
-      <button className={styles.add} onClick={startNew}><Plus size={17} /> {t('addTraining')}</button>
+      <div className={styles.headerActions}><button className={styles.report} onClick={() => setReportOpen(true)}><FileDown size={16} /> {t('exportDiary')}</button><button className={styles.add} onClick={startNew}><Plus size={17} /> {t('addTraining')}</button></div>
     </header>
     <p className={styles.intro}>{t('diaryIntro')}</p>
     <PeriodGoals />
@@ -87,5 +89,6 @@ export default function TrainingDiary({ onBack }: Props) {
     </section>}
     {entries.length === 0 ? <div className={styles.empty}><Target size={20} /> {t('trainingEmpty')}</div> : <section className={styles.list}>{entries.map((entry) => <article key={entry.id}><div className={styles.entryHead}><div><b>{entry.date}</b><span>{entry.updatedAt && entry.createdAt !== entry.updatedAt ? `${t('editedAt')}: ${formatSavedAt(entry.updatedAt)}` : `${t('savedAt')}: ${formatSavedAt(entry.createdAt)}`}</span></div><div className={styles.entryActions}><button onClick={() => startEdit(entry)} aria-label={t('editTraining')}><Pencil size={15} /></button><button className={styles.delete} onClick={() => setDeleteTarget(entry)} aria-label={t('deleteTraining')}><Trash2 size={15} /></button></div></div>{entryMetrics(entry).length > 0 && <div className={styles.entryMetrics}>{entryMetrics(entry).map((metric) => <span key={metric.id}><b>{metric.value}</b> {metric.name}{metric.sets && metric.sets.length > 1 && <small> · {metric.sets.join(' + ')}</small>}</span>)}</div>}{entry.focus && <p><b>{t('trainingFocus')}:</b> {entry.focus}</p>}{entry.notes && <p className={styles.notes}>{entry.notes}</p>}</article>)}</section>}
     <ConfirmModal open={Boolean(deleteTarget)} message={t('confirmDeleteTraining')} danger onConfirm={deleteEntry} onCancel={() => setDeleteTarget(null)} />
+    <DiaryReportModal open={reportOpen} entries={entries} profile={profile} onClose={() => setReportOpen(false)} showToast={showToast} />
   </main>
 }

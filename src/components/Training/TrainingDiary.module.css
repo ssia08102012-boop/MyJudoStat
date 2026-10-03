@@ -2,9 +2,10 @@
 .pageHeader { display:flex; align-items:center; justify-content:space-between; gap:10px; padding-bottom:14px; border-bottom:1px solid var(--border); }
 .pageHeader > div { display:flex; align-items:center; justify-content:center; gap:8px; color:var(--orange); }
 .pageHeader h1 { margin:0; font-family:Cinzel,serif; font-size:16px; letter-spacing:.08em; color:var(--text); }
-.back,.add,.save,.cancel,.metricsTitle button { display:inline-flex; align-items:center; justify-content:center; gap:6px; border-radius:8px; font:inherit; font-size:12px; cursor:pointer; }
+.back,.add,.report,.save,.cancel,.metricsTitle button { display:inline-flex; align-items:center; justify-content:center; gap:6px; border-radius:8px; font:inherit; font-size:12px; cursor:pointer; }
 .back { border:1px solid var(--border); background:var(--bg3); color:var(--text); padding:8px 10px; }
 .add,.save { border:1px solid var(--orange); background:var(--orange); color:#fff; padding:8px 11px; }
+.headerActions { display:flex; gap:7px; }.report { border:1px solid var(--border); background:var(--bg3); color:var(--text); padding:8px 10px; }
 .intro { margin:14px 0; color:var(--muted); font-size:13px; }
 .editor { display:grid; gap:11px; padding:14px; margin-bottom:16px; background:var(--bg2); border:1px solid rgba(230,114,10,.45); border-radius:12px; }
 .editorTitle { display:flex; align-items:center; gap:7px; color:var(--orange); }
@@ -28,4 +29,4 @@
 .entryActions { display:flex; gap:6px; }.entryHead button { display:flex; min-height:32px; min-width:32px; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:7px; color:var(--orange); background:var(--bg3); cursor:pointer; }.entryHead .delete { color:var(--red); }
 .entryMetrics { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }.entryMetrics span { padding:4px 7px; border-radius:6px; background:var(--bg3); color:var(--muted); font-size:12px; }.entryMetrics b { color:var(--orange); }.entryMetrics small { color:var(--muted); font-size:10px; }
 .list p { margin:9px 0 0; color:var(--text); font-size:13px; line-height:1.45; }.list .notes { color:var(--muted); white-space:pre-wrap; }
-@media (max-width:580px) { .page { padding:12px 12px 28px; }.pageHeader { flex-wrap:wrap; }.pageHeader > div { order:-1; width:100%; }.back,.add { flex:1; } }
+@media (max-width:580px) { .page { padding:12px 12px 28px; }.pageHeader { flex-wrap:wrap; }.pageHeader > div:not(.headerActions) { order:-1; width:100%; }.back,.add,.report { flex:1; }.headerActions { flex:2; } }
