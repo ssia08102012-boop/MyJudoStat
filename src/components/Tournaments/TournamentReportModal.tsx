@@ -3,7 +3,7 @@ import { FileDown, FileSpreadsheet } from 'lucide-react'
 import Modal from '@/components/UI/Modal'
 import { BtnGhost, BtnPrimary } from '@/components/UI/Buttons'
 import { t } from '@/services/i18n'
-import { shareOrDownloadFile } from '@/services/fileShare'
+import { prepareFileTarget, shareOrDownloadFile } from '@/services/fileShare'
 import { withExportTimeout } from '@/services/exportTask'
 import type { Profile, Tournament } from '@/types'
 import styles from './TournamentReportModal.module.css'
@@ -34,12 +34,13 @@ export default function TournamentReportModal({ open, comps, profile, onClose, s
 
   async function generate() {
     if (included.length === 0) return setError(t('reportNoTournaments'))
+    const target = prepareFileTarget()
     setBusy(true)
     setError('')
     try {
       const { createTournamentReport } = await import('@/services/tournamentReport')
       const file = await withExportTimeout(createTournamentReport(included, profile, year))
-      if (await shareOrDownloadFile(file, t('reportTournamentsTitle')) === 'downloaded') showToast(t('reportShareUnsupported'))
+      if (await shareOrDownloadFile(file, t('reportTournamentsTitle'), target) === 'downloaded') showToast(t('reportShareUnsupported'))
       onClose()
     } catch (reason) {
       if ((reason as DOMException).name !== 'AbortError') setError(t('reportGenerationFailed'))
@@ -50,12 +51,13 @@ export default function TournamentReportModal({ open, comps, profile, onClose, s
 
   async function generateExcel() {
     if (included.length === 0) return setError(t('reportNoTournaments'))
+    const target = prepareFileTarget()
     setBusy(true)
     setError('')
     try {
       const { createTournamentExcel } = await import('@/services/excelReport')
       const file = await withExportTimeout(createTournamentExcel(included, profile, year))
-      if (await shareOrDownloadFile(file, t('reportExcelTitle')) === 'downloaded') showToast(t('reportShareUnsupported'))
+      if (await shareOrDownloadFile(file, t('reportExcelTitle'), target) === 'downloaded') showToast(t('reportShareUnsupported'))
       onClose()
     } catch (reason) {
       if ((reason as DOMException).name !== 'AbortError') setError(t('reportGenerationFailed'))

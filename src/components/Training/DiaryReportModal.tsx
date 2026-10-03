@@ -3,7 +3,7 @@ import { FileDown, FileSpreadsheet } from 'lucide-react'
 import Modal from '@/components/UI/Modal'
 import { BtnGhost, BtnPrimary } from '@/components/UI/Buttons'
 import { t } from '@/services/i18n'
-import { shareOrDownloadFile } from '@/services/fileShare'
+import { prepareFileTarget, shareOrDownloadFile } from '@/services/fileShare'
 import { withExportTimeout } from '@/services/exportTask'
 import type { Profile, TrainingEntry } from '@/types'
 import styles from './DiaryReportModal.module.css'
@@ -36,12 +36,13 @@ export default function DiaryReportModal({ open, entries, profile, onClose, show
   async function generate() {
     if (from > to) return setError(t('reportInvalidPeriod'))
     if (included.length === 0) return setError(t('reportNoEntries'))
+    const target = prepareFileTarget()
     setBusy(true)
     setError('')
     try {
       const { createDiaryReport } = await import('@/services/diaryReport')
       const file = await withExportTimeout(createDiaryReport(included, profile, from, to))
-      if (await shareOrDownloadFile(file, t('reportDiaryTitle')) === 'downloaded') showToast(t('reportShareUnsupported'))
+      if (await shareOrDownloadFile(file, t('reportDiaryTitle'), target) === 'downloaded') showToast(t('reportShareUnsupported'))
       onClose()
     } catch (reason) {
       if ((reason as DOMException).name !== 'AbortError') setError(t('reportGenerationFailed'))
@@ -53,12 +54,13 @@ export default function DiaryReportModal({ open, entries, profile, onClose, show
   async function generateExcel() {
     if (from > to) return setError(t('reportInvalidPeriod'))
     if (included.length === 0) return setError(t('reportNoEntries'))
+    const target = prepareFileTarget()
     setBusy(true)
     setError('')
     try {
       const { createDiaryExcel } = await import('@/services/excelReport')
       const file = await withExportTimeout(createDiaryExcel(included, profile, from, to))
-      if (await shareOrDownloadFile(file, t('reportExcelTitle')) === 'downloaded') showToast(t('reportShareUnsupported'))
+      if (await shareOrDownloadFile(file, t('reportExcelTitle'), target) === 'downloaded') showToast(t('reportShareUnsupported'))
       onClose()
     } catch (reason) {
       if ((reason as DOMException).name !== 'AbortError') setError(t('reportGenerationFailed'))
