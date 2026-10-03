@@ -40,10 +40,16 @@ export default function App() {
   const [modal, setModal] = useState<ModalState>({ type: 'none' })
   const [diaryOpen, setDiaryOpen] = useState(false)
   const [partnerOpen, setPartnerOpen] = useState(false)
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => localStorage.getItem('judo_theme') === 'light' ? 'light' : 'dark')
 
   useEffect(() => {
     clearLegacySiteCredentials()
   }, [])
+
+  useEffect(() => {
+    document.body.dataset.theme = theme
+    localStorage.setItem('judo_theme', theme)
+  }, [theme])
 
   function showToast(msg: string) {
     setToast(msg)
@@ -94,6 +100,8 @@ export default function App() {
         onOpenBackup={() => setModal({ type: 'backup' })}
         onOpenDiary={() => { setPartnerOpen(false); setDiaryOpen(true) }}
         onOpenPartner={() => { setDiaryOpen(false); setPartnerOpen(true) }}
+        theme={theme}
+        onToggleTheme={() => setTheme((current) => current === 'dark' ? 'light' : 'dark')}
       />
 
       {diaryOpen ? <TrainingDiary onBack={() => setDiaryOpen(false)} /> : partnerOpen ? <TrainingPartner entries={getTrainingEntries()} onBack={() => setPartnerOpen(false)} /> : <>

@@ -19,3 +19,21 @@
   --radius-lg: 16px;
   --transition: 0.2s ease;
 }
+
+[data-theme='light'] {
+  --bg:      #f4efe7;
+  --bg2:     #fffdf9;
+  --bg3:     #f1e9df;
+  --border:  #d8c8b7;
+  --orange:  #c85c05;
+  --orange2: #e47416;
+  --amber:   #aa7012;
+  --blue:    #31739d;
+  --blue2:   #277eaf;
+  --text:    #1d252b;
+  --muted:   #697078;
+  --green:   #238950;
+  --red:     #bd3939;
+  --fur1:    #c26b10;
+  --fur2:    #7d4309;
+}

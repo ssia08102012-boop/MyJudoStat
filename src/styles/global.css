@@ -40,6 +40,9 @@ body::after {
   background-position: 0 0, 120px 120px;
 }
 
+body[data-theme='light']::before { opacity: .5; }
+body[data-theme='light']::after { opacity: .55; }
+
 #root { position: relative; z-index: 1; }
 
 a { color: var(--orange); text-decoration: none; }

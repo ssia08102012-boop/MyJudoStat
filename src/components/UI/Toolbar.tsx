@@ -1,4 +1,4 @@
-import { Plus, Cloud, Trophy, Globe, NotebookPen, UsersRound } from 'lucide-react'
+import { Plus, Cloud, Trophy, Globe, Moon, NotebookPen, Sun, UsersRound } from 'lucide-react'
 import { t } from '@/services/i18n'
 import type { Lang } from '@/types'
 import styles from './Toolbar.module.css'
@@ -10,11 +10,13 @@ interface Props {
   onOpenBackup: () => void
   onOpenDiary: () => void
   onOpenPartner: () => void
+  theme: 'dark' | 'light'
+  onToggleTheme: () => void
 }
 
 const LANGS: Lang[] = ['uk', 'en', 'pl']
 
-export default function Toolbar({ lang, onChangeLang, onAddTournament, onOpenBackup, onOpenDiary, onOpenPartner }: Props) {
+export default function Toolbar({ lang, onChangeLang, onAddTournament, onOpenBackup, onOpenDiary, onOpenPartner, theme, onToggleTheme }: Props) {
   return (
     <div className={styles.toolbar}>
       <div className={styles.left}>
@@ -46,6 +48,9 @@ export default function Toolbar({ lang, onChangeLang, onAddTournament, onOpenBac
       </div>
 
       <div className={styles.right}>
+        <button className={styles.themeBtn} onClick={onToggleTheme} aria-label={theme === 'dark' ? t('switchToLight') : t('switchToDark')} title={theme === 'dark' ? t('switchToLight') : t('switchToDark')}>
+          {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+        </button>
         <Globe size={14} strokeWidth={2} className={styles.globeIcon} />
         {LANGS.map((l) => (
           <button

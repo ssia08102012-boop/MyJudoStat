@@ -4,6 +4,7 @@ const TR = {
   uk: {
     // Nav / toolbar
     addTournament: 'Турнір',
+    switchToLight: 'Увімкнути світлу тему', switchToDark: 'Увімкнути темну тему',
     clubRanking: 'Рейтинг клубу',
     install: 'Встановити',
     updateAvailable: 'Доступна нова версія',
@@ -176,6 +177,7 @@ const TR = {
   },
   en: {
     addTournament: 'Tournament',
+    switchToLight: 'Switch to light theme', switchToDark: 'Switch to dark theme',
     clubRanking: 'Club Ranking',
     install: 'Install',
     updateAvailable: 'A new version is available',
@@ -333,6 +335,7 @@ const TR = {
   },
   pl: {
     addTournament: 'Turniej',
+    switchToLight: 'Włącz jasny motyw', switchToDark: 'Włącz ciemny motyw',
     clubRanking: 'Ranking klubu',
     install: 'Zainstaluj',
     updateAvailable: 'Dostępna jest nowa wersja',

@@ -30,6 +30,19 @@
   margin-right: 2px;
 }
 
+.themeBtn {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:30px;
+  min-height:30px;
+  padding:0;
+  border:1px solid var(--border);
+  border-radius:7px;
+  background:var(--bg3);
+  color:var(--orange);
+}
+
 .tbBtn {
   display: flex;
   align-items: center;
