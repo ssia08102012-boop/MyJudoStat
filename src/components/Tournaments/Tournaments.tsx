@@ -1,13 +1,15 @@
-import { Search } from 'lucide-react'
+import { FileDown, Search } from 'lucide-react'
 import { useState } from 'react'
 import { t } from '@/services/i18n'
-import type { Tournament, Lang } from '@/types'
+import type { Tournament, Lang, Profile } from '@/types'
 import TournamentCard from './TournamentCard'
+import TournamentReportModal from './TournamentReportModal'
 import styles from './Tournaments.module.css'
 
 interface Props {
   comps: Tournament[]
   allComps: Tournament[]
+  profile: Profile
   onEdit: (c: Tournament) => void
   onDelete: (id: string) => Promise<void>
   onAdd: (c: Tournament) => Promise<void>
@@ -18,9 +20,10 @@ interface Props {
 
 type MedalFilter = 'all' | 'gold' | 'medal'
 
-export default function Tournaments({ comps, onEdit, onDelete, onOpenFight, showToast }: Props) {
+export default function Tournaments({ comps, allComps, profile, onEdit, onDelete, onOpenFight, showToast }: Props) {
   const [query, setQuery] = useState('')
   const [medalFilter, setMedalFilter] = useState<MedalFilter>('all')
+  const [reportOpen, setReportOpen] = useState(false)
 
   const visible = comps.filter((c) => {
     if (query) {
@@ -54,6 +57,7 @@ export default function Tournaments({ comps, onEdit, onDelete, onOpenFight, show
               {f === 'all' ? t('filterAll') : f === 'gold' ? t('filterGold') : t('filterMedal')}
             </button>
           ))}
+          <button className={styles.export} onClick={() => setReportOpen(true)}><FileDown size={14} /> {t('exportTournaments')}</button>
         </div>
       </div>
 
@@ -90,6 +94,7 @@ export default function Tournaments({ comps, onEdit, onDelete, onOpenFight, show
           })()}
         </div>
       )}
+      <TournamentReportModal open={reportOpen} comps={allComps} profile={profile} onClose={() => setReportOpen(false)} showToast={showToast} />
     </div>
   )
 }

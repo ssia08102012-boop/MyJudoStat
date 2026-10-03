@@ -1,0 +1,7 @@
+.form { display:grid; gap:14px; }
+.form p { margin:0; color:var(--muted); font-size:12px; }
+.years { display:flex; flex-wrap:wrap; gap:7px; }
+.years button { min-height:34px; padding:6px 11px; border:1px solid var(--border); border-radius:8px; background:var(--bg3); color:var(--text); font:11px Cinzel,serif; cursor:pointer; }
+.years .active { border-color:var(--orange); color:var(--orange); }
+.count { padding:9px 10px; border:1px solid var(--border); border-radius:8px; background:var(--bg3); color:var(--text); font-size:12px; }
+.error { color:var(--red); font-size:12px; }

@@ -142,6 +142,7 @@ export default function App() {
         <Tournaments
           comps={filtered}
           allComps={comps}
+          profile={profile}
           onEdit={(comp) => setModal({ type: 'editTournament', comp })}
           onDelete={deleteComp}
           onAdd={addComp}

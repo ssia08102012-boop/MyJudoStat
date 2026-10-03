@@ -46,6 +46,8 @@
   border-color: var(--amber);
   color: var(--amber);
 }
+.export { display:inline-flex; align-items:center; gap:5px; padding:6px 10px; border:1px solid var(--border); border-radius:20px; background:var(--bg3); color:var(--text); font:11px Cinzel,serif; cursor:pointer; }
+.export:hover { border-color:var(--orange); color:var(--orange); }
 
 .list { display: flex; flex-direction: column; gap: 8px; }
 
