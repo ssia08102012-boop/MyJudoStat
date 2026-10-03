@@ -46,7 +46,9 @@ export default defineConfig({
       workbox: {
         clientsClaim: true,
         cleanupOutdatedCaches: true,
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff2}'],
+        // PDF reports load the Cyrillic font at runtime. Keep it available offline
+        // in the installed iPhone PWA instead of waiting for a network request.
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff2,ttf}'],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com/,

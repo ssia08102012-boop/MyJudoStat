@@ -4,6 +4,7 @@ import Modal from '@/components/UI/Modal'
 import { BtnGhost, BtnPrimary } from '@/components/UI/Buttons'
 import { t } from '@/services/i18n'
 import { shareOrDownloadFile } from '@/services/fileShare'
+import { withExportTimeout } from '@/services/exportTask'
 import type { Profile, TrainingEntry } from '@/types'
 import styles from './DiaryReportModal.module.css'
 
@@ -33,11 +34,11 @@ export default function DiaryReportModal({ open, entries, profile, onClose, show
     setError('')
     try {
       const { createDiaryReport } = await import('@/services/diaryReport')
-      const file = await createDiaryReport(included, profile, from, to)
+      const file = await withExportTimeout(createDiaryReport(included, profile, from, to))
       if (await shareOrDownloadFile(file, t('reportDiaryTitle')) === 'downloaded') showToast(t('reportShareUnsupported'))
       onClose()
     } catch (reason) {
-      if ((reason as DOMException).name !== 'AbortError') setError(t('importErr'))
+      if ((reason as DOMException).name !== 'AbortError') setError(t('reportGenerationFailed'))
     } finally {
       setBusy(false)
     }
@@ -50,11 +51,11 @@ export default function DiaryReportModal({ open, entries, profile, onClose, show
     setError('')
     try {
       const { createDiaryExcel } = await import('@/services/excelReport')
-      const file = await createDiaryExcel(included, profile, from, to)
+      const file = await withExportTimeout(createDiaryExcel(included, profile, from, to))
       if (await shareOrDownloadFile(file, t('reportExcelTitle')) === 'downloaded') showToast(t('reportShareUnsupported'))
       onClose()
     } catch (reason) {
-      if ((reason as DOMException).name !== 'AbortError') setError(t('importErr'))
+      if ((reason as DOMException).name !== 'AbortError') setError(t('reportGenerationFailed'))
     } finally {
       setBusy(false)
     }

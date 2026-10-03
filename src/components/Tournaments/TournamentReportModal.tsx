@@ -4,6 +4,7 @@ import Modal from '@/components/UI/Modal'
 import { BtnGhost, BtnPrimary } from '@/components/UI/Buttons'
 import { t } from '@/services/i18n'
 import { shareOrDownloadFile } from '@/services/fileShare'
+import { withExportTimeout } from '@/services/exportTask'
 import type { Profile, Tournament } from '@/types'
 import styles from './TournamentReportModal.module.css'
 
@@ -30,11 +31,11 @@ export default function TournamentReportModal({ open, comps, profile, onClose, s
     setError('')
     try {
       const { createTournamentReport } = await import('@/services/tournamentReport')
-      const file = await createTournamentReport(included, profile, year)
+      const file = await withExportTimeout(createTournamentReport(included, profile, year))
       if (await shareOrDownloadFile(file, t('reportTournamentsTitle')) === 'downloaded') showToast(t('reportShareUnsupported'))
       onClose()
     } catch (reason) {
-      if ((reason as DOMException).name !== 'AbortError') setError(t('importErr'))
+      if ((reason as DOMException).name !== 'AbortError') setError(t('reportGenerationFailed'))
     } finally {
       setBusy(false)
     }
@@ -46,11 +47,11 @@ export default function TournamentReportModal({ open, comps, profile, onClose, s
     setError('')
     try {
       const { createTournamentExcel } = await import('@/services/excelReport')
-      const file = await createTournamentExcel(included, profile, year)
+      const file = await withExportTimeout(createTournamentExcel(included, profile, year))
       if (await shareOrDownloadFile(file, t('reportExcelTitle')) === 'downloaded') showToast(t('reportShareUnsupported'))
       onClose()
     } catch (reason) {
-      if ((reason as DOMException).name !== 'AbortError') setError(t('importErr'))
+      if ((reason as DOMException).name !== 'AbortError') setError(t('reportGenerationFailed'))
     } finally {
       setBusy(false)
     }
