@@ -3,6 +3,7 @@ import { FileDown, FileSpreadsheet } from 'lucide-react'
 import Modal from '@/components/UI/Modal'
 import { BtnGhost, BtnPrimary } from '@/components/UI/Buttons'
 import { t } from '@/services/i18n'
+import { shareOrDownloadFile } from '@/services/fileShare'
 import type { Profile, TrainingEntry } from '@/types'
 import styles from './DiaryReportModal.module.css'
 
@@ -33,17 +34,7 @@ export default function DiaryReportModal({ open, entries, profile, onClose, show
     try {
       const { createDiaryReport } = await import('@/services/diaryReport')
       const file = await createDiaryReport(included, profile, from, to)
-      if (navigator.share && (!navigator.canShare || navigator.canShare({ files: [file] }))) {
-        await navigator.share({ title: t('reportDiaryTitle'), files: [file] })
-      } else {
-        const url = URL.createObjectURL(file)
-        const anchor = document.createElement('a')
-        anchor.href = url
-        anchor.download = file.name
-        anchor.click()
-        URL.revokeObjectURL(url)
-        showToast(t('reportShareUnsupported'))
-      }
+      if (await shareOrDownloadFile(file, t('reportDiaryTitle')) === 'downloaded') showToast(t('reportShareUnsupported'))
       onClose()
     } catch (reason) {
       if ((reason as DOMException).name !== 'AbortError') setError(t('importErr'))
@@ -60,17 +51,7 @@ export default function DiaryReportModal({ open, entries, profile, onClose, show
     try {
       const { createDiaryExcel } = await import('@/services/excelReport')
       const file = await createDiaryExcel(included, profile, from, to)
-      if (navigator.share && (!navigator.canShare || navigator.canShare({ files: [file] }))) {
-        await navigator.share({ title: t('reportExcelTitle'), files: [file] })
-      } else {
-        const url = URL.createObjectURL(file)
-        const anchor = document.createElement('a')
-        anchor.href = url
-        anchor.download = file.name
-        anchor.click()
-        URL.revokeObjectURL(url)
-        showToast(t('reportShareUnsupported'))
-      }
+      if (await shareOrDownloadFile(file, t('reportExcelTitle')) === 'downloaded') showToast(t('reportShareUnsupported'))
       onClose()
     } catch (reason) {
       if ((reason as DOMException).name !== 'AbortError') setError(t('importErr'))
@@ -79,7 +60,7 @@ export default function DiaryReportModal({ open, entries, profile, onClose, show
     }
   }
 
-  return <Modal open={open} onClose={onClose} title={t('exportDiaryTitle')} maxWidth={430} actions={<><BtnPrimary onClick={generate} disabled={busy}><FileDown size={15} /> PDF</BtnPrimary><BtnGhost onClick={generateExcel} disabled={busy}><FileSpreadsheet size={15} /> EXCEL</BtnGhost><BtnGhost onClick={onClose} disabled={busy}>{t('cancel')}</BtnGhost></>}>
+  return <Modal open={open} onClose={onClose} title={t('exportDiaryTitle')} maxWidth={430} actions={<><BtnPrimary onClick={generate} disabled={busy}><FileDown size={15} /> {busy ? t('reportCreating') : 'PDF'}</BtnPrimary><BtnGhost className={styles.excelAction} onClick={generateExcel} disabled={busy}><FileSpreadsheet size={15} /> {busy ? t('reportCreating') : 'EXCEL'}</BtnGhost><BtnGhost onClick={onClose} disabled={busy}>{t('cancel')}</BtnGhost></>}>
     <div className={styles.form}>
       <p>{t('diaryIntro')}</p>
       <div className={styles.dates}>

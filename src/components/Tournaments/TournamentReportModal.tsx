@@ -3,6 +3,7 @@ import { FileDown, FileSpreadsheet } from 'lucide-react'
 import Modal from '@/components/UI/Modal'
 import { BtnGhost, BtnPrimary } from '@/components/UI/Buttons'
 import { t } from '@/services/i18n'
+import { shareOrDownloadFile } from '@/services/fileShare'
 import type { Profile, Tournament } from '@/types'
 import styles from './TournamentReportModal.module.css'
 
@@ -30,17 +31,7 @@ export default function TournamentReportModal({ open, comps, profile, onClose, s
     try {
       const { createTournamentReport } = await import('@/services/tournamentReport')
       const file = await createTournamentReport(included, profile, year)
-      if (navigator.share && (!navigator.canShare || navigator.canShare({ files: [file] }))) {
-        await navigator.share({ title: t('reportTournamentsTitle'), files: [file] })
-      } else {
-        const url = URL.createObjectURL(file)
-        const anchor = document.createElement('a')
-        anchor.href = url
-        anchor.download = file.name
-        anchor.click()
-        URL.revokeObjectURL(url)
-        showToast(t('reportShareUnsupported'))
-      }
+      if (await shareOrDownloadFile(file, t('reportTournamentsTitle')) === 'downloaded') showToast(t('reportShareUnsupported'))
       onClose()
     } catch (reason) {
       if ((reason as DOMException).name !== 'AbortError') setError(t('importErr'))
@@ -56,17 +47,7 @@ export default function TournamentReportModal({ open, comps, profile, onClose, s
     try {
       const { createTournamentExcel } = await import('@/services/excelReport')
       const file = await createTournamentExcel(included, profile, year)
-      if (navigator.share && (!navigator.canShare || navigator.canShare({ files: [file] }))) {
-        await navigator.share({ title: t('reportExcelTitle'), files: [file] })
-      } else {
-        const url = URL.createObjectURL(file)
-        const anchor = document.createElement('a')
-        anchor.href = url
-        anchor.download = file.name
-        anchor.click()
-        URL.revokeObjectURL(url)
-        showToast(t('reportShareUnsupported'))
-      }
+      if (await shareOrDownloadFile(file, t('reportExcelTitle')) === 'downloaded') showToast(t('reportShareUnsupported'))
       onClose()
     } catch (reason) {
       if ((reason as DOMException).name !== 'AbortError') setError(t('importErr'))
@@ -75,7 +56,7 @@ export default function TournamentReportModal({ open, comps, profile, onClose, s
     }
   }
 
-  return <Modal open={open} onClose={onClose} title={t('exportTournamentsTitle')} maxWidth={430} actions={<><BtnPrimary onClick={generate} disabled={busy}><FileDown size={15} /> PDF</BtnPrimary><BtnGhost onClick={generateExcel} disabled={busy}><FileSpreadsheet size={15} /> EXCEL</BtnGhost><BtnGhost onClick={onClose} disabled={busy}>{t('cancel')}</BtnGhost></>}>
+  return <Modal open={open} onClose={onClose} title={t('exportTournamentsTitle')} maxWidth={430} actions={<><BtnPrimary onClick={generate} disabled={busy}><FileDown size={15} /> {busy ? t('reportCreating') : 'PDF'}</BtnPrimary><BtnGhost className={styles.excelAction} onClick={generateExcel} disabled={busy}><FileSpreadsheet size={15} /> {busy ? t('reportCreating') : 'EXCEL'}</BtnGhost><BtnGhost onClick={onClose} disabled={busy}>{t('cancel')}</BtnGhost></>}>
     <div className={styles.form}>
       <p>{t('reportSelectYear')}</p>
       <div className={styles.years}><button className={year === 'all' ? styles.active : ''} onClick={() => setYear('all')}>{t('reportAllYears')}</button>{years.map((item) => <button key={item} className={year === item ? styles.active : ''} onClick={() => setYear(item)}>{item}</button>)}</div>
