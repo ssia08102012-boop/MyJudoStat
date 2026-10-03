@@ -2,7 +2,7 @@ import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import logoUrl from '@/assets/logo-rys.png'
 import fontUrl from '@/assets/DejaVuSans.ttf?url'
-import { t, tBelt } from '@/services/i18n'
+import { t } from '@/services/i18n'
 import type { Profile, TrainingEntry, TrainingMetric } from '@/types'
 
 function base64(buffer: ArrayBuffer): string {
@@ -104,7 +104,6 @@ export async function createDiaryReport(entries: TrainingEntry[], profile: Profi
     [t('height'), profile.height || t('reportEmpty')],
     [t('weightCat'), profile.weight || t('reportEmpty')],
     [t('born'), profile.dob || t('reportEmpty')],
-    [t('belt'), tBelt(profile.belt)],
   ]
   autoTable(doc, {
     startY: 72,
@@ -118,23 +117,9 @@ export async function createDiaryReport(entries: TrainingEntry[], profile: Profi
   const tableStart = (doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY ?? 100
   doc.setTextColor(...orange)
   doc.setFontSize(10)
-  doc.text(t('exerciseStats').toUpperCase(), 16, tableStart + 12)
+  doc.text(t('trainingDiary').toUpperCase(), 16, tableStart + 12)
   autoTable(doc, {
     startY: tableStart + 16,
-    head: [[t('categoryName'), t('totalVolume'), t('bestSet'), t('bestWorkout')]],
-    body: workSummary(entries).map((item) => [item.name, item.total, item.bestSet, item.bestWorkout]),
-    theme: 'grid',
-    styles: { font: 'DejaVu', fontSize: 7.4, cellPadding: 2.3, textColor: dark, lineColor: [215, 203, 187] },
-    headStyles: { fillColor: dark, textColor: [255, 255, 255], font: 'DejaVu', fontStyle: 'normal' },
-    margin: { left: 16, right: 16 },
-  })
-
-  const entryStart = (doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY ?? tableStart + 30
-  doc.setTextColor(...orange)
-  doc.setFontSize(10)
-  doc.text(t('trainingDiary').toUpperCase(), 16, entryStart + 12)
-  autoTable(doc, {
-    startY: entryStart + 16,
     head: [[t('reportDate'), t('reportExercises'), t('reportFocus'), t('reportNotes')]],
     body: entries.map((entry) => [entry.date, formatWork(entry), entry.focus || t('reportEmpty'), entry.notes || t('reportEmpty')]),
     theme: 'grid',
@@ -142,6 +127,30 @@ export async function createDiaryReport(entries: TrainingEntry[], profile: Profi
     headStyles: { fillColor: dark, textColor: [255, 255, 255], font: 'DejaVu', fontStyle: 'normal' },
     columnStyles: { 0: { cellWidth: 22 }, 1: { cellWidth: 58 }, 2: { cellWidth: 48 }, 3: { cellWidth: 50 } },
     margin: { left: 16, right: 16, bottom: 16 },
+    didDrawPage: () => {
+      doc.setFont('DejaVu')
+      doc.setTextColor(...muted)
+      doc.setFontSize(7)
+      doc.text('MyJudoStat · Rys Judo Club', 16, 291)
+    },
+  })
+
+  let summaryStart = ((doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY ?? tableStart + 30) + 12
+  if (summaryStart > 270) {
+    doc.addPage()
+    summaryStart = 18
+  }
+  doc.setTextColor(...orange)
+  doc.setFontSize(10)
+  doc.text(t('exerciseStats').toUpperCase(), 16, summaryStart)
+  autoTable(doc, {
+    startY: summaryStart + 4,
+    head: [[t('categoryName'), t('totalVolume'), t('bestSet'), t('bestWorkout')]],
+    body: workSummary(entries).map((item) => [item.name, item.total, item.bestSet, item.bestWorkout]),
+    theme: 'grid',
+    styles: { font: 'DejaVu', fontSize: 7.4, cellPadding: 2.3, textColor: dark, lineColor: [215, 203, 187] },
+    headStyles: { fillColor: dark, textColor: [255, 255, 255], font: 'DejaVu', fontStyle: 'normal' },
+    margin: { left: 16, right: 16 },
     didDrawPage: () => {
       doc.setFont('DejaVu')
       doc.setTextColor(...muted)
